@@ -25,6 +25,7 @@ public final class LapisLogin extends JavaPlugin {
 
     Logger logger = Bukkit.getLogger();
     LapisUpdater updater;
+    LapisLoginPasswordManager passwordManager;
 
     @Override
     public void onEnable() {
@@ -36,6 +37,7 @@ public final class LapisLogin extends JavaPlugin {
                 logger.info("Update available for LapisLogin");
             }
         }
+        passwordManager = new LapisLoginPasswordManager(this);
         Metrics metrics = new Metrics(this);
         metrics.start();
         logger.info("LapisLogin v." + getDescription().getVersion() + " has been enabled!");

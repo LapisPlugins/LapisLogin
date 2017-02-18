@@ -16,6 +16,12 @@
 
 package net.lapismc.lapislogin;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.File;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.UUID;
@@ -24,15 +30,46 @@ public class LapisLoginPasswordManager {
 
     private LapisLogin plugin;
     private PasswordHash passwordHasher = new PasswordHash();
+    private YamlConfiguration passwords;
+    private File passwordsFile;
 
     protected LapisLoginPasswordManager(LapisLogin p) {
         plugin = p;
+        loadPasswordsYaml();
+    }
+
+    private void loadPasswordsYaml() {
+        passwordsFile = new File(plugin.getDataFolder() + "Passwords.yml");
+        if (!passwordsFile.exists()) {
+            try {
+                passwordsFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        passwords = YamlConfiguration.loadConfiguration(passwordsFile);
+    }
+
+    private void savePasswordsYaml(YamlConfiguration yaml) {
+        try {
+            passwords = yaml;
+            passwords.save(passwordsFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean setPassword(UUID uuid, String pw) {
         String hash = getHash(pw);
         if (hash != null) {
-            //TODO: set hash to UUID or username in passwords file
+            if (Bukkit.getServer().getOnlineMode()) {
+                passwords.set(uuid.toString(), hash);
+            } else {
+                OfflinePlayer op = Bukkit.getOfflinePlayer(uuid);
+                String name = op.getName();
+                passwords.set(name, hash);
+            }
+            savePasswordsYaml(passwords);
             return true;
         } else {
             return false;
@@ -40,7 +77,14 @@ public class LapisLoginPasswordManager {
     }
 
     public boolean checkPassword(UUID uuid, String pw) {
-        String hash = null; //TODO: load hash from passwords file
+        String hash;
+        if (Bukkit.getServer().getOnlineMode()) {
+            hash = passwords.getString(uuid.toString());
+        } else {
+            OfflinePlayer op = Bukkit.getOfflinePlayer(uuid);
+            String name = op.getName();
+            hash = passwords.getString(name);
+        }
         return checkHash(pw, hash);
     }
 
