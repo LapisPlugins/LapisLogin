@@ -1,0 +1,5 @@
+name: LapisLogin
+version: ${project.version}
+main: net.lapismc.lapislogin.LapisLogin
+authors: [Dart2112]
+description: Simple login plugin for offline mode servers
