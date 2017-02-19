@@ -1,5 +1,5 @@
 /*
- * Copyright  2017 Benjamin Martin
+ * Copyright 2017 Benjamin Martin
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ public final class LapisLogin extends JavaPlugin {
     Logger logger = Bukkit.getLogger();
     LapisUpdater updater;
     LapisLoginPasswordManager passwordManager;
+    LapisLoginConfigurations LLConfig;
 
     @Override
     public void onEnable() {
@@ -38,6 +39,7 @@ public final class LapisLogin extends JavaPlugin {
             }
         }
         passwordManager = new LapisLoginPasswordManager(this);
+        LLConfig = new LapisLoginConfigurations(this);
         Metrics metrics = new Metrics(this);
         metrics.start();
         logger.info("LapisLogin v." + getDescription().getVersion() + " has been enabled!");
