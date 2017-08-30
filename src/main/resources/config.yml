@@ -1,2 +1,3 @@
 ConfigVersion: 1
 DownloadUpdates: true
+LogoutTimout: 1

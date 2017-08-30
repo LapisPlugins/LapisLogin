@@ -34,7 +34,7 @@ public class LapisLoginRegister {
             sender.sendMessage(plugin.LLConfig.getMessage("Error.MustBePlayer"));
             return;
         }
-        LapisLoginPlayer loginPlayer = plugin.players.get(((Player) sender).getUniqueId());
+        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(((Player) sender).getUniqueId());
         if (args.length == 2) {
             String password1 = args[0];
             String password2 = args[1];

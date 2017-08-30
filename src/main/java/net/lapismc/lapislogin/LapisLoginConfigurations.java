@@ -31,6 +31,8 @@ public class LapisLoginConfigurations {
 
     public LapisLoginConfigurations(LapisLogin p) {
         plugin = p;
+        p.saveDefaultConfig();
+        new File(p.getDataFolder(), "PlayerData").mkdirs();
         primaryColor = ChatColor.translateAlternateColorCodes('&', getMessages().getString("PrimaryColor"));
         secondaryColor = ChatColor.translateAlternateColorCodes('&', getMessages().getString("SecondaryColor"));
     }
@@ -38,7 +40,7 @@ public class LapisLoginConfigurations {
     private YamlConfiguration getMessages() {
         if (messages == null) {
             if (messagesFile == null) {
-                messagesFile = new File(plugin.getDataFolder() + "Messages.yml");
+                messagesFile = new File(plugin.getDataFolder() + File.separator + "Messages.yml");
                 if (!messagesFile.exists()) {
                     plugin.saveResource("Messages.yml", false);
                 }
@@ -49,7 +51,7 @@ public class LapisLoginConfigurations {
     }
 
     public String getColoredMessage(String path) {
-        return ChatColor.translateAlternateColorCodes('&', getMessages().getString(path.replace("&p", primaryColor).replace("&s", secondaryColor)));
+        return ChatColor.translateAlternateColorCodes('&', getMessages().getString(path).replace("&p", primaryColor).replace("&s", secondaryColor));
     }
 
     public String getMessage(String path) {

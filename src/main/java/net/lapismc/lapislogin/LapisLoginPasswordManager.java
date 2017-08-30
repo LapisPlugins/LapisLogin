@@ -40,13 +40,9 @@ public class LapisLoginPasswordManager {
     }
 
     private void loadPasswordsYaml() {
-        passwordsFile = new File(plugin.getDataFolder() + "Passwords.yml");
+        passwordsFile = new File(plugin.getDataFolder() + File.separator + "Passwords.yml");
         if (!passwordsFile.exists()) {
-            try {
-                passwordsFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            plugin.saveResource("Passwords.yml", false);
         }
         passwords = YamlConfiguration.loadConfiguration(passwordsFile);
     }
@@ -57,6 +53,14 @@ public class LapisLoginPasswordManager {
             passwords.save(passwordsFile);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public boolean isPasswordSet(UUID uuid) {
+        if (Bukkit.getServer().getOnlineMode()) {
+            return passwords.contains(uuid.toString());
+        } else {
+            return passwords.contains(Bukkit.getOfflinePlayer(uuid).getName());
         }
     }
 

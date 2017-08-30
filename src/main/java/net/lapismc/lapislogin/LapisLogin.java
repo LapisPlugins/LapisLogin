@@ -31,7 +31,7 @@ public final class LapisLogin extends JavaPlugin {
     public LapisLoginPasswordManager passwordManager;
     public InventorySerialization invSerialization;
     public LapisLoginConfigurations LLConfig;
-    public HashMap<UUID, LapisLoginPlayer> players = new HashMap<>();
+    private HashMap<UUID, LapisLoginPlayer> players = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -46,6 +46,8 @@ public final class LapisLogin extends JavaPlugin {
         passwordManager = new LapisLoginPasswordManager(this);
         invSerialization = new InventorySerialization();
         LLConfig = new LapisLoginConfigurations(this);
+        new LapisLoginListeners(this);
+        new LapisLoginCommands(this);
         Metrics metrics = new Metrics(this);
         logger.info("LapisLogin v." + getDescription().getVersion() + " has been enabled!");
     }
@@ -53,5 +55,16 @@ public final class LapisLogin extends JavaPlugin {
     @Override
     public void onDisable() {
         logger.info("LapisLogin has been disabled!");
+    }
+
+    public LapisLoginPlayer getLoginPlayer(UUID uuid) {
+        if (!players.containsKey(uuid)) {
+            players.put(uuid, new LapisLoginPlayer(this, uuid));
+        }
+        return players.get(uuid);
+    }
+
+    public void removeLoginPlayer(UUID uuid) {
+        players.remove(uuid);
     }
 }

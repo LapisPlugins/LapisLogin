@@ -1,13 +1,15 @@
 #all instances of &p and &s will be replaced by these values on use
-PrimaryColor: "&4"
+PrimaryColor: "&b"
 SecondaryColor: "&c"
 Login:
   Success: "&pYou have successfully logged in \nWelcome Back"
   LoginRequired: "&pUse /login (password) to login"
   PasswordIncorrect: "&sThe password you entered was incorrect!"
+  WelcomeBack: "&pWelcome back, no login required"
   AlreadyLoggedIn: "&pYou are already logged in!"
 Register:
   Success: "&pYour password is now set to %PASSWORD% \nUse /login %PASSWORD% to login from now on"
+  RegistrationRequired: "&pUse /register (password) (password) to register"
   Failed: "&sYour registration failed, try a different password or try again later!"
   PasswordsDontMatch: "&sThose two passwords don't match, please try again"
 Error:

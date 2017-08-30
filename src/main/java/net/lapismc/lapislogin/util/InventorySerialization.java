@@ -16,12 +16,10 @@
 
 package net.lapismc.lapislogin.util;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -44,19 +42,19 @@ public class InventorySerialization {
         }
     }
 
-    public Inventory loadInventory(String data, Player p) {
+    public void loadInventory(String data, Player p) {
         try {
-            Inventory inv = Bukkit.createInventory(p, InventoryType.PLAYER);
+            Inventory playerInv = p.getInventory();
             YamlConfiguration config = new YamlConfiguration();
             config.loadFromString(data);
             HashMap<Integer, ItemStack> items = loadInventory(config);
             for (Integer i : items.keySet()) {
-                inv.setItem(i, items.get(i));
+                playerInv.setItem(i, items.get(i));
             }
-            return inv;
+            p.updateInventory();
         } catch (InvalidConfigurationException e) {
             e.printStackTrace();
-            return null;
+            return;
         }
     }
 

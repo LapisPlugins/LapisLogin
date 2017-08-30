@@ -17,6 +17,7 @@
 package net.lapismc.lapislogin;
 
 import net.lapismc.lapislogin.commands.LapisLoginLogin;
+import net.lapismc.lapislogin.commands.LapisLoginRegister;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,17 +26,24 @@ public class LapisLoginCommands implements CommandExecutor {
 
     private LapisLogin plugin;
     private LapisLoginLogin login;
+    private LapisLoginRegister register;
 
     public LapisLoginCommands(LapisLogin p) {
         plugin = p;
         login = new LapisLoginLogin(plugin);
+        register = new LapisLoginRegister(plugin);
+        plugin.getCommand("login").setExecutor(this);
+        plugin.getCommand("register").setExecutor(this);
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel,
-                             String[] args) {
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equals("login")) {
             login.run(sender, args);
+            return true;
+        } else if (cmd.getName().equals("register")) {
+            register.run(sender, args);
+            return true;
         }
         return false;
     }

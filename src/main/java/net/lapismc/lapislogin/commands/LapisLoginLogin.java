@@ -34,7 +34,11 @@ public class LapisLoginLogin {
             sender.sendMessage(plugin.LLConfig.getMessage("Error.MustBePlayer"));
             return;
         }
-        LapisLoginPlayer loginPlayer = plugin.players.get(((Player) sender).getUniqueId());
+        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(((Player) sender).getUniqueId());
+        if (!loginPlayer.isRegistered()) {
+            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));
+            return;
+        }
         if (loginPlayer.isLoggedIn()) {
             loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.AlreadyLoggedIn"));
             return;
