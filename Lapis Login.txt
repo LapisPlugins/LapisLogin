@@ -1,0 +1,19 @@
+Lapis Login:
+    Files:
+        config.yml
+        messages.yml
+        logins.db
+    Classes:
+        Initializer
+        SQLite
+        Password Hasher(From homespawn)
+        Player join listener
+        Command class(es)
+    Player commands
+        /login (password)
+        /logout
+        /register (password) (password)
+        /changepw (new password) (new password)
+    Admin commands
+        /resetpw (username)
+        /logout (username)

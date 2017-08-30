@@ -16,6 +16,7 @@
 
 package net.lapismc.lapislogin;
 
+import net.lapismc.lapislogin.commands.LapisLoginCommandRegisterEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,10 +24,10 @@ import java.util.logging.Logger;
 
 public final class LapisLogin extends JavaPlugin {
 
-    Logger logger = Bukkit.getLogger();
-    LapisUpdater updater;
-    LapisLoginPasswordManager passwordManager;
-    LapisLoginConfigurations LLConfig;
+    public Logger logger = getLogger();
+    public LapisUpdater updater;
+    public LapisLoginPasswordManager passwordManager;
+    public LapisLoginConfigurations LLConfig;
 
     @Override
     public void onEnable() {
@@ -40,6 +41,8 @@ public final class LapisLogin extends JavaPlugin {
         }
         passwordManager = new LapisLoginPasswordManager(this);
         LLConfig = new LapisLoginConfigurations(this);
+        LapisLoginCommandRegisterEvent CRE = new LapisLoginCommandRegisterEvent(this);
+        Bukkit.getPluginManager().callEvent(CRE);
         Metrics metrics = new Metrics(this);
         metrics.start();
         logger.info("LapisLogin v." + getDescription().getVersion() + " has been enabled!");
