@@ -43,6 +43,7 @@ public class LapisLoginListeners implements Listener {
         Date date = new Date();
         config.set("Login", date.getTime());
         loginPlayer.saveConfig(config);
+        loginPlayer.getPlayer().getInventory().clear();
         plugin.players.put(loginPlayer.getPlayer().getUniqueId(), loginPlayer);
     }
 

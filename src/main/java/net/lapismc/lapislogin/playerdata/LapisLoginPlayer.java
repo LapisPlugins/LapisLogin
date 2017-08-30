@@ -21,6 +21,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +41,10 @@ public class LapisLoginPlayer {
         loadConfig();
     }
 
+    private Inventory loadInventory() {
+        return plugin.invSerialization.loadInventory(config.getString("Inventory"), op.getPlayer());
+    }
+
     public void loadConfig() {
         try {
             File file = new File(plugin.getDataFolder() + File.separator + "PlayerData" + File.separator + op.getUniqueId() + ".yml");
@@ -56,6 +61,7 @@ public class LapisLoginPlayer {
     public void loginPlayer(String password) {
         if (plugin.passwordManager.checkPassword(op.getUniqueId(), password)) {
             sendMessage(plugin.LLConfig.getColoredMessage("Login.Success"));
+            getPlayer().getInventory().setContents(loadInventory().getContents());
             loggedIn = true;
         } else {
             sendMessage(plugin.LLConfig.getColoredMessage("Login.PasswordIncorect"));

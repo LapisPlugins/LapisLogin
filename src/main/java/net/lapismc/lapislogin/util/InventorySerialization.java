@@ -16,14 +16,16 @@
 
 package net.lapismc.lapislogin.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class InventorySerialization {
 
@@ -42,27 +44,35 @@ public class InventorySerialization {
         }
     }
 
-    public ItemStack[] loadInventory(String data) throws InvalidConfigurationException {
-        YamlConfiguration config = new YamlConfiguration();
-        config.loadFromString(data);
-        return loadInventory(config);
+    public Inventory loadInventory(String data, Player p) {
+        try {
+            Inventory inv = Bukkit.createInventory(p, InventoryType.PLAYER);
+            YamlConfiguration config = new YamlConfiguration();
+            config.loadFromString(data);
+            HashMap<Integer, ItemStack> items = loadInventory(config);
+            for (Integer i : items.keySet()) {
+                inv.setItem(i, items.get(i));
+            }
+            return inv;
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public ItemStack[] loadInventory(ConfigurationSection source) throws InvalidConfigurationException {
-        List<ItemStack> stacks = new ArrayList<>();
-
+    public HashMap<Integer, ItemStack> loadInventory(ConfigurationSection source) {
+        HashMap<Integer, ItemStack> stacks = new HashMap<>();
         try {
             for (String key : source.getKeys(false)) {
                 int number = Integer.parseInt(key);
                 while (stacks.size() <= number) {
-                    stacks.add(null);
+                    stacks.put(number, null);
                 }
-
-                stacks.set(number, (ItemStack) source.get(key));
+                stacks.put(number, (ItemStack) source.get(key));
             }
         } catch (NumberFormatException e) {
-            throw new InvalidConfigurationException("Expected a number.", e);
+            e.printStackTrace();
         }
-        return stacks.toArray(new ItemStack[0]);
+        return stacks;
     }
 }
