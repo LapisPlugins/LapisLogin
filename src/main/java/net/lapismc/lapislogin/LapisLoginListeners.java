@@ -16,7 +16,8 @@
 
 package net.lapismc.lapislogin;
 
-import org.bukkit.entity.Player;
+import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -24,58 +25,51 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.Date;
 
 public class LapisLoginListeners implements Listener {
 
     LapisLogin plugin;
-    ArrayList<UUID> loggedOut = new ArrayList<>();
 
     public LapisLoginListeners(LapisLogin p) {
         plugin = p;
     }
 
-    public void loginPlayer(Player p) {
-        if (loggedOut.contains(p.getUniqueId())) {
-            loggedOut.remove(p.getUniqueId());
-            p.sendMessage(""); //TODO: add messages
-            //TODO: add inventory, teleport and possibly log
-        }
-    }
-
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-        //TODO: add API Event Fire
-        loggedOut.add(p.getUniqueId());
-        p.sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired")); //TODO: add message
+        LapisLoginPlayer loginPlayer = new LapisLoginPlayer(plugin, e.getPlayer().getUniqueId());
+        loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
+        YamlConfiguration config = loginPlayer.getConfig();
+        Date date = new Date();
+        config.set("Login", date.getTime());
+        loginPlayer.saveConfig(config);
+        plugin.players.put(loginPlayer.getPlayer().getUniqueId(), loginPlayer);
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-        Player p = e.getPlayer();
-        if (loggedOut.contains(p.getUniqueId())) {
-            loggedOut.remove(p.getUniqueId());
-        } else {
-            //TODO: add timout for login
-        }
+        LapisLoginPlayer loginPlayer = plugin.players.get(e.getPlayer().getUniqueId());
+        loginPlayer.saveInventory();
+        YamlConfiguration config = loginPlayer.getConfig();
+        Date date = new Date();
+        config.set("Logout", date.getTime());
+        loginPlayer.saveConfig(config);
     }
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent e) {
-        Player p = e.getPlayer();
-        if (loggedOut.contains(p.getUniqueId())) {
-            p.sendMessage(""); //TODO: add message
+        LapisLoginPlayer loginPlayer = plugin.players.get(e.getPlayer().getUniqueId());
+        if (!loginPlayer.isLoggedIn()) {
+            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
             e.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onPlayerCommand(PlayerCommandPreprocessEvent e) {
-        Player p = e.getPlayer();
-        if (loggedOut.contains(p.getUniqueId())) {
-            p.sendMessage(""); //TODO: add message
+        LapisLoginPlayer loginPlayer = plugin.players.get(e.getPlayer().getUniqueId());
+        if (!loginPlayer.isLoggedIn()) {
+            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
             e.setCancelled(true);
         }
     }

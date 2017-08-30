@@ -16,6 +16,7 @@
 
 package net.lapismc.lapislogin;
 
+import net.lapismc.lapislogin.util.PasswordHash;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;

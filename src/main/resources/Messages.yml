@@ -1,2 +1,16 @@
+#all instances of &p and &s will be replaced by these values on use
+PrimaryColor: "&4"
+SecondaryColor: "&c"
 Login:
-  LoginRequired: "&4 Use /login (password) to login"
+  Success: "&pYou have successfully logged in \nWelcome Back"
+  LoginRequired: "&pUse /login (password) to login"
+  PasswordIncorrect: "&sThe password you entered was incorrect!"
+  AlreadyLoggedIn: "&pYou are already logged in!"
+Register:
+  Success: "&pYour password is now set to %PASSWORD% \nUse /login %PASSWORD% to login from now on"
+  Failed: "&sYour registration failed, try a different password or try again later!"
+  PasswordsDontMatch: "&sThose two passwords don't match, please try again"
+Error:
+  Args: "&pTo many or too few arguments!"
+  ActionDenied: "&sYou must login todo this!"
+  MustBePlayer: "&sYou must be a player to do this!"

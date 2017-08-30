@@ -21,12 +21,12 @@ import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class LapisLoginLogin {
+public class LapisLoginRegister {
 
-    LapisLogin plugin;
+    private LapisLogin plugin;
 
-    public LapisLoginLogin(LapisLogin p) {
-        plugin = p;
+    public LapisLoginRegister(LapisLogin plugin) {
+        this.plugin = plugin;
     }
 
     public void run(CommandSender sender, String[] args) {
@@ -35,22 +35,24 @@ public class LapisLoginLogin {
             return;
         }
         LapisLoginPlayer loginPlayer = plugin.players.get(((Player) sender).getUniqueId());
-        if (loginPlayer.isLoggedIn()) {
-            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.AlreadyLoggedIn"));
-            return;
-        }
-        if (args.length == 1) {
-            loginPlayer.loginPlayer(args[0]);
+        if (args.length == 2) {
+            String password1 = args[0];
+            String password2 = args[1];
+            if (password1.equals(password2)) {
+                loginPlayer.registerPlayer(password1);
+            } else {
+                loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Regsiter.PasswordsDontMatch"));
+            }
         } else {
             loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.Args"));
             loginPlayer.sendMessage(plugin.LLConfig.primaryColor + help());
         }
     }
 
-    public String help() {
+    private String help() {
         StringBuilder sb = new StringBuilder();
-        sb.append("/login usage \n");
-        sb.append("/login (Password)");
+        sb.append("/register usage \n");
+        sb.append("/register (password) (password)");
         return sb.toString();
     }
 

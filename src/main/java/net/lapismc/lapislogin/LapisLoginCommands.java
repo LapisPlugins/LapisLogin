@@ -16,22 +16,27 @@
 
 package net.lapismc.lapislogin;
 
-import net.lapismc.lapislogin.commands.LapisLoginCommand;
-import net.lapismc.lapislogin.commands.LapisLoginCommandRegisterEvent;
-import org.bukkit.Bukkit;
+import net.lapismc.lapislogin.commands.LapisLoginLogin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
-
-public class LapisLoginCommands {
+public class LapisLoginCommands implements CommandExecutor {
 
     private LapisLogin plugin;
-    public ArrayList<LapisLoginCommand> commands;
+    private LapisLoginLogin login;
 
     public LapisLoginCommands(LapisLogin p) {
         plugin = p;
+        login = new LapisLoginLogin(plugin);
+    }
 
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel,
+                             String[] args) {
+        if (cmd.getName().equals("login")) {
+            login.run(sender, args);
+        }
+        return false;
     }
 }

@@ -26,9 +26,13 @@ public class LapisLoginConfigurations {
     LapisLogin plugin;
     YamlConfiguration messages;
     File messagesFile;
+    public String primaryColor = ChatColor.AQUA.toString();
+    public String secondaryColor = ChatColor.RED.toString();
 
     public LapisLoginConfigurations(LapisLogin p) {
         plugin = p;
+        primaryColor = ChatColor.translateAlternateColorCodes('&', getMessages().getString("PrimaryColor"));
+        secondaryColor = ChatColor.translateAlternateColorCodes('&', getMessages().getString("SecondaryColor"));
     }
 
     private YamlConfiguration getMessages() {
@@ -45,7 +49,7 @@ public class LapisLoginConfigurations {
     }
 
     public String getColoredMessage(String path) {
-        return ChatColor.translateAlternateColorCodes('&', getMessages().getString(path));
+        return ChatColor.translateAlternateColorCodes('&', getMessages().getString(path.replace("&p", primaryColor).replace("&s", secondaryColor)));
     }
 
     public String getMessage(String path) {

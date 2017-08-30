@@ -16,6 +16,102 @@
 
 package net.lapismc.lapislogin.playerdata;
 
+import net.lapismc.lapislogin.LapisLogin;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
 public class LapisLoginPlayer {
+
+    private LapisLogin plugin;
+    private OfflinePlayer op;
+    private boolean loggedIn;
+    private YamlConfiguration config;
+
+    public LapisLoginPlayer(LapisLogin plugin, UUID uuid) {
+        this.plugin = plugin;
+        op = Bukkit.getOfflinePlayer(uuid);
+        loggedIn = false;
+        loadConfig();
+    }
+
+    public void loadConfig() {
+        try {
+            File file = new File(plugin.getDataFolder() + File.separator + "PlayerData" + File.separator + op.getUniqueId() + ".yml");
+            if (!file.exists()) {
+                file.mkdirs();
+                file.createNewFile();
+            }
+            config = YamlConfiguration.loadConfiguration(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loginPlayer(String password) {
+        if (plugin.passwordManager.checkPassword(op.getUniqueId(), password)) {
+            sendMessage(plugin.LLConfig.getColoredMessage("Login.Success"));
+            loggedIn = true;
+        } else {
+            sendMessage(plugin.LLConfig.getColoredMessage("Login.PasswordIncorect"));
+        }
+    }
+
+    public void registerPlayer(String password) {
+        if (plugin.passwordManager.setPassword(op.getUniqueId(), password)) {
+            sendMessage(plugin.LLConfig.getColoredMessage("Register.Success").replace("%PASSWORD%", password));
+        } else {
+            sendMessage(plugin.LLConfig.getColoredMessage("Register.Failed"));
+        }
+    }
+
+    public void saveInventory() {
+        config.set("Inventory", plugin.invSerialization.saveInventory(op.getPlayer().getInventory()));
+    }
+
+    public YamlConfiguration getConfig() {
+        if (config != null) {
+            return config;
+        } else {
+            loadConfig();
+            return config;
+        }
+    }
+
+    public void saveConfig(YamlConfiguration configuration) {
+        try {
+            File file = new File(plugin.getDataFolder() + File.separator + "PlayerData" + File.separator + op.getUniqueId() + ".yml");
+            configuration.save(file);
+            config = configuration;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public Player getPlayer() {
+        if (op.isOnline()) {
+            return op.getPlayer();
+        }
+        return null;
+    }
+
+    public OfflinePlayer getOfflinePlayer() {
+        return op;
+    }
+
+    public void sendMessage(String message) {
+        if (op.isOnline()) {
+            op.getPlayer().sendMessage(message);
+        }
+    }
 
 }

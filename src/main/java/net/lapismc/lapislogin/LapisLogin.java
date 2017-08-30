@@ -16,10 +16,12 @@
 
 package net.lapismc.lapislogin;
 
-import net.lapismc.lapislogin.commands.LapisLoginCommandRegisterEvent;
-import org.bukkit.Bukkit;
+import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
+import net.lapismc.lapislogin.util.InventorySerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public final class LapisLogin extends JavaPlugin {
@@ -27,7 +29,9 @@ public final class LapisLogin extends JavaPlugin {
     public Logger logger = getLogger();
     public LapisUpdater updater;
     public LapisLoginPasswordManager passwordManager;
+    public InventorySerialization invSerialization;
     public LapisLoginConfigurations LLConfig;
+    public HashMap<UUID, LapisLoginPlayer> players = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -40,17 +44,14 @@ public final class LapisLogin extends JavaPlugin {
             }
         }
         passwordManager = new LapisLoginPasswordManager(this);
+        invSerialization = new InventorySerialization();
         LLConfig = new LapisLoginConfigurations(this);
-        LapisLoginCommandRegisterEvent CRE = new LapisLoginCommandRegisterEvent(this);
-        Bukkit.getPluginManager().callEvent(CRE);
         Metrics metrics = new Metrics(this);
-        metrics.start();
         logger.info("LapisLogin v." + getDescription().getVersion() + " has been enabled!");
     }
 
     @Override
     public void onDisable() {
-
         logger.info("LapisLogin has been disabled!");
     }
 }

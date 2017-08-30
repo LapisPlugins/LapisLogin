@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package net.lapismc.lapislogin;
+package net.lapismc.lapislogin.util;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
