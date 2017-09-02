@@ -36,9 +36,9 @@ public final class LapisLogin extends JavaPlugin {
     @Override
     public void onEnable() {
         updater = new LapisUpdater(this, "LapisLogin", "Dart2112", "LapisLogin", "master");
-        if (updater.checkUpdate("LapisLogin")) {
+        if (updater.checkUpdate()) {
             if (getConfig().getBoolean("DownloadUpdates")) {
-                updater.downloadUpdate("LapisLogin");
+                updater.downloadUpdate();
             } else {
                 logger.info("Update available for LapisLogin");
             }

@@ -60,7 +60,7 @@ public class LapisLoginPlayer {
             loadInventory();
             loggedIn = true;
         } else {
-            sendMessage(plugin.LLConfig.getColoredMessage("Login.PasswordIncorect"));
+            sendMessage(plugin.LLConfig.getColoredMessage("Login.PasswordIncorrect"));
         }
     }
 

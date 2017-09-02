@@ -17,8 +17,9 @@
 package net.lapismc.lapislogin;
 
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,20 +28,21 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.Date;
+import java.util.logging.Logger;
 
 public class LapisUpdater {
 
     private String ID;
-    private String result;
     private String jarName;
     private String username;
     private String repoName;
     private String branch;
-    private Plugin plugin;
+    private JavaPlugin plugin;
+    private Logger logger = Bukkit.getLogger();
     private Boolean force;
     private String newVersionRawString;
 
-    public LapisUpdater(Plugin plugin, String jarName, String username, String repoName, String branch) {
+    LapisUpdater(JavaPlugin plugin, String jarName, String username, String repoName, String branch) {
         this.plugin = plugin;
         this.jarName = jarName;
         this.username = username;
@@ -48,19 +50,19 @@ public class LapisUpdater {
         this.branch = branch;
     }
 
-    public boolean checkUpdate(String ID) {
-        this.ID = ID;
+    public boolean checkUpdate() {
+        this.ID = "LapisLogin";
         this.force = false;
         return updateCheck();
     }
 
-    public boolean downloadUpdate(String ID) {
-        this.ID = ID;
+    public void downloadUpdate() {
+        this.ID = "LapisLogin";
         this.force = true;
-        return downloadUpdateJar();
+        downloadUpdateJar();
     }
 
-    private boolean downloadUpdateJar() {
+    private void downloadUpdateJar() {
         if (updateCheck()) {
             try {
                 URL changeLogURL = new URL(
@@ -75,11 +77,16 @@ public class LapisUpdater {
                 ReadableByteChannel jarByteChannel = Channels.newChannel(jarURL.openStream());
                 File update = plugin.getServer().getUpdateFolderFile();
                 if (!update.exists()) {
-                    update.mkdir();
+                    if (!update.mkdir()) {
+                        logger.info(plugin.getName() + " failed to make update folder");
+                    }
                 }
                 File jar = new File(update.getAbsolutePath() + File.separator + jarName + ".jar");
                 if (!jar.exists()) {
-                    jar.createNewFile();
+                    if (!jar.createNewFile()) {
+                        logger.info(plugin.getName() + " updater Failed to save the updated Jar");
+                        return;
+                    }
                 }
                 FileOutputStream jarOutputStream = new FileOutputStream(jar);
                 jarOutputStream.getChannel().transferFrom(jarByteChannel, 0, Long.MAX_VALUE);
@@ -93,25 +100,21 @@ public class LapisUpdater {
                 changeLogOutputStream.flush();
                 changeLogOutputStream.close();
                 YamlConfiguration changeLog = YamlConfiguration.loadConfiguration(changeLogFile);
-                plugin.getLogger().info("Changes in newest Version \n" +
+                logger.info("Changes in newest Version \n" +
                         changeLog.getStringList(newVersionRawString).toString().replace("[", "").replace("]", ""));
-                return true;
             } catch (IOException e) {
-                plugin.getLogger().severe("HomeSpawn updater failed to download updates!");
-                plugin.getLogger().severe("Please check your internet connection and" +
+                logger.severe(plugin.getName() + " updater failed to download updates!");
+                logger.severe("Please check your internet connection and" +
                         " firewall settings and try again later");
-                return false;
             }
-        } else {
-            return false;
         }
     }
 
     private boolean updateCheck() {
-        Integer oldVersion = null;
-        Integer newVersion = null;
-        File f = null;
-        YamlConfiguration yaml = null;
+        Integer oldVersion;
+        Integer newVersion;
+        File f;
+        YamlConfiguration yaml;
         try {
             URL website = new URL(
                     "https://raw.githubusercontent.com/" + username + "/" + repoName + "/" + branch + "/updater" +
@@ -128,12 +131,14 @@ public class LapisUpdater {
                 rbc.close();
                 fos.flush();
                 fos.close();
-                f.setLastModified(d0.getTime());
+                if (!f.setLastModified(d0.getTime())) {
+                    logger.info(plugin.getName() + " failed to update last time modified on update.yml");
+                }
             }
         } catch (IOException e) {
-            plugin.getLogger().severe("Failed to check for updates!");
-            plugin.getLogger().severe("Please check your internet and firewall settings" +
-                    " and try again later!");
+            logger.severe(plugin.getName() + " updater failed to check for updates!");
+            logger.severe("Please check your internet connection and" +
+                    " firewall settings and try again later");
             return false;
         }
         try {
@@ -149,29 +154,14 @@ public class LapisUpdater {
             oldVersion = Integer.parseInt(oldVersionString);
             newVersion = Integer.parseInt(newVersionString);
         } catch (Exception e) {
-            plugin.getLogger().severe("Failed to load update.yml or parse the values!" +
+            logger.severe(plugin.getName() + " failed to load update.yml or parse the values!" +
                     " It may be corrupt!");
-            plugin.getLogger().severe("Please try again later");
-            f.delete();
+            logger.severe("Please try again later");
+            if (!f.delete()) {
+                logger.info(plugin.getName() + " failed to delete update.yml, please delete it your self");
+            }
             return false;
         }
-        Boolean update = false;
-        if (yaml.getString(ID).contains("Beta") && !plugin.getDescription()
-                .getVersion().contains("Beta")) {
-            update = true;
-        }
-        if (!yaml.getString(ID).contains("Beta") && plugin.getDescription()
-                .getVersion().contains("Beta")) {
-            update = true;
-        }
-        if (yaml.getString(ID).contains("Beta") && plugin.getDescription()
-                .getVersion().contains("Beta")) {
-            update = oldVersion < newVersion;
-        }
-        if (!yaml.getString(ID).contains("Beta") && !plugin.getDescription()
-                .getVersion().contains("Beta")) {
-            update = oldVersion < newVersion;
-        }
-        return update;
+        return oldVersion < newVersion;
     }
 }

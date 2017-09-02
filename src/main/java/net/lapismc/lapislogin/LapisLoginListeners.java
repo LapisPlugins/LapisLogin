@@ -46,7 +46,7 @@ public class LapisLoginListeners implements Listener {
             loginPlayer.task.cancel();
         }
         if (loginPlayer.isLoggedIn()) {
-            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.NoLoginRequired"));
+            e.getPlayer().sendMessage(plugin.LLConfig.getColoredMessage("Login.NoLoginRequired"));
         } else {
             if (loginPlayer.isRegistered()) {
                 loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
