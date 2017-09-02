@@ -46,7 +46,7 @@ public class LapisLoginResetPassword {
             LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(Bukkit.getOfflinePlayer(args[0]).getUniqueId());
             plugin.passwordManager.removePassword(loginPlayer.getOfflinePlayer().getUniqueId());
             if (loginPlayer.getOfflinePlayer().isOnline()) {
-                loginPlayer.logoutPlayer();
+                loginPlayer.logoutPlayer(true);
                 loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));
             }
             sender.sendMessage(plugin.LLConfig.getColoredMessage("PasswordReset").replace("%PLAYER%", loginPlayer.getOfflinePlayer().getName()));

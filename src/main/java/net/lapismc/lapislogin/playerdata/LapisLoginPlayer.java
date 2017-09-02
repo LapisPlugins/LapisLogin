@@ -58,7 +58,8 @@ public class LapisLoginPlayer {
         if (plugin.passwordManager.checkPassword(op.getUniqueId(), password)) {
             sendMessage(plugin.LLConfig.getColoredMessage("Login.Success"));
             loadInventory();
-            config.set("IPAddress", op.getPlayer().getAddress().toString());
+            loadConfig();
+            config.set("IPAddress", op.getPlayer().getAddress().getHostString());
             saveConfig(config);
             loggedIn = true;
         } else {
@@ -66,29 +67,39 @@ public class LapisLoginPlayer {
         }
     }
 
-    public void logoutPlayer() {
+    public void forceLogin() {
+        loggedIn = true;
+    }
+
+    public void logoutPlayer(boolean deregister) {
         loggedIn = false;
         saveInventory();
-        if (plugin.getConfig().getBoolean("HideInventory")) {
+        if (!deregister && plugin.getConfig().getBoolean("HideInventory")) {
             getPlayer().getInventory().clear();
         }
-        sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
+        if (!deregister)
+            sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
     }
 
     public void playerQuit() {
         if (loggedIn) {
             saveInventory();
         }
-        task = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
-            @Override
-            public void run() {
-                if (!op.isOnline()) {
-                    plugin.logger.info("Removed " + op.getName() + "'s player stuffs");
-                    saveConfig(config);
-                    plugin.removeLoginPlayer(op.getUniqueId());
+        if (isRegistered()) {
+            task = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
+                @Override
+                public void run() {
+                    if (!op.isOnline()) {
+                        plugin.logger.info("Removed " + op.getName() + "'s player stuffs");
+                        saveConfig(config);
+                        plugin.removeLoginPlayer(op.getUniqueId());
+                    }
                 }
-            }
-        }, plugin.getConfig().getInt("LogoutTimeout") * 20 * 60);
+            }, plugin.getConfig().getInt("LogoutTimeout") * 20 * 60);
+        } else {
+            saveConfig(config);
+            plugin.removeLoginPlayer(op.getUniqueId());
+        }
     }
 
     public String getIP() {
@@ -162,9 +173,7 @@ public class LapisLoginPlayer {
     }
 
     public void sendMessage(String message) {
-        if (op.isOnline()) {
-            op.getPlayer().sendMessage(message);
-        }
+        Bukkit.getPlayer(op.getUniqueId()).sendMessage(message);
     }
 
 }

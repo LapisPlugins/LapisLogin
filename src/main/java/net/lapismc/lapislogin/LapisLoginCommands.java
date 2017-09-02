@@ -16,10 +16,7 @@
 
 package net.lapismc.lapislogin;
 
-import net.lapismc.lapislogin.commands.LapisLoginChangePassword;
-import net.lapismc.lapislogin.commands.LapisLoginLogin;
-import net.lapismc.lapislogin.commands.LapisLoginLogout;
-import net.lapismc.lapislogin.commands.LapisLoginRegister;
+import net.lapismc.lapislogin.commands.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,6 +27,7 @@ public class LapisLoginCommands implements CommandExecutor {
     private LapisLoginLogin login;
     private LapisLoginLogout logout;
     private LapisLoginRegister register;
+    private LapisLoginResetPassword resetPassword;
     private LapisLoginChangePassword changePassword;
 
     public LapisLoginCommands(LapisLogin p) {
@@ -37,10 +35,12 @@ public class LapisLoginCommands implements CommandExecutor {
         login = new LapisLoginLogin(plugin);
         logout = new LapisLoginLogout(plugin);
         register = new LapisLoginRegister(plugin);
+        resetPassword = new LapisLoginResetPassword(plugin);
         changePassword = new LapisLoginChangePassword(plugin);
         plugin.getCommand("login").setExecutor(this);
         plugin.getCommand("logout").setExecutor(this);
         plugin.getCommand("register").setExecutor(this);
+        plugin.getCommand("resetpassword").setExecutor(this);
         plugin.getCommand("changepassword").setExecutor(this);
     }
 
@@ -54,6 +54,9 @@ public class LapisLoginCommands implements CommandExecutor {
             return true;
         } else if (cmd.getName().equals("register")) {
             register.run(sender, args);
+            return true;
+        } else if (cmd.getName().equals("resetpassword")) {
+            resetPassword.run(sender, args);
             return true;
         } else if (cmd.getName().equals("changepassword")) {
             changePassword.run(sender, args);

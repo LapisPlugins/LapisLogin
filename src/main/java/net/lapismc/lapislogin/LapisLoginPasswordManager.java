@@ -57,6 +57,7 @@ public class LapisLoginPasswordManager {
     }
 
     public boolean isPasswordSet(UUID uuid) {
+        loadPasswordsYaml();
         if (Bukkit.getServer().getOnlineMode()) {
             return passwords.contains(uuid.toString());
         } else {
@@ -70,9 +71,7 @@ public class LapisLoginPasswordManager {
             if (Bukkit.getServer().getOnlineMode()) {
                 passwords.set(uuid.toString(), hash);
             } else {
-                OfflinePlayer op = Bukkit.getOfflinePlayer(uuid);
-                String name = op.getName();
-                passwords.set(name, hash);
+                passwords.set(Bukkit.getOfflinePlayer(uuid).getName(), hash);
             }
             savePasswordsYaml(passwords);
             return true;
@@ -82,7 +81,12 @@ public class LapisLoginPasswordManager {
     }
 
     public void removePassword(UUID uuid) {
-        passwords.set(uuid.toString(), null);
+        if (Bukkit.getServer().getOnlineMode()) {
+            passwords.set(uuid.toString(), null);
+        } else {
+            passwords.set(Bukkit.getOfflinePlayer(uuid).getName(), null);
+        }
+        savePasswordsYaml(passwords);
     }
 
     public boolean checkPassword(UUID uuid, String pw) {

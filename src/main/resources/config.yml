@@ -5,6 +5,6 @@ DownloadUpdates: true
 #How long does a player have to be offline for before we make them login again (in minutes)
 LogoutTimeout: 1
 #This will stop players using their inventory while not logged in, this includes disallowing item pickup, drop and moving
-InventoryLock: false
+InventoryLock: true
 #This will remove the players inventory while they aren't logged in and give it back when they login
 HideInventory: true

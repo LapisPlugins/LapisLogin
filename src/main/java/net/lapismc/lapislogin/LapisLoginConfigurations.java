@@ -39,7 +39,7 @@ public class LapisLoginConfigurations {
     }
 
     private void configVersion() {
-        if (plugin.getConfig().getInt("ConfigurationVersion") != 1) {
+        if (plugin.getConfig().getInt("ConfigVersion") != 1) {
             File f = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config_old.yml");
             File f1 = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
             if (!f1.renameTo(f)) {

@@ -37,7 +37,7 @@ public class LapisLoginLogout {
         LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(((Player) sender).getUniqueId());
         if (loginPlayer.isLoggedIn()) {
             loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.LoggedOut"));
-            loginPlayer.logoutPlayer();
+            loginPlayer.logoutPlayer(false);
         } else {
             loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
         }

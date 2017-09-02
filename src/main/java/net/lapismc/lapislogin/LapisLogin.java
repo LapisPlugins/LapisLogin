@@ -18,8 +18,10 @@ package net.lapismc.lapislogin;
 
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
 import net.lapismc.lapislogin.util.InventorySerialization;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -64,6 +66,21 @@ public final class LapisLogin extends JavaPlugin {
     public LapisLoginPlayer getLoginPlayer(UUID uuid) {
         if (!players.containsKey(uuid)) {
             players.put(uuid, new LapisLoginPlayer(this, uuid));
+        } else {
+            Date date = new Date();
+            if (players.get(uuid).getConfig().getLong("Logout") + (getConfig().getInt("LogoutTimeout") * 60000) > date.getTime()) {
+                LapisLoginPlayer loginPlayer = new LapisLoginPlayer(this, uuid);
+                loginPlayer.forceLogin();
+                players.put(uuid, loginPlayer);
+            }
+        }
+        if (!players.get(uuid).getOfflinePlayer().isOnline()) {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
+                @Override
+                public void run() {
+                    removeLoginPlayer(uuid);
+                }
+            }, 20);
         }
         return players.get(uuid);
     }

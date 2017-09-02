@@ -46,8 +46,10 @@ public class LapisLoginListeners implements Listener {
             loginPlayer.task.cancel();
         }
         if (loginPlayer.isLoggedIn()) {
-            if (loginPlayer.getIP() != e.getPlayer().getAddress().toString()) {
-                loginPlayer.logoutPlayer();
+            if (!loginPlayer.getIP().equals(e.getPlayer().getAddress().getHostString())) {
+                loginPlayer.sendMessage("You have been logged out");
+                loginPlayer.sendMessage("OLD: " + loginPlayer.getIP() + "NEW: " + e.getPlayer().getAddress().getHostString());
+                loginPlayer.logoutPlayer(false);
                 return;
             }
             e.getPlayer().sendMessage(plugin.LLConfig.getColoredMessage("Login.NoLoginRequired"));
@@ -75,6 +77,7 @@ public class LapisLoginListeners implements Listener {
         config.set("Logout", date.getTime());
         loginPlayer.saveConfig(config);
         loginPlayer.playerQuit();
+
     }
 
     //Deny action events

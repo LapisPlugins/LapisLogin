@@ -63,9 +63,6 @@ public class InventorySerialization {
         try {
             for (String key : source.getKeys(false)) {
                 int number = Integer.parseInt(key);
-                while (stacks.size() <= number) {
-                    stacks.put(number, null);
-                }
                 stacks.put(number, (ItemStack) source.get(key));
             }
         } catch (NumberFormatException e) {
