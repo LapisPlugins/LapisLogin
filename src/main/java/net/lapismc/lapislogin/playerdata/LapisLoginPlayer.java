@@ -32,8 +32,8 @@ public class LapisLoginPlayer {
     private LapisLogin plugin;
     private OfflinePlayer op;
     private boolean loggedIn = false;
-    private YamlConfiguration config;
-    private BukkitTask task;
+    public YamlConfiguration config;
+    public BukkitTask task;
 
     public LapisLoginPlayer(LapisLogin plugin, UUID uuid) {
         this.plugin = plugin;
@@ -57,8 +57,7 @@ public class LapisLoginPlayer {
     public void loginPlayer(String password) {
         if (plugin.passwordManager.checkPassword(op.getUniqueId(), password)) {
             sendMessage(plugin.LLConfig.getColoredMessage("Login.Success"));
-            loadConfig();
-            plugin.invSerialization.loadInventory(config.getString("Inventory"), op.getPlayer());
+            loadInventory();
             loggedIn = true;
         } else {
             sendMessage(plugin.LLConfig.getColoredMessage("Login.PasswordIncorect"));
@@ -66,18 +65,19 @@ public class LapisLoginPlayer {
     }
 
     public void playerQuit() {
-        if (task != null) {
-            task.cancel();
+        if (loggedIn) {
+            saveInventory();
         }
         task = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
             @Override
             public void run() {
                 if (!op.isOnline()) {
                     plugin.logger.info("Removed " + op.getName() + "'s player stuffs");
+                    saveConfig(config);
                     plugin.removeLoginPlayer(op.getUniqueId());
                 }
             }
-        }, plugin.getConfig().getInt("LogoutTimout") * 20 * 60);
+        }, plugin.getConfig().getInt("LogoutTimeout") * 20 * 60);
     }
 
     public boolean isRegistered() {
@@ -87,8 +87,6 @@ public class LapisLoginPlayer {
     public void registerPlayer(String password) {
         if (plugin.passwordManager.setPassword(op.getUniqueId(), password)) {
             sendMessage(plugin.LLConfig.getColoredMessage("Register.Success").replace("%PASSWORD%", password));
-            loadConfig();
-            plugin.invSerialization.loadInventory(config.getString("Inventory"), op.getPlayer());
             loggedIn = true;
         } else {
             sendMessage(plugin.LLConfig.getColoredMessage("Register.Failed"));
@@ -96,8 +94,22 @@ public class LapisLoginPlayer {
     }
 
     public void saveInventory() {
-        config.set("Inventory", plugin.invSerialization.saveInventory(op.getPlayer().getInventory()));
-        saveConfig(config);
+        if (op.getPlayer().getInventory() != null && op.getPlayer().getInventory().getContents().length > 0) {
+            String inv = plugin.invSerialization.saveInventory(op.getPlayer().getInventory());
+            if (inv != null) {
+                config.set("Inventory", inv);
+                saveConfig(config);
+            }
+        }
+    }
+
+    public void loadInventory() {
+        if (!plugin.getConfig().getBoolean("HideInventory"))
+            return;
+        if (config.getString("Inventory") != null) {
+            loadConfig();
+            plugin.invSerialization.loadInventory(config.getString("Inventory"), op.getPlayer());
+        }
     }
 
     public YamlConfiguration getConfig() {

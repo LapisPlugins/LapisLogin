@@ -54,6 +54,10 @@ public final class LapisLogin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        for (LapisLoginPlayer p : players.values()) {
+            p.saveConfig(p.config);
+            removeLoginPlayer(p.getOfflinePlayer().getUniqueId());
+        }
         logger.info("LapisLogin has been disabled!");
     }
 

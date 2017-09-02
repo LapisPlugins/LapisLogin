@@ -5,7 +5,7 @@ Login:
   Success: "&pYou have successfully logged in \nWelcome Back"
   LoginRequired: "&pUse /login (password) to login"
   PasswordIncorrect: "&sThe password you entered was incorrect!"
-  WelcomeBack: "&pWelcome back, no login required"
+  NoLoginRequired: "&pBecause you just left you don't need to login again \nWelcome back!"
   AlreadyLoggedIn: "&pYou are already logged in!"
 Register:
   Success: "&pYour password is now set to %PASSWORD% \nUse /login %PASSWORD% to login from now on"

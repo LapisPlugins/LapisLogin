@@ -1,3 +1,5 @@
 ConfigVersion: 1
 DownloadUpdates: true
-LogoutTimout: 1
+LogoutTimeout: 1
+InventoryLock: false
+HideInventory: true

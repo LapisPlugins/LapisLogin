@@ -19,8 +19,11 @@ package net.lapismc.lapislogin;
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.*;
 
 import java.util.Date;
@@ -34,14 +37,22 @@ public class LapisLoginListeners implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    //connect disconnect events
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
+        if (loginPlayer.task != null) {
+            loginPlayer.task.cancel();
+        }
         if (loginPlayer.isLoggedIn()) {
-            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.WelcomeBack"));
+            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.NoLoginRequired"));
         } else {
             if (loginPlayer.isRegistered()) {
                 loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
+                if (plugin.getConfig().getBoolean("HideInventory")) {
+                    loginPlayer.getPlayer().getInventory().clear();
+                }
             } else {
                 loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));
             }
@@ -49,8 +60,6 @@ public class LapisLoginListeners implements Listener {
             Date date = new Date();
             config.set("Login", date.getTime());
             loginPlayer.saveConfig(config);
-            loginPlayer.saveInventory();
-            loginPlayer.getPlayer().getInventory().clear();
         }
     }
 
@@ -63,6 +72,8 @@ public class LapisLoginListeners implements Listener {
         loginPlayer.saveConfig(config);
         loginPlayer.playerQuit();
     }
+
+    //Deny action events
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent e) {
@@ -92,6 +103,45 @@ public class LapisLoginListeners implements Listener {
                 e.setCancelled(true);
             } else {
                 e.setCancelled(false);
+            }
+        }
+    }
+
+    //inventory lock events
+
+    @EventHandler
+    public void onInventoryInteract(InventoryInteractEvent e) {
+        if (!plugin.getConfig().getBoolean("InventoryLock"))
+            return;
+        if (e.getWhoClicked() instanceof Player) {
+            LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getWhoClicked().getUniqueId());
+            if (!loginPlayer.isLoggedIn()) {
+                e.setCancelled(true);
+                loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
+            }
+        }
+    }
+
+    @EventHandler
+    public void onItemDrop(PlayerDropItemEvent e) {
+        if (!plugin.getConfig().getBoolean("InventoryLock"))
+            return;
+        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
+        if (!loginPlayer.isLoggedIn()) {
+            e.setCancelled(true);
+            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
+        }
+    }
+
+    @EventHandler
+    public void onItemPickup(EntityPickupItemEvent e) {
+        if (!plugin.getConfig().getBoolean("InventoryLock"))
+            return;
+        if (e.getEntity() instanceof Player) {
+            LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getEntity().getUniqueId());
+            if (!loginPlayer.isLoggedIn()) {
+                e.setCancelled(true);
+                loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
             }
         }
     }
