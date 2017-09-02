@@ -29,11 +29,11 @@ import java.util.UUID;
 
 public class LapisLoginPlayer {
 
+    public YamlConfiguration config;
+    public BukkitTask task;
     private LapisLogin plugin;
     private OfflinePlayer op;
     private boolean loggedIn = false;
-    public YamlConfiguration config;
-    public BukkitTask task;
 
     public LapisLoginPlayer(LapisLogin plugin, UUID uuid) {
         this.plugin = plugin;
@@ -58,10 +58,21 @@ public class LapisLoginPlayer {
         if (plugin.passwordManager.checkPassword(op.getUniqueId(), password)) {
             sendMessage(plugin.LLConfig.getColoredMessage("Login.Success"));
             loadInventory();
+            config.set("IPAddress", op.getPlayer().getAddress().toString());
+            saveConfig(config);
             loggedIn = true;
         } else {
             sendMessage(plugin.LLConfig.getColoredMessage("Login.PasswordIncorrect"));
         }
+    }
+
+    public void logoutPlayer() {
+        loggedIn = false;
+        saveInventory();
+        if (plugin.getConfig().getBoolean("HideInventory")) {
+            getPlayer().getInventory().clear();
+        }
+        sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
     }
 
     public void playerQuit() {
@@ -78,6 +89,10 @@ public class LapisLoginPlayer {
                 }
             }
         }, plugin.getConfig().getInt("LogoutTimeout") * 20 * 60);
+    }
+
+    public String getIP() {
+        return config.getString("IPAddress");
     }
 
     public boolean isRegistered() {

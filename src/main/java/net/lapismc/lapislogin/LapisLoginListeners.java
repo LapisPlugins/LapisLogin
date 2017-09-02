@@ -46,6 +46,10 @@ public class LapisLoginListeners implements Listener {
             loginPlayer.task.cancel();
         }
         if (loginPlayer.isLoggedIn()) {
+            if (loginPlayer.getIP() != e.getPlayer().getAddress().toString()) {
+                loginPlayer.logoutPlayer();
+                return;
+            }
             e.getPlayer().sendMessage(plugin.LLConfig.getColoredMessage("Login.NoLoginRequired"));
         } else {
             if (loginPlayer.isRegistered()) {
@@ -86,6 +90,15 @@ public class LapisLoginListeners implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
+        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
+        if (!loginPlayer.isLoggedIn()) {
+            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e) {
         LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
         if (!loginPlayer.isLoggedIn()) {
             loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));

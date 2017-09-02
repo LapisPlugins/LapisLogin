@@ -1,5 +1,10 @@
+#Dont change unless you want to reset the config
 ConfigVersion: 1
+#Downloads and installs updates when available
 DownloadUpdates: true
+#How long does a player have to be offline for before we make them login again (in minutes)
 LogoutTimeout: 1
+#This will stop players using their inventory while not logged in, this includes disallowing item pickup, drop and moving
 InventoryLock: false
+#This will remove the players inventory while they aren't logged in and give it back when they login
 HideInventory: true

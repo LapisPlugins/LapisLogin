@@ -3,6 +3,7 @@ PrimaryColor: "&b"
 SecondaryColor: "&c"
 Login:
   Success: "&pYou have successfully logged in \nWelcome Back"
+  LoggedOut: "&pYou have successfully logged out"
   LoginRequired: "&pUse /login (password) to login"
   PasswordIncorrect: "&sThe password you entered was incorrect!"
   NoLoginRequired: "&pBecause you just left you don't need to login again \nWelcome back!"
@@ -14,5 +15,7 @@ Register:
   PasswordsDontMatch: "&sThose two passwords don't match, please try again"
 Error:
   Args: "&pTo many or too few arguments!"
+  NoPermission: "&sYou don't have permission todo this!"
   ActionDenied: "&sYou must login todo this!"
   MustBePlayer: "&sYou must be a player to do this!"
+PasswordReset: "&pPassword for %PLAYER% reset"

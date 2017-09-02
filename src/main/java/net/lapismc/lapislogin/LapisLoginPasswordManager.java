@@ -81,6 +81,10 @@ public class LapisLoginPasswordManager {
         }
     }
 
+    public void removePassword(UUID uuid) {
+        passwords.set(uuid.toString(), null);
+    }
+
     public boolean checkPassword(UUID uuid, String pw) {
         String hash;
         if (Bukkit.getServer().getOnlineMode()) {

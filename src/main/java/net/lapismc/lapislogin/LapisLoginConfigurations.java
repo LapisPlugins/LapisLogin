@@ -23,18 +23,32 @@ import java.io.File;
 
 public class LapisLoginConfigurations {
 
+    public String primaryColor = ChatColor.AQUA.toString();
+    public String secondaryColor = ChatColor.RED.toString();
     LapisLogin plugin;
     YamlConfiguration messages;
     File messagesFile;
-    public String primaryColor = ChatColor.AQUA.toString();
-    public String secondaryColor = ChatColor.RED.toString();
 
-    public LapisLoginConfigurations(LapisLogin p) {
-        plugin = p;
-        p.saveDefaultConfig();
-        new File(p.getDataFolder(), "PlayerData").mkdirs();
+    public LapisLoginConfigurations(LapisLogin plugin) {
+        this.plugin = plugin;
+        plugin.saveDefaultConfig();
+        configVersion();
+        new File(plugin.getDataFolder(), "PlayerData").mkdirs();
         primaryColor = ChatColor.translateAlternateColorCodes('&', getMessages().getString("PrimaryColor"));
         secondaryColor = ChatColor.translateAlternateColorCodes('&', getMessages().getString("SecondaryColor"));
+    }
+
+    private void configVersion() {
+        if (plugin.getConfig().getInt("ConfigurationVersion") != 1) {
+            File f = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config_old.yml");
+            File f1 = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
+            if (!f1.renameTo(f)) {
+                plugin.logger.info(plugin.getName() + " failed to update the config.yml");
+            }
+            plugin.saveDefaultConfig();
+            plugin.logger.info("New Configuration Generated for " + plugin.getName() + "," +
+                    " Please Transfer Values From config_old.yml");
+        }
     }
 
     private YamlConfiguration getMessages() {
