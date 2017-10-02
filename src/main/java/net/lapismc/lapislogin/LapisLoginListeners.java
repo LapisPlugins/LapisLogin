@@ -50,17 +50,20 @@ public class LapisLoginListeners implements Listener {
                 loginPlayer.sendMessage("You have been logged out");
                 loginPlayer.sendMessage("OLD: " + loginPlayer.getIP() + "NEW: " + e.getPlayer().getAddress().getHostString());
                 loginPlayer.logoutPlayer(false);
+                if (plugin.getConfig().getBoolean("HideInventory")) {
+                    loginPlayer.saveInventory();
+                }
                 return;
             }
             e.getPlayer().sendMessage(plugin.LLConfig.getColoredMessage("Login.NoLoginRequired"));
         } else {
             if (loginPlayer.isRegistered()) {
                 loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
-                if (plugin.getConfig().getBoolean("HideInventory")) {
-                    loginPlayer.getPlayer().getInventory().clear();
-                }
             } else {
                 loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));
+            }
+            if (plugin.getConfig().getBoolean("HideInventory")) {
+                loginPlayer.saveInventory();
             }
             YamlConfiguration config = loginPlayer.getConfig();
             Date date = new Date();
@@ -74,10 +77,10 @@ public class LapisLoginListeners implements Listener {
         LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
         YamlConfiguration config = loginPlayer.getConfig();
         Date date = new Date();
+        loginPlayer.loadInventory();
         config.set("Logout", date.getTime());
         loginPlayer.saveConfig(config);
         loginPlayer.playerQuit();
-
     }
 
     //Deny action events

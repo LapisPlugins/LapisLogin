@@ -21,6 +21,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
@@ -33,6 +34,7 @@ public class LapisLoginPlayer {
     public BukkitTask task;
     private LapisLogin plugin;
     private OfflinePlayer op;
+    private ItemStack[] inv;
     private boolean loggedIn = false;
 
     public LapisLoginPlayer(LapisLogin plugin, UUID uuid) {
@@ -73,7 +75,6 @@ public class LapisLoginPlayer {
 
     public void logoutPlayer(boolean deregister) {
         loggedIn = false;
-        saveInventory();
         if (!deregister && plugin.getConfig().getBoolean("HideInventory")) {
             getPlayer().getInventory().clear();
         }
@@ -82,9 +83,6 @@ public class LapisLoginPlayer {
     }
 
     public void playerQuit() {
-        if (loggedIn) {
-            saveInventory();
-        }
         if (isRegistered()) {
             task = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
                 @Override
@@ -121,20 +119,15 @@ public class LapisLoginPlayer {
 
     public void saveInventory() {
         if (op.getPlayer().getInventory() != null && op.getPlayer().getInventory().getContents().length > 0) {
-            String inv = plugin.invSerialization.saveInventory(op.getPlayer().getInventory());
-            if (inv != null) {
-                config.set("Inventory", inv);
-                saveConfig(config);
-            }
+            inv = op.getPlayer().getInventory().getContents();
+            op.getPlayer().getInventory().clear();
         }
     }
 
     public void loadInventory() {
-        if (!plugin.getConfig().getBoolean("HideInventory"))
-            return;
-        if (config.getString("Inventory") != null) {
-            loadConfig();
-            plugin.invSerialization.loadInventory(config.getString("Inventory"), op.getPlayer());
+        if (!plugin.getConfig().getBoolean("HideInventory")) return;
+        if (inv != null) {
+            op.getPlayer().getInventory().setContents(inv);
         }
     }
 
