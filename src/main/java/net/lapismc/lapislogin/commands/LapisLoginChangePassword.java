@@ -35,6 +35,10 @@ public class LapisLoginChangePassword {
             return;
         }
         LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(((Player) sender).getUniqueId());
+        if (!loginPlayer.isRegistered()) {
+            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));
+            return;
+        }
         if (args.length == 3) {
             String oldPassword = args[0];
             String newPassword0 = args[1];

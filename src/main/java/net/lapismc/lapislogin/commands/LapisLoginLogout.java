@@ -35,6 +35,10 @@ public class LapisLoginLogout {
             return;
         }
         LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(((Player) sender).getUniqueId());
+        if (!loginPlayer.isRegistered()) {
+            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));
+            return;
+        }
         if (loginPlayer.isLoggedIn()) {
             loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.LoggedOut"));
             loginPlayer.logoutPlayer(false);

@@ -1,7 +1,7 @@
 #all instances of &p and &s will be replaced by these values on use
 # \n means that all text after it will be on a new line
 PrimaryColor: "&b"
-SecondaryColor: "&c"
+SecondaryColor: "&3"
 Login:
   Success: "&pYou have successfully logged in \nWelcome Back"
   LoggedOut: "&pYou have successfully logged out"

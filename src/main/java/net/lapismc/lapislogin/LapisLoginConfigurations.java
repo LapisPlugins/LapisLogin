@@ -24,7 +24,7 @@ import java.io.File;
 public class LapisLoginConfigurations {
 
     public String primaryColor = ChatColor.AQUA.toString();
-    public String secondaryColor = ChatColor.RED.toString();
+    public String secondaryColor = ChatColor.DARK_AQUA.toString();
     LapisLogin plugin;
     YamlConfiguration messages;
     File messagesFile;
