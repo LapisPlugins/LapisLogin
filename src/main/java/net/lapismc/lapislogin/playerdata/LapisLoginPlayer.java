@@ -57,6 +57,38 @@ public class LapisLoginPlayer {
         }
     }
 
+    public void playerJoin() {
+        if (task != null) {
+            task.cancel();
+        }
+        if (isLoggedIn()) {
+            if (!getIP().equals(getPlayer().getAddress().getHostString())) {
+                sendMessage("You have been logged out bacouse your IP address has changed");
+                sendMessage("OLD: " + getIP() + "NEW: " + getPlayer().getAddress().getHostString());
+                logoutPlayer(false);
+                if (plugin.getConfig().getBoolean("HideInventory")) {
+                    saveInventory();
+                }
+            } else {
+                loadInventory();
+                getPlayer().sendMessage(plugin.LLConfig.getColoredMessage("Login.NoLoginRequired"));
+            }
+        } else {
+            if (isRegistered()) {
+                sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
+            } else {
+                sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));
+            }
+            if (plugin.getConfig().getBoolean("HideInventory")) {
+                saveInventory();
+            }
+            YamlConfiguration config = getConfig();
+            Date date = new Date();
+            config.set("Login", date.getTime());
+            saveConfig(config);
+        }
+    }
+
     public void loginPlayer(String password) {
         if (plugin.passwordManager.checkPassword(op.getUniqueId(), password)) {
             sendMessage(plugin.LLConfig.getColoredMessage("Login.Success"));
@@ -77,10 +109,9 @@ public class LapisLoginPlayer {
     public void logoutPlayer(boolean deregister) {
         loggedIn = false;
         if (!deregister && plugin.getConfig().getBoolean("HideInventory")) {
-            getPlayer().getInventory().clear();
+            saveInventory();
         }
-        if (!deregister)
-            sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
+        if (!deregister) sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
     }
 
     public void playerQuit() {
@@ -123,10 +154,8 @@ public class LapisLoginPlayer {
     }
 
     public void saveInventory() {
-        if (op.getPlayer().getInventory() != null && op.getPlayer().getInventory().getContents().length > 0) {
-            inv = op.getPlayer().getInventory().getContents();
-            op.getPlayer().getInventory().clear();
-        }
+        inv = getPlayer().getInventory().getContents();
+        getPlayer().getInventory().clear();
     }
 
     public void loadInventory() {

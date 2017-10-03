@@ -18,15 +18,12 @@ package net.lapismc.lapislogin;
 
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.*;
-
-import java.util.Date;
 
 public class LapisLoginListeners implements Listener {
 
@@ -42,34 +39,7 @@ public class LapisLoginListeners implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
-        if (loginPlayer.task != null) {
-            loginPlayer.task.cancel();
-        }
-        if (loginPlayer.isLoggedIn()) {
-            if (!loginPlayer.getIP().equals(e.getPlayer().getAddress().getHostString())) {
-                loginPlayer.sendMessage("You have been logged out");
-                loginPlayer.sendMessage("OLD: " + loginPlayer.getIP() + "NEW: " + e.getPlayer().getAddress().getHostString());
-                loginPlayer.logoutPlayer(false);
-                if (plugin.getConfig().getBoolean("HideInventory")) {
-                    loginPlayer.saveInventory();
-                }
-                return;
-            }
-            e.getPlayer().sendMessage(plugin.LLConfig.getColoredMessage("Login.NoLoginRequired"));
-        } else {
-            if (loginPlayer.isRegistered()) {
-                loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
-            } else {
-                loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));
-            }
-            if (plugin.getConfig().getBoolean("HideInventory")) {
-                loginPlayer.saveInventory();
-            }
-            YamlConfiguration config = loginPlayer.getConfig();
-            Date date = new Date();
-            config.set("Login", date.getTime());
-            loginPlayer.saveConfig(config);
-        }
+        loginPlayer.playerJoin();
     }
 
     @EventHandler
