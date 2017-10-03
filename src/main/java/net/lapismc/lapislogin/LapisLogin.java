@@ -53,7 +53,11 @@ public final class LapisLogin extends JavaPlugin {
         new LapisLoginCommands(this);
         Metrics metrics = new Metrics(this);
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendMessage(LLConfig.primaryColor + "LapisLogin has been reloaded, Unfortunately this means you need to login again.\nUse /login (password) to login again");
+            LapisLoginPlayer loginPlayer = getLoginPlayer(p.getUniqueId());
+            if (loginPlayer.isRegistered()) {
+                p.sendMessage(LLConfig.getColoredMessage("Error.ReloadedPlugin"));
+                p.sendMessage(LLConfig.getColoredMessage("Login.LoginRequired"));
+            }
         }
         logger.info("LapisLogin v." + getDescription().getVersion() + " has been enabled!");
     }

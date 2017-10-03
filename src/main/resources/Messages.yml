@@ -21,4 +21,5 @@ Error:
   ActionDenied: "&sYou must login todo this!"
   MustBePlayer: "&sYou must be a player to do this!"
   MustBeRegistered: "&sYou must be registered to use this command!"
+  ReloadedPlugin: "&pLapisLogin has just been reloaded, this means you will need to login again"
 PasswordReset: "&pPassword for &s%PLAYER%&p reset"
