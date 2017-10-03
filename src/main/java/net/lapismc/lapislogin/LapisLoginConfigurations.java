@@ -40,14 +40,22 @@ public class LapisLoginConfigurations {
 
     private void configVersion() {
         if (plugin.getConfig().getInt("ConfigVersion") != 1) {
-            File f = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config_old.yml");
-            File f1 = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
-            if (!f1.renameTo(f)) {
+            File oldConfig = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config_old.yml");
+            File newConfig = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
+            if (!newConfig.renameTo(oldConfig)) {
                 plugin.logger.info(plugin.getName() + " failed to update the config.yml");
             }
             plugin.saveDefaultConfig();
+
+            File oldMessages = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "Messages_old.yml");
+            if (!messagesFile.renameTo(oldMessages)) {
+                plugin.logger.info(plugin.getName() + " failed to update the Messages.yml");
+            }
+            messages = null;
+            messagesFile = null;
+            getMessages();
             plugin.logger.info("New Configuration Generated for " + plugin.getName() + "," +
-                    " Please Transfer Values From config_old.yml");
+                    " Please Transfer Values From config_old.yml & Messages_old.yml");
         }
     }
 
