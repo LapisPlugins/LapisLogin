@@ -58,6 +58,9 @@ public class LapisLoginPlayer {
     }
 
     public void playerJoin() {
+        if (plugin.getConfig().getBoolean("HideInventory")) {
+            saveInventory();
+        }
         if (task != null) {
             task.cancel();
         }
@@ -66,9 +69,6 @@ public class LapisLoginPlayer {
                 sendMessage("You have been logged out bacouse your IP address has changed");
                 sendMessage("OLD: " + getIP() + "NEW: " + getPlayer().getAddress().getHostString());
                 logoutPlayer(false);
-                if (plugin.getConfig().getBoolean("HideInventory")) {
-                    saveInventory();
-                }
             } else {
                 loadInventory();
                 getPlayer().sendMessage(plugin.LLConfig.getColoredMessage("Login.NoLoginRequired"));
@@ -78,9 +78,6 @@ public class LapisLoginPlayer {
                 sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
             } else {
                 sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));
-            }
-            if (plugin.getConfig().getBoolean("HideInventory")) {
-                saveInventory();
             }
             YamlConfiguration config = getConfig();
             Date date = new Date();
@@ -119,7 +116,7 @@ public class LapisLoginPlayer {
         loadInventory();
         config.set("Logout", date.getTime());
         saveConfig(config);
-        if (isRegistered()) {
+        if (isRegistered() && isLoggedIn()) {
             task = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
                 @Override
                 public void run() {
