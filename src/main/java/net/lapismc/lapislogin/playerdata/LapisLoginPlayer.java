@@ -37,10 +37,12 @@ public class LapisLoginPlayer {
     private OfflinePlayer op;
     private ItemStack[] inv;
     private boolean loggedIn = false;
+    public boolean registrationRequired = true;
 
     public LapisLoginPlayer(LapisLogin plugin, UUID uuid) {
         this.plugin = plugin;
         op = Bukkit.getOfflinePlayer(uuid);
+        registrationRequired = getPlayer().hasPermission("lapislogin.required");
         loggedIn = false;
         loadConfig();
     }
@@ -58,6 +60,10 @@ public class LapisLoginPlayer {
     }
 
     public void playerJoin() {
+        if (!isRegistered() && !registrationRequired) {
+            sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationOptional"));
+            return;
+        }
         if (plugin.getConfig().getBoolean("HideInventory")) {
             saveInventory();
         }
@@ -105,7 +111,7 @@ public class LapisLoginPlayer {
 
     public void logoutPlayer(boolean deregister) {
         loggedIn = false;
-        if (!deregister && plugin.getConfig().getBoolean("HideInventory")) {
+        if (plugin.getConfig().getBoolean("HideInventory")) {
             saveInventory();
         }
         if (!deregister) sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
@@ -141,9 +147,20 @@ public class LapisLoginPlayer {
         return plugin.passwordManager.isPasswordSet(op.getUniqueId());
     }
 
+    public boolean canInteract() {
+        if (isRegistered() && isLoggedIn()) {
+            return true;
+        }
+        if (!isRegistered() && registrationRequired) {
+            return false;
+        }
+        return false;
+    }
+
     public void registerPlayer(String password) {
         if (plugin.passwordManager.setPassword(op.getUniqueId(), password)) {
             sendMessage(plugin.LLConfig.getColoredMessage("Register.Success").replace("%PASSWORD%", password));
+            loadInventory();
             loggedIn = true;
         } else {
             sendMessage(plugin.LLConfig.getColoredMessage("Register.Failed"));

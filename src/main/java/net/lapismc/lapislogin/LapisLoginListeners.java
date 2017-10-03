@@ -50,44 +50,37 @@ public class LapisLoginListeners implements Listener {
 
     //Deny action events
 
+    private boolean denyAction(PlayerEvent e) {
+        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
+        if (!loginPlayer.isLoggedIn() && loginPlayer.registrationRequired) {
+            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
+            return true;
+        }
+        return false;
+    }
+
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent e) {
-        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
-        if (!loginPlayer.isLoggedIn()) {
-            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
-            e.setCancelled(true);
-        }
+        e.setCancelled(denyAction(e));
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
-        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
-        if (!loginPlayer.isLoggedIn()) {
-            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
-            e.setCancelled(true);
-        }
+        e.setCancelled(denyAction(e));
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
-        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
-        if (!loginPlayer.isLoggedIn()) {
-            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
-            e.setCancelled(true);
-        }
+        e.setCancelled(denyAction(e));
     }
 
     @EventHandler
     public void onPlayerCommand(PlayerCommandPreprocessEvent e) {
-        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
-        if (!loginPlayer.isLoggedIn()) {
-            String cmd = e.getMessage().split(" ")[0].toLowerCase();
-            if (!(cmd.equals("/login") || cmd.equals("/register"))) {
-                loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
-                e.setCancelled(true);
-            } else {
-                e.setCancelled(false);
-            }
+        String cmd = e.getMessage().split(" ")[0].toLowerCase();
+        if (!(cmd.equals("/login") || cmd.equals("/register"))) {
+            e.setCancelled(denyAction(e));
+        } else {
+            e.setCancelled(false);
         }
     }
 
@@ -99,7 +92,7 @@ public class LapisLoginListeners implements Listener {
             return;
         if (e.getWhoClicked() instanceof Player) {
             LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getWhoClicked().getUniqueId());
-            if (!loginPlayer.isLoggedIn()) {
+            if (!loginPlayer.isLoggedIn() && loginPlayer.registrationRequired) {
                 e.setCancelled(true);
                 loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
             }
@@ -111,7 +104,7 @@ public class LapisLoginListeners implements Listener {
         if (!plugin.getConfig().getBoolean("InventoryLock"))
             return;
         LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
-        if (!loginPlayer.isLoggedIn()) {
+        if (!loginPlayer.isLoggedIn() && loginPlayer.registrationRequired) {
             e.setCancelled(true);
             loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
         }
@@ -123,7 +116,7 @@ public class LapisLoginListeners implements Listener {
             return;
         if (e.getEntity() instanceof Player) {
             LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getEntity().getUniqueId());
-            if (!loginPlayer.isLoggedIn()) {
+            if (!loginPlayer.isLoggedIn() && loginPlayer.registrationRequired) {
                 e.setCancelled(true);
                 loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
             }

@@ -4,6 +4,8 @@ main: net.lapismc.lapislogin.LapisLogin
 authors: [Dart2112]
 description: Simple login plugin for offline mode servers
 permissions:
+  lapislogin.required:
+    decsription: Players with this permission will be required to register
   lapislogin.admin:
     decsription: Allows you to deregister players with /resetpassword (Player)
 commands:

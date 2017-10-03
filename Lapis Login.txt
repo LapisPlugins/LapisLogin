@@ -1,19 +1,14 @@
-Lapis Login:
-    Files:
-        config.yml
-        messages.yml
-        logins.db
-    Classes:
-        Initializer
-        SQLite
-        Password Hasher(From homespawn)
-        Player join listener
-        Command class(es)
-    Player commands
-        /login (password)
-        /logout
-        /register (password) (password)
-        /changepw (new password) (new password)
-    Admin commands
-        /resetpw (username)
-        /logout (username)
+Features:
+    Password Security:
+    Uses hashing and salting to secure passwords in such a way that even I can't tell you what they are
+
+    Simple and Fast:
+    Because I haven't put in a lot of fancy features the plugin is lite and easy to run making it perfect for small and massive servers
+
+    Ability to only require some players to register:
+    If you don't want all players to need to register then you only need to give the permission to the players you want to be required to register.
+    other players can still register if they wish but it wont be a requirement. this might be handy if you want to force staff to secure their account but don't want to force players to.
+Commands:
+
+Permissions:
+lapislogin.admin: allows the player to reset other players passwords with /resetpassword
