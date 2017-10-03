@@ -72,8 +72,7 @@ public class LapisLoginPlayer {
         }
         if (isLoggedIn()) {
             if (!getIP().equals(getPlayer().getAddress().getHostString())) {
-                sendMessage("You have been logged out bacouse your IP address has changed");
-                sendMessage("OLD: " + getIP() + "NEW: " + getPlayer().getAddress().getHostString());
+                sendMessage(plugin.LLConfig.getColoredMessage("Error.IPChangeLogout"));
                 logoutPlayer(false);
             } else {
                 loadInventory();
@@ -127,7 +126,6 @@ public class LapisLoginPlayer {
                 @Override
                 public void run() {
                     if (!op.isOnline()) {
-                        plugin.logger.info("Removed " + op.getName() + "'s player stuffs");
                         saveConfig(config);
                         plugin.removeLoginPlayer(op.getUniqueId());
                     }

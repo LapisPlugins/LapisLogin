@@ -17,7 +17,6 @@
 package net.lapismc.lapislogin;
 
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -38,7 +37,7 @@ public class LapisUpdater {
     private String repoName;
     private String branch;
     private JavaPlugin plugin;
-    private Logger logger = Bukkit.getLogger();
+    private Logger logger;
     private Boolean force;
     private String newVersionRawString;
 
@@ -48,6 +47,7 @@ public class LapisUpdater {
         this.username = username;
         this.repoName = repoName;
         this.branch = branch;
+        this.logger = plugin.getLogger();
     }
 
     public boolean checkUpdate() {

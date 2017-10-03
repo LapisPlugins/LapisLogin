@@ -16,6 +16,11 @@ Features:
     Player locking:
     This only applies to players who are registered but not logged in or players who are required to register but haven't. These players will not be able to move, chat, use commands other that /login and /register,
      access inventories like chests and alter their own inventory if inventory hiding is disabled.
+
+     Customisable Messages:
+     All messages but command usage are editable and translatable should you wish to do so. this also allows you to theme the messages to match the theme of your server. The messages also have
+     primary and secondary colors meaning you only have to change 2 values to change the colors of all the messages in an effortless way
+
 Commands:
 /login (Password):
 this command allows the player to login, after this commmand is run the player will be allowed to move and be given back their inventory if inventory hiding is on

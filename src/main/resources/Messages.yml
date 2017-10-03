@@ -20,6 +20,7 @@ Error:
   NoPermission: "&sYou don't have permission todo this!"
   ActionDenied: "&sYou must login todo this!"
   MustBePlayer: "&sYou must be a player to do this!"
+  IPChangeLogout: "&sYou have been logged out because your IP address changed!"
   MustBeRegistered: "&sYou must be registered to use this command!"
   ReloadedPlugin: "&pLapisLogin has just been reloaded, this means you will need to login again"
 PasswordReset: "&pPassword for &s%PLAYER%&p reset"
