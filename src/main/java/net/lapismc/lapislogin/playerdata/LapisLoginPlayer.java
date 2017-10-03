@@ -26,6 +26,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.UUID;
 
 public class LapisLoginPlayer {
@@ -83,6 +84,10 @@ public class LapisLoginPlayer {
     }
 
     public void playerQuit() {
+        Date date = new Date();
+        loadInventory();
+        config.set("Logout", date.getTime());
+        saveConfig(config);
         if (isRegistered()) {
             task = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
                 @Override

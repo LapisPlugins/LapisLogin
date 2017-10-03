@@ -75,11 +75,6 @@ public class LapisLoginListeners implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
-        YamlConfiguration config = loginPlayer.getConfig();
-        Date date = new Date();
-        loginPlayer.loadInventory();
-        config.set("Logout", date.getTime());
-        loginPlayer.saveConfig(config);
         loginPlayer.playerQuit();
     }
 

@@ -19,6 +19,7 @@ package net.lapismc.lapislogin;
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
 import net.lapismc.lapislogin.util.InventorySerialization;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Date;
@@ -51,6 +52,9 @@ public final class LapisLogin extends JavaPlugin {
         new LapisLoginListeners(this);
         new LapisLoginCommands(this);
         Metrics metrics = new Metrics(this);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendMessage(LLConfig.primaryColor + "LapisLogin has been reloaded, Unfortunately this means you need to login again.\nUse /login (password) to login again");
+        }
         logger.info("LapisLogin v." + getDescription().getVersion() + " has been enabled!");
     }
 
@@ -80,7 +84,7 @@ public final class LapisLogin extends JavaPlugin {
                 public void run() {
                     removeLoginPlayer(uuid);
                 }
-            }, 20);
+            }, 20 * 10);
         }
         return players.get(uuid);
     }
