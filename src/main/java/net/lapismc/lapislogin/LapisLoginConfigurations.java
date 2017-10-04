@@ -39,7 +39,7 @@ public class LapisLoginConfigurations {
     }
 
     private void configVersion() {
-        if (plugin.getConfig().getInt("ConfigVersion") != 1) {
+        if (plugin.getConfig().getInt("ConfigVersion") != 2) {
             File oldConfig = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config_old.yml");
             File newConfig = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
             if (!newConfig.renameTo(oldConfig)) {
@@ -47,6 +47,7 @@ public class LapisLoginConfigurations {
             }
             plugin.saveDefaultConfig();
 
+            getMessages();
             File oldMessages = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "Messages_old.yml");
             if (!messagesFile.renameTo(oldMessages)) {
                 plugin.logger.info(plugin.getName() + " failed to update the Messages.yml");
