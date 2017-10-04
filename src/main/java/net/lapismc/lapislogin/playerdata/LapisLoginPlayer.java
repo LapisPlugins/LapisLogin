@@ -72,7 +72,7 @@ public class LapisLoginPlayer {
             task.cancel();
         }
         if (isLoggedIn()) {
-            if (!getIP().equals(getPlayer().getAddress().getHostString())) {
+            if (getIP() != null && !getIP().equals(getPlayer().getAddress().getHostString())) {
                 sendMessage(plugin.LLConfig.getColoredMessage("Error.IPChangeLogout"));
                 logoutPlayer(false);
             } else {
@@ -90,6 +90,9 @@ public class LapisLoginPlayer {
             config.set("Login", date.getTime());
             saveConfig(config);
         }
+        loadConfig();
+        config.set("IPAddress", op.getPlayer().getAddress().getHostString());
+        saveConfig(config);
     }
 
     public void loginPlayer(String password) {
@@ -97,9 +100,6 @@ public class LapisLoginPlayer {
             sendMessage(plugin.LLConfig.getColoredMessage("Login.Success"));
             loginAttempts = 0;
             loadInventory();
-            loadConfig();
-            config.set("IPAddress", op.getPlayer().getAddress().getHostString());
-            saveConfig(config);
             loggedIn = true;
         } else {
             loginAttempts++;
