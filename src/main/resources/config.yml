@@ -1,7 +1,11 @@
 #Dont change unless you want to reset the config
-ConfigVersion: 1
+ConfigVersion: 2
 #Downloads and installs updates when available
 DownloadUpdates: true
+#How many times can a player get their password wrong before the LoginAttemptsReachedCommand is run
+LoginAttempts: 3
+#Command to run after a player get their password wrong
+LoginAttemptsReachedCommand: "kick %NAME% You got your password wrong %ATTEMPTS% times!"
 #How long does a player have to be offline for before we make them login again (in minutes), they will always need to login again if their IP address changes
 LogoutTimeout: 1
 #This will stop players using their inventory while not logged in, this includes disallowing item pickup, drop and moving

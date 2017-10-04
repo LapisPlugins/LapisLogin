@@ -36,6 +36,7 @@ public class LapisLoginPlayer {
     private LapisLogin plugin;
     private OfflinePlayer op;
     private ItemStack[] inv;
+    private int loginAttempts = 0;
     private boolean loggedIn = false;
     public boolean registrationRequired = true;
 
@@ -94,13 +95,20 @@ public class LapisLoginPlayer {
     public void loginPlayer(String password) {
         if (plugin.passwordManager.checkPassword(op.getUniqueId(), password)) {
             sendMessage(plugin.LLConfig.getColoredMessage("Login.Success"));
+            loginAttempts = 0;
             loadInventory();
             loadConfig();
             config.set("IPAddress", op.getPlayer().getAddress().getHostString());
             saveConfig(config);
             loggedIn = true;
         } else {
-            sendMessage(plugin.LLConfig.getColoredMessage("Login.PasswordIncorrect"));
+            loginAttempts++;
+            if (plugin.getConfig().getInt("LoginAttempts") <= loginAttempts) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getConfig().getString("LoginAttemptsReachedCommand")
+                        .replace("%NAME%", op.getName()).replace("%ATTEMPTS%", loginAttempts + ""));
+            } else {
+                sendMessage(plugin.LLConfig.getColoredMessage("Login.PasswordIncorrect").replace("%ATTEMPTS%", plugin.getConfig().getInt("LoginAttempts") - loginAttempts + ""));
+            }
         }
     }
 

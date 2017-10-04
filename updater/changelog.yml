@@ -1,2 +1,4 @@
 0.1.0:
   - "Initial release!"
+1.0.0:
+  - "Added login attempts to deal with players trying to get into an account without knowing the password"

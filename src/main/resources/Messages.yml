@@ -6,7 +6,7 @@ Login:
   Success: "&pYou have successfully logged in \nWelcome Back"
   LoggedOut: "&pYou have successfully logged out"
   LoginRequired: "&pUse &s/login (password)&p to login"
-  PasswordIncorrect: "&sThe password you entered was&s incorrect&p!"
+  PasswordIncorrect: "&sThe password you entered was&s incorrect&p!&s %ATTEMPTS%&p login attempts remaining"
   NoLoginRequired: "&pBecause you just left you don't need to login again \nWelcome back!"
   AlreadyLoggedIn: "&pYou are already logged in!"
 Register:
