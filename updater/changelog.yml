@@ -5,3 +5,4 @@
 1.0.1:
   - "Many bug fixes"
   - "Added file watcher for automatic file reloading"
+  - "Added /lapislogin command to deal with help, reloading, updating and displaying plugin information"
