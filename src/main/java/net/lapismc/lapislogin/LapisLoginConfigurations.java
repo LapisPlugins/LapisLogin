@@ -34,8 +34,8 @@ public class LapisLoginConfigurations {
         plugin.saveDefaultConfig();
         configVersion();
         new File(plugin.getDataFolder(), "PlayerData").mkdirs();
-        primaryColor = ChatColor.translateAlternateColorCodes('&', getMessages().getString("PrimaryColor"));
-        secondaryColor = ChatColor.translateAlternateColorCodes('&', getMessages().getString("SecondaryColor"));
+        primaryColor = ChatColor.translateAlternateColorCodes('&', getMessages(false).getString("PrimaryColor"));
+        secondaryColor = ChatColor.translateAlternateColorCodes('&', getMessages(false).getString("SecondaryColor"));
     }
 
     private void configVersion() {
@@ -47,21 +47,21 @@ public class LapisLoginConfigurations {
             }
             plugin.saveDefaultConfig();
 
-            getMessages();
+            getMessages(false);
             File oldMessages = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "Messages_old.yml");
             if (!messagesFile.renameTo(oldMessages)) {
                 plugin.logger.info(plugin.getName() + " failed to update the Messages.yml");
             }
             messages = null;
             messagesFile = null;
-            getMessages();
+            getMessages(false);
             plugin.logger.info("New Configuration Generated for " + plugin.getName() + "," +
                     " Please Transfer Values From config_old.yml & Messages_old.yml");
         }
     }
 
-    private YamlConfiguration getMessages() {
-        if (messages == null) {
+    public YamlConfiguration getMessages(boolean reload) {
+        if (messages == null || reload) {
             if (messagesFile == null) {
                 messagesFile = new File(plugin.getDataFolder() + File.separator + "Messages.yml");
                 if (!messagesFile.exists()) {
@@ -74,7 +74,7 @@ public class LapisLoginConfigurations {
     }
 
     public String getColoredMessage(String path) {
-        return ChatColor.translateAlternateColorCodes('&', getMessages().getString(path).replace("&p", primaryColor).replace("&s", secondaryColor));
+        return ChatColor.translateAlternateColorCodes('&', getMessages(false).getString(path).replace("&p", primaryColor).replace("&s", secondaryColor));
     }
 
     public String getMessage(String path) {

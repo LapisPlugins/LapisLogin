@@ -29,6 +29,7 @@ public class LapisLoginCommands implements CommandExecutor {
     private LapisLoginRegister register;
     private LapisLoginResetPassword resetPassword;
     private LapisLoginChangePassword changePassword;
+    private net.lapismc.lapislogin.commands.LapisLogin lapisLogin;
 
     public LapisLoginCommands(LapisLogin p) {
         plugin = p;
@@ -37,16 +38,21 @@ public class LapisLoginCommands implements CommandExecutor {
         register = new LapisLoginRegister(plugin);
         resetPassword = new LapisLoginResetPassword(plugin);
         changePassword = new LapisLoginChangePassword(plugin);
+        lapisLogin = new net.lapismc.lapislogin.commands.LapisLogin(plugin);
         plugin.getCommand("login").setExecutor(this);
         plugin.getCommand("logout").setExecutor(this);
         plugin.getCommand("register").setExecutor(this);
+        plugin.getCommand("lapislogin").setExecutor(this);
         plugin.getCommand("resetpassword").setExecutor(this);
         plugin.getCommand("changepassword").setExecutor(this);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (cmd.getName().equals("login")) {
+        if (cmd.getName().equalsIgnoreCase("lapislogin")) {
+            lapisLogin.run(sender, args);
+            return true;
+        } else if (cmd.getName().equals("login")) {
             login.run(sender, args);
             return true;
         } else if (cmd.getName().equals("logout")) {

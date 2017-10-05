@@ -9,6 +9,8 @@ permissions:
   lapislogin.admin:
     decsription: Allows you to deregister players with /resetpassword (Player)
 commands:
+  lapislogin:
+    description: Use /lapislogin help for help
   login:
     description: Allows you to login to the server
   register:

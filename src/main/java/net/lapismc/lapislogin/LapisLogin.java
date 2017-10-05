@@ -51,6 +51,7 @@ public final class LapisLogin extends JavaPlugin {
         LLConfig = new LapisLoginConfigurations(this);
         new LapisLoginListeners(this);
         new LapisLoginCommands(this);
+        new LapisLoginFileWatcher(this);
         Metrics metrics = new Metrics(this);
         for (Player p : Bukkit.getOnlinePlayers()) {
             LapisLoginPlayer loginPlayer = getLoginPlayer(p.getUniqueId());

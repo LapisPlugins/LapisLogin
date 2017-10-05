@@ -2,3 +2,6 @@
   - "Initial release!"
 1.0.0:
   - "Added login attempts to deal with players trying to get into an account without knowing the password"
+1.0.1:
+  - "Many bug fixes"
+  - "Added file watcher for automatic file reloading"
