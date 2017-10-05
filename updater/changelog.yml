@@ -6,3 +6,5 @@
   - "Many bug fixes"
   - "Added file watcher for automatic file reloading"
   - "Added /lapislogin command to deal with help, reloading, updating and displaying plugin information"
+1.0.2:
+  - "Added new API objects for other developers"
