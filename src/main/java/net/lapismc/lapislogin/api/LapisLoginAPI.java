@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package net.lapismc.lapislogin.API;
+package net.lapismc.lapislogin.api;
 
 import net.lapismc.lapislogin.LapisLogin;
 import net.lapismc.lapislogin.playerdata.LapisLoginAPIPlayer;

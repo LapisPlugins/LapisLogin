@@ -16,7 +16,7 @@
 
 package net.lapismc.lapislogin;
 
-import net.lapismc.lapislogin.API.LapisLoginAPI;
+import net.lapismc.lapislogin.api.LapisLoginAPI;
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
 import net.lapismc.lapislogin.util.InventorySerialization;
 import org.bukkit.Bukkit;
