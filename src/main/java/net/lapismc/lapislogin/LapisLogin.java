@@ -16,6 +16,7 @@
 
 package net.lapismc.lapislogin;
 
+import net.lapismc.lapislogin.API.LapisLoginAPI;
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
 import net.lapismc.lapislogin.util.InventorySerialization;
 import org.bukkit.Bukkit;
@@ -52,6 +53,7 @@ public final class LapisLogin extends JavaPlugin {
         new LapisLoginListeners(this);
         new LapisLoginCommands(this);
         new LapisLoginFileWatcher(this);
+        new LapisLoginAPI(this);
         Metrics metrics = new Metrics(this);
         for (Player p : Bukkit.getOnlinePlayers()) {
             LapisLoginPlayer loginPlayer = getLoginPlayer(p.getUniqueId());

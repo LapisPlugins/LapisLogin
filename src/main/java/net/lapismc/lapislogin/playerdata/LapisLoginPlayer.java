@@ -36,6 +36,7 @@ public class LapisLoginPlayer {
     private LapisLogin plugin;
     private OfflinePlayer op;
     private ItemStack[] inv;
+    private LapisLoginAPIPlayer api;
     private int loginAttempts = 0;
     private boolean loggedIn = false;
     public boolean registrationRequired = true;
@@ -43,9 +44,16 @@ public class LapisLoginPlayer {
     public LapisLoginPlayer(LapisLogin plugin, UUID uuid) {
         this.plugin = plugin;
         op = Bukkit.getOfflinePlayer(uuid);
-        registrationRequired = getPlayer().hasPermission("lapislogin.required");
+        if (op.isOnline()) {
+            registrationRequired = getPlayer().hasPermission("lapislogin.required");
+        }
         loggedIn = false;
+        api = new LapisLoginAPIPlayer(plugin, this);
         loadConfig();
+    }
+
+    public LapisLoginAPIPlayer getAPIPlayer() {
+        return api;
     }
 
     public void loadConfig() {
@@ -174,8 +182,10 @@ public class LapisLoginPlayer {
     }
 
     public void saveInventory() {
-        inv = getPlayer().getInventory().getContents();
-        getPlayer().getInventory().clear();
+        if (op.isOnline()) {
+            inv = getPlayer().getInventory().getContents();
+            getPlayer().getInventory().clear();
+        }
     }
 
     public void loadInventory() {
@@ -220,7 +230,9 @@ public class LapisLoginPlayer {
     }
 
     public void sendMessage(String message) {
-        Bukkit.getPlayer(op.getUniqueId()).sendMessage(message);
+        if (op.isOnline()) {
+            Bukkit.getPlayer(op.getUniqueId()).sendMessage(message);
+        }
     }
 
 }
