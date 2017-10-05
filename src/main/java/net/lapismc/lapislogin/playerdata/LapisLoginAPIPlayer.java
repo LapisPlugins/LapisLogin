@@ -46,6 +46,7 @@ public class LapisLoginAPIPlayer {
 
     /**
      * @return Returns true if the player is online
+     * checks if the player is online
      */
     public boolean isOnline() {
         return p.getOfflinePlayer().isOnline();
@@ -53,6 +54,7 @@ public class LapisLoginAPIPlayer {
 
     /**
      * @return Returns true when the player is logged in, NOTE: the player might be offline and have an active session
+     * checks if the player is logged in
      */
     public boolean isLoggedIn() {
         return loggedIn;
@@ -60,6 +62,7 @@ public class LapisLoginAPIPlayer {
 
     /**
      * @return Returns true when the player has a password registered with LapisLogin
+     * checks if the player has a password registered
      */
     public boolean isRegistered() {
         return Registered;
@@ -67,6 +70,7 @@ public class LapisLoginAPIPlayer {
 
     /**
      * @return Returns true if the player required to register, it will also return true if they are offline
+     * checks if the player is required to register
      */
     public boolean isRegistrationRequired() {
         return registrationRequired;

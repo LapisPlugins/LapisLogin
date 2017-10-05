@@ -29,6 +29,8 @@ public class LapisLoginAPI {
     private static List<JavaPlugin> plugins;
 
     /**
+     * Please don't use this!
+     *
      * @param lapisLogin This is for internal use only, Please use {@link #LapisLoginAPI(JavaPlugin)}
      */
     public LapisLoginAPI(LapisLogin lapisLogin) {
@@ -36,6 +38,8 @@ public class LapisLoginAPI {
     }
 
     /**
+     * use this constructor to get an instace of the class for access to the API features
+     *
      * @param plugin This should be your plugins main class
      */
     public LapisLoginAPI(JavaPlugin plugin) {
@@ -43,6 +47,8 @@ public class LapisLoginAPI {
     }
 
     /**
+     * Use this to get the LapisLoginAPIPlayer to get access to player information
+     *
      * @param uuid The {@link UUID} of the player you want data on
      * @return returns a {@link LapisLoginAPIPlayer} which can be used to both read and write information on a player
      */
