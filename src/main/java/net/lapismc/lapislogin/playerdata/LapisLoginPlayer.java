@@ -137,6 +137,7 @@ public class LapisLoginPlayer {
     }
 
     public void logoutPlayer(boolean deregister) {
+        plugin.passwordManager.removePassword(op.getUniqueId());
         loggedIn = false;
         if (plugin.getConfig().getBoolean("HideInventory")) {
             saveInventory();

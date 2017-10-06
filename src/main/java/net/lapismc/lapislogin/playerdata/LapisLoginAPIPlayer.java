@@ -113,6 +113,7 @@ public class LapisLoginAPIPlayer {
      */
     public void deregisterPlayer() {
         if (Registered) {
+
             p.logoutPlayer(true);
             if (registrationRequired) {
                 p.sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));
