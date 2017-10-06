@@ -16,6 +16,7 @@
 
 package net.lapismc.lapislogin.api.events;
 
+import net.lapismc.lapislogin.playerdata.LapisLoginAPIPlayer;
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -97,10 +98,10 @@ public class ChangePasswordEvent extends Event implements Cancellable {
     }
 
     /**
-     * @return Returns the {@link LapisLoginPlayer} object of the player attempting to login
+     * @return Returns the {@link LapisLoginAPIPlayer} object of the player attempting to login
      */
-    public LapisLoginPlayer getLoginPlayer() {
-        return loginPlayer;
+    public LapisLoginAPIPlayer getLoginPlayer() {
+        return loginPlayer.getAPIPlayer();
     }
 
     /**
