@@ -137,12 +137,15 @@ public class LapisLoginPlayer {
     }
 
     public void logoutPlayer(boolean deregister) {
-        plugin.passwordManager.removePassword(op.getUniqueId());
-        loggedIn = false;
-        if (plugin.getConfig().getBoolean("HideInventory")) {
+        if (plugin.getConfig().getBoolean("HideInventory") && loggedIn) {
             saveInventory();
         }
-        if (!deregister) sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
+        loggedIn = false;
+        if (deregister) {
+            plugin.passwordManager.removePassword(op.getUniqueId());
+        } else {
+            sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
+        }
     }
 
     public void playerQuit() {
