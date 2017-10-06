@@ -17,6 +17,8 @@
 package net.lapismc.lapislogin.playerdata;
 
 import net.lapismc.lapislogin.LapisLogin;
+import net.lapismc.lapislogin.api.events.LoginEvent;
+import net.lapismc.lapislogin.api.events.RegisterEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -104,6 +106,12 @@ public class LapisLoginPlayer {
     }
 
     public void loginPlayer(String password) {
+        LoginEvent event = new LoginEvent(this, password);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            sendMessage(plugin.LLConfig.getColoredMessage("Login.Cancelled") + event.getCancelReason());
+            return;
+        }
         if (plugin.passwordManager.checkPassword(op.getUniqueId(), password)) {
             sendMessage(plugin.LLConfig.getColoredMessage("Login.Success"));
             loginAttempts = 0;
@@ -118,6 +126,10 @@ public class LapisLoginPlayer {
                 sendMessage(plugin.LLConfig.getColoredMessage("Login.PasswordIncorrect").replace("%ATTEMPTS%", plugin.getConfig().getInt("LoginAttempts") - loginAttempts + ""));
             }
         }
+    }
+
+    public boolean checkPassword(String password) {
+        return plugin.passwordManager.checkPassword(op.getUniqueId(), password);
     }
 
     public void forceLogin() {
@@ -172,6 +184,12 @@ public class LapisLoginPlayer {
     }
 
     public void registerPlayer(String password) {
+        RegisterEvent event = new RegisterEvent(this, password);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            sendMessage(plugin.LLConfig.getColoredMessage("Register.Cancelled") + event.getCancelReason());
+            return;
+        }
         if (plugin.passwordManager.setPassword(op.getUniqueId(), password)) {
             sendMessage(plugin.LLConfig.getColoredMessage("Register.Success").replace("%PASSWORD%", password));
             loadInventory();

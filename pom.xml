@@ -19,9 +19,8 @@
 
     <groupId>net.lapismc</groupId>
     <artifactId>LapisLogin</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
-
     <name>LapisLogin</name>
 
     <description>Simple login plugin for offline mode servers</description>
@@ -40,6 +39,7 @@
                 <configuration>
                     <sourceFileIncludes>
                         <exclude>net/lapismc/lapislogin/api/*.java</exclude>
+                        <exclude>net/lapismc/lapislogin/api/events/*.java</exclude>
                         <exclude>net/lapismc/lapislogin/playerdata/LapisLoginAPIPlayer.java</exclude>
                     </sourceFileIncludes>
                 </configuration>

@@ -1,5 +1,5 @@
 #Dont change unless you want to reset the config
-ConfigVersion: 2
+ConfigVersion: 3
 #Downloads and installs updates when available
 DownloadUpdates: true
 #How many times can a player get their password wrong before the LoginAttemptsReachedCommand is run

@@ -8,3 +8,6 @@
   - "Added /lapislogin command to deal with help, reloading, updating and displaying plugin information"
 1.0.2:
   - "Added new API objects for other developers"
+1.0.3:
+  - "Added event API"
+  - "Configs will reset because new messages have been added"

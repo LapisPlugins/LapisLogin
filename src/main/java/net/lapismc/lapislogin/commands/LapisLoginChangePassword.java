@@ -17,7 +17,9 @@
 package net.lapismc.lapislogin.commands;
 
 import net.lapismc.lapislogin.LapisLogin;
+import net.lapismc.lapislogin.api.events.ChangePasswordEvent;
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -50,6 +52,12 @@ public class LapisLoginChangePassword {
             }
             if (!plugin.passwordManager.checkPassword(loginPlayer.getPlayer().getUniqueId(), oldPassword)) {
                 loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.PasswordIncorrect"));
+                return;
+            }
+            ChangePasswordEvent event = new ChangePasswordEvent(loginPlayer, oldPassword, newPassword0);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Register.Cancelled") + event.getCancelReason());
                 return;
             }
             if (plugin.passwordManager.setPassword(loginPlayer.getPlayer().getUniqueId(), newPassword0)) {

@@ -17,7 +17,9 @@
 package net.lapismc.lapislogin.commands;
 
 import net.lapismc.lapislogin.LapisLogin;
+import net.lapismc.lapislogin.api.events.LogoutEvent;
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -41,6 +43,12 @@ public class LapisLoginLogout {
             return;
         }
         if (loginPlayer.isLoggedIn()) {
+            LogoutEvent event = new LogoutEvent(loginPlayer);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.LogoutCancelled") + event.getCancelReason());
+                return;
+            }
             loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.LoggedOut"));
             loginPlayer.logoutPlayer(false);
         } else {
