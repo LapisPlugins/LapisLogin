@@ -14,3 +14,5 @@
 1.0.4:
   - "Fixed critical issue!"
   - "UPDATE IMMEDIATELY!"
+1.0.5:
+  - "Quick fix to logging out and the API to allow for LapisLoginStrength"
