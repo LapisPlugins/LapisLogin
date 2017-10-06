@@ -28,7 +28,7 @@ public class LogoutEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private LapisLoginPlayer loginPlayer;
     private String cancelReason;
-    private boolean cancelled;
+    private boolean cancelled = false;
 
     public LogoutEvent(LapisLoginPlayer p) {
         loginPlayer = p;

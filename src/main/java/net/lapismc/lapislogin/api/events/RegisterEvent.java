@@ -29,7 +29,7 @@ public class RegisterEvent extends Event implements Cancellable {
     private LapisLoginPlayer loginPlayer;
     private String password;
     private String cancelReason;
-    private boolean cancelled;
+    private boolean cancelled = false;
 
     public RegisterEvent(LapisLoginPlayer p, String password) {
         loginPlayer = p;

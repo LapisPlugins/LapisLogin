@@ -184,6 +184,10 @@ public class LapisLoginPlayer {
     }
 
     public void registerPlayer(String password) {
+        if (isRegistered()) {
+            sendMessage(plugin.LLConfig.getColoredMessage("Login.AlreadyLoggedIn"));
+            return;
+        }
         RegisterEvent event = new RegisterEvent(this, password);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {

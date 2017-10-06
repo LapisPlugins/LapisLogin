@@ -30,7 +30,7 @@ public class ChangePasswordEvent extends Event implements Cancellable {
     private String oldPassword;
     private String newPassword;
     private String cancelReason;
-    private boolean cancelled;
+    private boolean cancelled = false;
 
     public ChangePasswordEvent(LapisLoginPlayer p, String oldPassword, String newPassword) {
         loginPlayer = p;
