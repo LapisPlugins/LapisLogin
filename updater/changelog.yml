@@ -16,3 +16,6 @@
   - "UPDATE IMMEDIATELY!"
 1.0.5:
   - "Quick fix to logging out and the API to allow for LapisLoginStrength"
+1.0.6:
+  - "Removing passwords from console logs has been added"
+  - "Quick fix to the message for incorrect password in /changepassword"

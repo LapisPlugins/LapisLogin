@@ -51,7 +51,8 @@ public class LapisLoginChangePassword {
                 return;
             }
             if (!plugin.passwordManager.checkPassword(loginPlayer.getPlayer().getUniqueId(), oldPassword)) {
-                loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Login.PasswordIncorrect"));
+                String msg = plugin.LLConfig.getColoredMessage("Login.PasswordIncorrect");
+                loginPlayer.sendMessage(msg.substring(0, msg.lastIndexOf("%ATTEMPTS%")));
                 return;
             }
             ChangePasswordEvent event = new ChangePasswordEvent(loginPlayer, oldPassword, newPassword0);

@@ -8,7 +8,7 @@ Login:
   LoggedOut: "&pYou have successfully logged out"
   LogoutCancelled: "&pYour logout has been cancelled by an external plugin because "
   LoginRequired: "&pUse &s/login (password)&p to login"
-  PasswordIncorrect: "&sThe password you entered was&s incorrect&p!&s %ATTEMPTS%&p login attempts remaining"
+  PasswordIncorrect: "&pThe password you entered was&s incorrect!&s %ATTEMPTS%&p login attempts remaining"
   NoLoginRequired: "&pBecause you just left you don't need to login again \nWelcome back!"
   AlreadyLoggedIn: "&pYou are already logged in!"
 Register:
