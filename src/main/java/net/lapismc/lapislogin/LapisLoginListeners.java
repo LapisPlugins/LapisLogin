@@ -32,6 +32,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.*;
 
+import java.util.Collections;
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 
@@ -175,6 +176,7 @@ public class LapisLoginListeners implements Listener {
     }
 
     //console log event for hiding passwords
+
     Filter consoleLogListener = new Filter() {
         @Override
         public boolean isLoggable(LogRecord record) {
@@ -198,13 +200,26 @@ public class LapisLoginListeners implements Listener {
 
     public String removePasswords(String msg) {
         if (msg.contains("issued server command: /login ")) {
-            return (msg.substring(0, msg.lastIndexOf("/login")) + "/login");
+            return (msg.substring(0, msg.lastIndexOf("/login")) + hidePasswords(msg.substring(msg.lastIndexOf("/login"))));
         } else if (msg.contains("issued server command: /register ")) {
-            return (msg.substring(0, msg.lastIndexOf("/register")) + "/register");
+            return (msg.substring(0, msg.lastIndexOf("/register")) + hidePasswords(msg.substring(msg.lastIndexOf("/register"))));
         } else if (msg.contains("issued server command: /changepassword ")) {
-            return (msg.substring(0, msg.lastIndexOf("/changepassword")) + "/changepassword");
+            return (msg.substring(0, msg.lastIndexOf("/changepassword")) + hidePasswords(msg.substring(msg.lastIndexOf("/changepassword"))));
         }
         return msg;
+    }
+
+    private String hidePasswords(String msg) {
+        StringBuilder hidden = new StringBuilder();
+        for (String s : msg.split(" ")) {
+            int n = s.length();
+            if (s.startsWith("/")) {
+                hidden.append(s);
+            } else {
+                hidden.append(" ").append(String.join("", Collections.nCopies(n, "*")));
+            }
+        }
+        return hidden.toString();
     }
 
 }
