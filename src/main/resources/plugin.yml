@@ -4,6 +4,8 @@ main: net.lapismc.lapislogin.LapisLogin
 authors: [Dart2112]
 description: Simple login plugin for offline mode servers
 permissions:
+  lapislogin.optional:
+    decsription: Players with this permission will have the option to register
   lapislogin.required:
     decsription: Players with this permission will be required to register
   lapislogin.admin:
@@ -13,8 +15,10 @@ commands:
     description: Use /lapislogin help for help
   login:
     description: Allows you to login to the server
+    alias: l
   register:
     description: Allows you to register a password for future logins
+    alias: r
   logout:
     description: Allows you to logout immediately instead of waiting for the timeout
   changepassword:

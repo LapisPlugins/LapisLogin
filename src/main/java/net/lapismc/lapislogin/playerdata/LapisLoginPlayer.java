@@ -42,12 +42,14 @@ public class LapisLoginPlayer {
     private int loginAttempts = 0;
     private boolean loggedIn = false;
     public boolean registrationRequired = true;
+    public boolean canRegister = true;
 
     public LapisLoginPlayer(LapisLogin plugin, UUID uuid) {
         this.plugin = plugin;
         op = Bukkit.getOfflinePlayer(uuid);
         if (op.isOnline()) {
             registrationRequired = getPlayer().hasPermission("lapislogin.required");
+            canRegister = getPlayer().hasPermission("lapislogin.optional") || getPlayer().hasPermission("lapislogin.required");
         }
         loggedIn = false;
         api = new LapisLoginAPIPlayer(plugin, this);
@@ -71,8 +73,11 @@ public class LapisLoginPlayer {
     }
 
     public void playerJoin() {
-        if (!isRegistered() && !registrationRequired) {
+        if (!isRegistered() && canRegister && !registrationRequired) {
             sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationOptional"));
+            return;
+        }
+        if (!canRegister) {
             return;
         }
         if (plugin.getConfig().getBoolean("HideInventory")) {
@@ -178,13 +183,16 @@ public class LapisLoginPlayer {
     }
 
     public boolean canInteract() {
-        if (isRegistered() && isLoggedIn()) {
+        if (!canRegister || isLoggedIn()) {
             return true;
         }
         if (!isRegistered() && registrationRequired) {
             return false;
         }
-        return false;
+        if (isRegistered() && !isLoggedIn()) {
+            return false;
+        }
+        return true;
     }
 
     public void registerPlayer(String password) {

@@ -19,3 +19,6 @@
 1.0.6:
   - "Removing passwords from console logs has been added"
   - "Quick fix to the message for incorrect password in /changepassword"
+1.0.7:
+  - "Added optional permissions so that players without any permissions will be ignored"
+  - "Fixed detection of player who are registered but don't have to be in denying actions"

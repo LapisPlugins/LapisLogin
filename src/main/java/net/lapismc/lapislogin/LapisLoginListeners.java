@@ -102,13 +102,11 @@ public class LapisLoginListeners implements Listener {
 
     //Deny action events
 
-    private boolean denyAction(PlayerEvent e) {
-        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
-        if (!loginPlayer.isLoggedIn() && loginPlayer.registrationRequired) {
-            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
-            return true;
-        }
-        return false;
+    public LapisLoginListeners(LapisLogin p) {
+        plugin = p;
+        Bukkit.getPluginManager().registerEvents(this, plugin);
+        Bukkit.getServer().getLogger().setFilter(consoleLogListener);
+        setLog4JFilter();
     }
 
     @EventHandler
@@ -185,11 +183,13 @@ public class LapisLoginListeners implements Listener {
         }
     };
 
-    public LapisLoginListeners(LapisLogin p) {
-        plugin = p;
-        Bukkit.getPluginManager().registerEvents(this, plugin);
-        Bukkit.getServer().getLogger().setFilter(consoleLogListener);
-        setLog4JFilter();
+    private boolean denyAction(PlayerEvent e) {
+        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
+        if (!loginPlayer.canInteract()) {
+            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
+            return true;
+        }
+        return false;
     }
 
     private void setLog4JFilter() {
