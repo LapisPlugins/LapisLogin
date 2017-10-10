@@ -40,51 +40,12 @@ public class LapisLoginListeners implements Listener {
 
     LapisLogin plugin;
 
-    AbstractFilter abstractConsoleLogListener = new AbstractFilter() {
-
-        private Result validateMessage(Message message) {
-            if (message == null) {
-                return Result.NEUTRAL;
-            }
-            return validateMessage(message.getFormattedMessage());
-        }
-
-        private Result validateMessage(String message) {
-            Result r = removePasswords(message).equalsIgnoreCase(message) ? Result.NEUTRAL : Result.DENY;
-            if (r == Result.DENY) {
-                Bukkit.getLogger().info(removePasswords(message));
-            }
-            return r;
-        }
-
-        @Override
-        public Result filter(LogEvent event) {
-            Message candidate = null;
-            if (event != null) {
-                candidate = event.getMessage();
-            }
-            return validateMessage(candidate);
-        }
-
-        @Override
-        public Result filter(Logger logger, Level level, Marker marker, Message msg, Throwable t) {
-            return validateMessage(msg);
-        }
-
-        @Override
-        public Result filter(Logger logger, Level level, Marker marker, Object msg, Throwable t) {
-            String candidate = null;
-            if (msg != null) {
-                candidate = msg.toString();
-            }
-            return validateMessage(candidate);
-        }
-
-        @Override
-        public Result filter(Logger logger, Level level, Marker marker, String msg, Object... params) {
-            return validateMessage(msg);
-        }
-    };
+    public LapisLoginListeners(LapisLogin p) {
+        plugin = p;
+        Bukkit.getPluginManager().registerEvents(this, plugin);
+        Bukkit.getServer().getLogger().setFilter(consoleLogListener);
+        setLog4JFilter();
+    }
 
     //connect disconnect events
 
@@ -102,11 +63,13 @@ public class LapisLoginListeners implements Listener {
 
     //Deny action events
 
-    public LapisLoginListeners(LapisLogin p) {
-        plugin = p;
-        Bukkit.getPluginManager().registerEvents(this, plugin);
-        Bukkit.getServer().getLogger().setFilter(consoleLogListener);
-        setLog4JFilter();
+    private boolean denyAction(PlayerEvent e) {
+        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
+        if (!loginPlayer.canInteract()) {
+            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
+            return true;
+        }
+        return false;
     }
 
     @EventHandler
@@ -121,7 +84,9 @@ public class LapisLoginListeners implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
-        e.setCancelled(denyAction(e));
+        if (!e.isCancelled() && denyAction(e)) {
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -183,16 +148,52 @@ public class LapisLoginListeners implements Listener {
         }
     };
 
-    private boolean denyAction(PlayerEvent e) {
-        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
-        if (!loginPlayer.canInteract()) {
-            loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
-            return true;
-        }
-        return false;
-    }
-
     private void setLog4JFilter() {
+        AbstractFilter abstractConsoleLogListener = new AbstractFilter() {
+
+            private Result validateMessage(Message message) {
+                if (message == null) {
+                    return Result.NEUTRAL;
+                }
+                return validateMessage(message.getFormattedMessage());
+            }
+
+            private Result validateMessage(String message) {
+                Result r = removePasswords(message).equalsIgnoreCase(message) ? Result.NEUTRAL : Result.DENY;
+                if (r == Result.DENY) {
+                    Bukkit.getLogger().info(removePasswords(message));
+                }
+                return r;
+            }
+
+            @Override
+            public Result filter(LogEvent event) {
+                Message candidate = null;
+                if (event != null) {
+                    candidate = event.getMessage();
+                }
+                return validateMessage(candidate);
+            }
+
+            @Override
+            public Result filter(Logger logger, Level level, Marker marker, Message msg, Throwable t) {
+                return validateMessage(msg);
+            }
+
+            @Override
+            public Result filter(Logger logger, Level level, Marker marker, Object msg, Throwable t) {
+                String candidate = null;
+                if (msg != null) {
+                    candidate = msg.toString();
+                }
+                return validateMessage(candidate);
+            }
+
+            @Override
+            public Result filter(Logger logger, Level level, Marker marker, String msg, Object... params) {
+                return validateMessage(msg);
+            }
+        };
         org.apache.logging.log4j.core.Logger logger;
         logger = (org.apache.logging.log4j.core.Logger) LogManager.getRootLogger();
         logger.addFilter(abstractConsoleLogListener);
