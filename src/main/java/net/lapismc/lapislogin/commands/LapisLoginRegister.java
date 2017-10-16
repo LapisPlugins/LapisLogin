@@ -41,7 +41,7 @@ public class LapisLoginRegister {
             if (password1.equals(password2)) {
                 loginPlayer.registerPlayer(password1);
             } else {
-                loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Regsiter.PasswordsDontMatch"));
+                loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Register.PasswordsDontMatch"));
             }
         } else {
             loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.Args"));

@@ -26,6 +26,7 @@ import org.apache.logging.log4j.core.filter.AbstractFilter;
 import org.apache.logging.log4j.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
@@ -64,6 +65,12 @@ public class LapisLoginListeners implements Listener {
     //Deny action events
 
     private boolean denyAction(PlayerEvent e) {
+        if (e instanceof Cancellable) {
+            Cancellable c = (Cancellable) e;
+            if (c.isCancelled()) {
+                return true;
+            }
+        }
         LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
         if (!loginPlayer.canInteract()) {
             loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
@@ -84,9 +91,7 @@ public class LapisLoginListeners implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
-        if (!e.isCancelled() && denyAction(e)) {
-            e.setCancelled(true);
-        }
+        e.setCancelled(denyAction(e));
     }
 
     @EventHandler

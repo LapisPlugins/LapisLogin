@@ -22,3 +22,6 @@
 1.0.7:
   - "Added optional permissions so that players without any permissions will be ignored"
   - "Fixed detection of player who are registered but don't have to be in denying actions"
+1.0.8:
+  - "Fixed the passwords don't match message on registration"
+  - "Fixed the interact event denial ignore cancelled events"
