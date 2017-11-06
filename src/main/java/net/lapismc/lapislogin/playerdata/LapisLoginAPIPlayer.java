@@ -77,6 +77,15 @@ public class LapisLoginAPIPlayer {
     }
 
     /**
+     * @param password The password you wish to check
+     * @return Returns true if the password is correct
+     */
+
+    public boolean checkPassword(String password) {
+        return p.checkPassword(password);
+    }
+
+    /**
      * Forces the player to login, this bypasses the need for a password and should therefore be used with caution!
      */
     public void loginPlayer() {
@@ -113,7 +122,6 @@ public class LapisLoginAPIPlayer {
      */
     public void deregisterPlayer() {
         if (Registered) {
-
             p.logoutPlayer(true);
             if (registrationRequired) {
                 p.sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));

@@ -25,3 +25,5 @@
 1.0.8:
   - "Fixed the passwords don't match message on registration"
   - "Fixed the interact event denial ignore cancelled events"
+1.0.9:
+  - "API change to fix an error in LapisLoginStrength"
