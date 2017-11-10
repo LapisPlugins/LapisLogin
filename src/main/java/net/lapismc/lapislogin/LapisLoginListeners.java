@@ -91,7 +91,10 @@ public class LapisLoginListeners implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
-        e.setCancelled(denyAction(e));
+        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
+        if ((loginPlayer.registrationRequired || loginPlayer.isRegistered()) && !loginPlayer.isLoggedIn()) {
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler
