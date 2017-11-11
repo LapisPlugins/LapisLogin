@@ -27,3 +27,4 @@
   - "Fixed the interact event denial ignore cancelled events"
 1.0.9:
   - "API change to fix an error in LapisLoginStrength"
+  - "Fixed player interact event"
