@@ -19,6 +19,7 @@ package net.lapismc.lapislogin;
 import net.lapismc.lapislogin.api.LapisLoginAPI;
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
 import net.lapismc.lapislogin.util.InventorySerialization;
+import net.lapismc.lapislogin.util.PlayerDataStore;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,6 +35,8 @@ public final class LapisLogin extends JavaPlugin {
     public LapisUpdater updater;
     public LapisLoginPasswordManager passwordManager;
     public InventorySerialization invSerialization;
+    //TODO: set this to the type at some point
+    public PlayerDataStore.dataType currentDataType;
     public LapisLoginConfigurations LLConfig;
     private HashMap<UUID, LapisLoginPlayer> players = new HashMap<>();
 

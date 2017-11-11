@@ -39,6 +39,7 @@ public class LapisLoginPasswordManager {
         loadPasswordsYaml();
     }
 
+    //TODO: move passwords into player data files
     private void loadPasswordsYaml() {
         passwordsFile = new File(plugin.getDataFolder() + File.separator + "Passwords.yml");
         if (!passwordsFile.exists()) {
