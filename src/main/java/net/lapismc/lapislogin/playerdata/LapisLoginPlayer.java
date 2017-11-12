@@ -91,6 +91,7 @@ public class LapisLoginPlayer {
                 sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));
             }
             Date date = new Date();
+            config.setupPlayer("", date.getTime(), 0l, op.getPlayer().getAddress().getHostString());
             config.set("Login", date.getTime());
         }
         loadConfig();

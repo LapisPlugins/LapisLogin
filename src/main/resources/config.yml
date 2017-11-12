@@ -1,5 +1,5 @@
 #Dont change unless you want to reset the config
-ConfigVersion: 3
+ConfigVersion: 4
 #Where should data be stored, this can be YAML or MySQL. If it is a database you will need to fill in settings at the bottom of the config
 DataStorage: YAML
 #Downloads and installs updates when available

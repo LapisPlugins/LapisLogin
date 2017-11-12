@@ -16,6 +16,8 @@
 
 package net.lapismc.lapislogin.util;
 
+import org.bukkit.configuration.file.FileConfiguration;
+
 import java.sql.*;
 
 public class MySQLDatabaseTool {
@@ -24,30 +26,31 @@ public class MySQLDatabaseTool {
     String username;
     String password;
     String DBName;
+    FileConfiguration config;
     Connection conn;
 
-    public MySQLDatabaseTool(String loc, String username, String password, String DBName) {
-        url.replace("%URL%", loc).replace("%DBName%", DBName);
-        this.username = username;
-        this.password = password;
-        this.DBName = DBName;
+    public MySQLDatabaseTool(FileConfiguration config) {
+        this.config = config;
+        this.username = config.getString("Database.username");
+        this.password = config.getString("Database.password");
+        this.DBName = config.getString("Database.dbName");
+        url = url.replace("%URL%", config.getString("Database.location")).replace("%DBName%", DBName);
         setupDatabase(username, password);
     }
 
     public void addData(String ID, String password, Long login, Long logout, String IP) {
         try {
             conn = getConnection();
-            String sql = "INSERT INTO loginPlayers(id,password,login,logout,ip) VALUES(?,?,?,?,?)";
-            PreparedStatement pstmt = conn.prepareStatement(sql,
+            String sql = "INSERT INTO loginPlayers(UUID,Password,Login,Logout,IPAddress) VALUES(?,?,?,?,?)";
+            PreparedStatement pareStatement = conn.prepareStatement(sql,
                     Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, ID);
-            pstmt.setString(2, password);
-            pstmt.setLong(3, login);
-            pstmt.setLong(4, logout);
-            pstmt.setString(4, IP);
-            pstmt.execute();
-            pstmt.close();
-            conn.close();
+            pareStatement.setString(1, ID);
+            pareStatement.setString(2, password);
+            pareStatement.setLong(3, login);
+            pareStatement.setLong(4, logout);
+            pareStatement.setString(5, IP);
+            pareStatement.execute();
+            pareStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -57,13 +60,12 @@ public class MySQLDatabaseTool {
         try {
             conn = getConnection();
             String sqlUpdate = "UPDATE loginPlayers SET ? = ? WHERE id = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sqlUpdate);
-            pstmt.setString(1, item);
-            pstmt.setObject(2, data);
-            pstmt.setString(3, ID);
-            pstmt.execute();
-            pstmt.close();
-            conn.close();
+            PreparedStatement pareStatement = conn.prepareStatement(sqlUpdate);
+            pareStatement.setString(1, item);
+            pareStatement.setObject(2, data);
+            pareStatement.setString(3, ID);
+            pareStatement.execute();
+            pareStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -77,18 +79,30 @@ public class MySQLDatabaseTool {
             ResultSet rs = stmt.executeQuery(sql);
             if (!rs.isBeforeFirst()) {
                 rs.close();
-                conn.close();
                 return null;
             }
             rs.next();
             Object data = rs.getObject(item);
             rs.close();
-            conn.close();
             return data;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public Integer getRows() {
+        try {
+            conn = getConnection();
+            Statement stmt = conn.createStatement();
+            String sql = "SELECT * FROM loginPlayers";
+            ResultSet rs = stmt.executeQuery(sql);
+            rs.last();
+            return rs.getRow();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     private void setupDatabase(String username, String password) {
@@ -99,9 +113,13 @@ public class MySQLDatabaseTool {
             String sql = "CREATE DATABASE IF NOT EXISTS " + DBName;
             stmt.execute(sql);
             stmt = conn.createStatement();
-            sql = "CREATE TABLE IF NOT EXISTS loginPlayers";
+            sql = "CREATE TABLE IF NOT EXISTS loginPlayers (" +
+                    "UUID BLOB NOT NULL," +
+                    "Password BLOB," +
+                    "Login BIGINT," +
+                    "Logout BIGINT," +
+                    "IPAddress BLOB)";
             stmt.execute(sql);
-            conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
@@ -109,7 +127,11 @@ public class MySQLDatabaseTool {
 
     private Connection getConnection() {
         try {
-            return DriverManager.getConnection(url, username, password);
+            if (conn == null) {
+                return DriverManager.getConnection(url, username, password);
+            } else {
+                return conn;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

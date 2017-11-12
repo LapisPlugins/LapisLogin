@@ -16,8 +16,11 @@
 
 package net.lapismc.lapislogin;
 
+import net.lapismc.lapislogin.util.MySQLDatabaseTool;
 import net.lapismc.lapislogin.util.PlayerDataStore;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -34,14 +37,14 @@ public class LapisLoginConfigurations {
     public LapisLoginConfigurations(LapisLogin plugin) {
         this.plugin = plugin;
         plugin.saveDefaultConfig();
-        configVersion();
         new File(plugin.getDataFolder(), "PlayerData").mkdirs();
+        configVersion();
         primaryColor = ChatColor.translateAlternateColorCodes('&', getMessages(false).getString("PrimaryColor"));
         secondaryColor = ChatColor.translateAlternateColorCodes('&', getMessages(false).getString("SecondaryColor"));
     }
 
     private void configVersion() {
-        if (plugin.getConfig().getInt("ConfigVersion") != 3) {
+        if (plugin.getConfig().getInt("ConfigVersion") != 4) {
             File oldConfig = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config_old.yml");
             File newConfig = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
             if (!newConfig.renameTo(oldConfig)) {
@@ -76,13 +79,36 @@ public class LapisLoginConfigurations {
             for (File data : f.listFiles()) {
                 YamlConfiguration yaml = YamlConfiguration.loadConfiguration(data);
                 PlayerDataStore playerData = new PlayerDataStore(plugin, UUID.fromString(data.getName().replace(".yml", "")));
-                playerData.setupPlayer(yaml.getString("Password"), yaml.getLong("Login"), yaml.getLong("Logout"),
+                playerData.setupPlayer(yaml.getString("Password", ""), yaml.getLong("Login"), yaml.getLong("Logout"),
                         yaml.getString("IPAddress"));
                 data.delete();
             }
             f.delete();
         }
-        //TODO: add MySQL to YAML converter
+        if (!f.exists() && plugin.getConfig().getString("DataStorage").equalsIgnoreCase("YAML")) {
+            MySQLDatabaseTool sql = new MySQLDatabaseTool(plugin.getConfig());
+            for (OfflinePlayer op : Bukkit.getOfflinePlayers()) {
+                PlayerDataStore playerData = new PlayerDataStore(plugin, op.getUniqueId());
+                if (sql.getData(op.getUniqueId().toString(), "Password") != null)
+                    playerData.setupPlayer((String) sql.getData(op.getUniqueId().toString(), "Password"), (Long) sql.getData(op.getUniqueId().toString(), "Login"),
+                            (Long) sql.getData(op.getUniqueId().toString(), "Logout"), (String) sql.getData(op.getUniqueId().toString(), "IPAddress"));
+            }
+        }
+        f = new File(plugin.getDataFolder(), "Passwords.yml");
+        if (f.exists()) {
+            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(f);
+            for (String s : yaml.getKeys(false)) {
+                try {
+                    PlayerDataStore playerData = new PlayerDataStore(plugin, UUID.fromString(s));
+                    playerData.set("Password", yaml.getString(s));
+                } catch (IllegalArgumentException e) {
+                    PlayerDataStore playerData = new PlayerDataStore(plugin, Bukkit.getServer().getOfflinePlayer(s).getUniqueId());
+                    playerData.set("Password", yaml.getString(s));
+                }
+                yaml.set(s, null);
+            }
+            f.delete();
+        }
     }
 
     public YamlConfiguration getMessages(boolean reload) {

@@ -80,9 +80,11 @@ public class PlayerDataStore {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                break;
             case MySQL:
-                MySQLDatabaseTool sql = new MySQLDatabaseTool("localhost:3360", "username", "Password123", "Database");
+                MySQLDatabaseTool sql = new MySQLDatabaseTool(plugin.getConfig());
                 sql.addData(uuid.toString(), password, login, logout, ip);
+                break;
         }
     }
 
@@ -104,9 +106,11 @@ public class PlayerDataStore {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                break;
             case MySQL:
-                MySQLDatabaseTool sql = new MySQLDatabaseTool("localhost:3360", "username", "Password123", "Database");
+                MySQLDatabaseTool sql = new MySQLDatabaseTool(plugin.getConfig());
                 sql.setData(uuid.toString(), path, data);
+                break;
         }
     }
 
@@ -124,7 +128,7 @@ public class PlayerDataStore {
                 YamlConfiguration yaml = YamlConfiguration.loadConfiguration(f);
                 return yaml.get(path);
             case MySQL:
-                MySQLDatabaseTool sql = new MySQLDatabaseTool("localhost:3360", "username", "Password123", "Database");
+                MySQLDatabaseTool sql = new MySQLDatabaseTool(plugin.getConfig());
                 return sql.getData(uuid.toString(), path);
             case SQLite:
                 //TODO: create database file and table if it doesn't exist, after that get the data
