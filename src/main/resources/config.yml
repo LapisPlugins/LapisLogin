@@ -1,5 +1,7 @@
 #Dont change unless you want to reset the config
 ConfigVersion: 3
+#Where should data be stored, this can be YAML or MySQL. If it is a database you will need to fill in settings at the bottom of the config
+DataStorage: YAML
 #Downloads and installs updates when available
 DownloadUpdates: true
 #How many times can a player get their password wrong before the LoginAttemptsReachedCommand is run
@@ -12,3 +14,10 @@ LogoutTimeout: 1
 InventoryLock: true
 #This will hide the players inventory while they aren't logged in and give it back when they login
 HideInventory: true
+
+#Database settings for if you wish to use a Database as your data store
+Database:
+  location: "localhost:3306"
+  username: "root"
+  password: ""
+  dbName: "SpigotServer"

@@ -19,21 +19,19 @@ package net.lapismc.lapislogin.playerdata;
 import net.lapismc.lapislogin.LapisLogin;
 import net.lapismc.lapislogin.api.events.LoginEvent;
 import net.lapismc.lapislogin.api.events.RegisterEvent;
+import net.lapismc.lapislogin.util.PlayerDataStore;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 
 public class LapisLoginPlayer {
 
-    public YamlConfiguration config;
+    public PlayerDataStore config;
     public BukkitTask task;
     private LapisLogin plugin;
     private OfflinePlayer op;
@@ -61,15 +59,7 @@ public class LapisLoginPlayer {
     }
 
     public void loadConfig() {
-        try {
-            File file = new File(plugin.getDataFolder() + File.separator + "PlayerData" + File.separator + op.getUniqueId() + ".yml");
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            config = YamlConfiguration.loadConfiguration(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        config = new PlayerDataStore(plugin, op.getUniqueId());
     }
 
     public void playerJoin() {
@@ -100,14 +90,11 @@ public class LapisLoginPlayer {
             } else {
                 sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));
             }
-            YamlConfiguration config = getConfig();
             Date date = new Date();
             config.set("Login", date.getTime());
-            saveConfig(config);
         }
         loadConfig();
         config.set("IPAddress", op.getPlayer().getAddress().getHostString());
-        saveConfig(config);
     }
 
     public void loginPlayer(String password) {
@@ -157,19 +144,16 @@ public class LapisLoginPlayer {
         Date date = new Date();
         loadInventory();
         config.set("Logout", date.getTime());
-        saveConfig(config);
         if (isRegistered() && isLoggedIn()) {
             task = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
                 @Override
                 public void run() {
                     if (!op.isOnline()) {
-                        saveConfig(config);
                         plugin.removeLoginPlayer(op.getUniqueId());
                     }
                 }
             }, plugin.getConfig().getInt("LogoutTimeout") * 20 * 60);
         } else {
-            saveConfig(config);
             plugin.removeLoginPlayer(op.getUniqueId());
         }
     }
@@ -229,22 +213,12 @@ public class LapisLoginPlayer {
         }
     }
 
-    public YamlConfiguration getConfig() {
+    public PlayerDataStore getConfig() {
         if (config != null) {
             return config;
         } else {
             loadConfig();
             return config;
-        }
-    }
-
-    public void saveConfig(YamlConfiguration configuration) {
-        try {
-            File file = new File(plugin.getDataFolder() + File.separator + "PlayerData" + File.separator + op.getUniqueId() + ".yml");
-            configuration.save(file);
-            config = configuration;
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

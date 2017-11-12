@@ -17,12 +17,8 @@
 package net.lapismc.lapislogin;
 
 import net.lapismc.lapislogin.util.PasswordHash;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.YamlConfiguration;
+import net.lapismc.lapislogin.util.PlayerDataStore;
 
-import java.io.File;
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.UUID;
@@ -31,50 +27,23 @@ public class LapisLoginPasswordManager {
 
     private LapisLogin plugin;
     private PasswordHash passwordHasher = new PasswordHash();
-    private YamlConfiguration passwords;
-    private File passwordsFile;
 
     protected LapisLoginPasswordManager(LapisLogin p) {
         plugin = p;
-        loadPasswordsYaml();
     }
 
-    //TODO: move passwords into player data files
-    private void loadPasswordsYaml() {
-        passwordsFile = new File(plugin.getDataFolder() + File.separator + "Passwords.yml");
-        if (!passwordsFile.exists()) {
-            plugin.saveResource("Passwords.yml", false);
-        }
-        passwords = YamlConfiguration.loadConfiguration(passwordsFile);
-    }
-
-    private void savePasswordsYaml(YamlConfiguration yaml) {
-        try {
-            passwords = yaml;
-            passwords.save(passwordsFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private PlayerDataStore getPlayerData(UUID uuid) {
+        return plugin.getLoginPlayer(uuid).getConfig();
     }
 
     public boolean isPasswordSet(UUID uuid) {
-        loadPasswordsYaml();
-        if (Bukkit.getServer().getOnlineMode()) {
-            return passwords.contains(uuid.toString());
-        } else {
-            return passwords.contains(Bukkit.getOfflinePlayer(uuid).getName());
-        }
+        return getPlayerData(uuid).getString("Password").equalsIgnoreCase("");
     }
 
     public boolean setPassword(UUID uuid, String pw) {
         String hash = getHash(pw);
         if (hash != null) {
-            if (Bukkit.getServer().getOnlineMode()) {
-                passwords.set(uuid.toString(), hash);
-            } else {
-                passwords.set(Bukkit.getOfflinePlayer(uuid).getName(), hash);
-            }
-            savePasswordsYaml(passwords);
+            getPlayerData(uuid).set("Password", pw);
             return true;
         } else {
             return false;
@@ -82,23 +51,11 @@ public class LapisLoginPasswordManager {
     }
 
     public void removePassword(UUID uuid) {
-        if (Bukkit.getServer().getOnlineMode()) {
-            passwords.set(uuid.toString(), null);
-        } else {
-            passwords.set(Bukkit.getOfflinePlayer(uuid).getName(), null);
-        }
-        savePasswordsYaml(passwords);
+        getPlayerData(uuid).set("Password", "");
     }
 
     public boolean checkPassword(UUID uuid, String pw) {
-        String hash;
-        if (Bukkit.getServer().getOnlineMode()) {
-            hash = passwords.getString(uuid.toString());
-        } else {
-            OfflinePlayer op = Bukkit.getOfflinePlayer(uuid);
-            String name = op.getName();
-            hash = passwords.getString(name);
-        }
+        String hash = getPlayerData(uuid).getString("Password");
         return checkHash(pw, hash);
     }
 

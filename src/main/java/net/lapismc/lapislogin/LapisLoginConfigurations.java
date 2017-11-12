@@ -16,10 +16,12 @@
 
 package net.lapismc.lapislogin;
 
+import net.lapismc.lapislogin.util.PlayerDataStore;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.UUID;
 
 public class LapisLoginConfigurations {
 
@@ -58,6 +60,29 @@ public class LapisLoginConfigurations {
             plugin.logger.info("New Configuration Generated for " + plugin.getName() + "," +
                     " Please Transfer Values From config_old.yml & Messages_old.yml");
         }
+        convertPlayerData();
+    }
+
+    private void convertPlayerData() {
+        if (plugin.getConfig().getString("DataStorage").equalsIgnoreCase("YAML")) {
+            plugin.currentDataType = PlayerDataStore.dataType.YAML;
+        } else if (plugin.getConfig().getString("DataStorage").equalsIgnoreCase("MySQL")) {
+            plugin.currentDataType = PlayerDataStore.dataType.MySQL;
+        } else {
+            plugin.currentDataType = PlayerDataStore.dataType.YAML;
+        }
+        File f = new File(plugin.getDataFolder(), "PlayerData");
+        if (f.exists() && !plugin.getConfig().getString("DataStorage").equalsIgnoreCase("YAML")) {
+            for (File data : f.listFiles()) {
+                YamlConfiguration yaml = YamlConfiguration.loadConfiguration(data);
+                PlayerDataStore playerData = new PlayerDataStore(plugin, UUID.fromString(data.getName().replace(".yml", "")));
+                playerData.setupPlayer(yaml.getString("Password"), yaml.getLong("Login"), yaml.getLong("Logout"),
+                        yaml.getString("IPAddress"));
+                data.delete();
+            }
+            f.delete();
+        }
+        //TODO: add MySQL to YAML converter
     }
 
     public YamlConfiguration getMessages(boolean reload) {

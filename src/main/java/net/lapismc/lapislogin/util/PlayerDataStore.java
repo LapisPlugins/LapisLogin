@@ -33,6 +33,83 @@ public class PlayerDataStore {
         this.uuid = uuid;
     }
 
+    public String getString(String path) {
+        if (getData(path) instanceof String) {
+            return (String) getData(path);
+        }
+        return null;
+    }
+
+    public Long getLong(String path) {
+        if (getData(path) instanceof Long) {
+            return (Long) getData(path);
+        }
+        return null;
+    }
+
+    public Object get(String path) {
+        return getData(path);
+    }
+
+    public void set(String path, Object data) {
+        setData(path, data);
+    }
+
+    public void setupPlayer(String password, Long login, Long logout, String ip) {
+        addData(password, login, logout, ip);
+    }
+
+    private void addData(String password, Long login, Long logout, String ip) {
+        switch (plugin.currentDataType) {
+            case YAML:
+                File f = new File(plugin.getDataFolder(), "PlayerData" + File.separator + uuid.toString() + ".yml");
+                if (!f.exists()) {
+                    try {
+                        f.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                YamlConfiguration yaml = YamlConfiguration.loadConfiguration(f);
+                yaml.set("Password", password);
+                yaml.set("Login", login);
+                yaml.set("Logout", logout);
+                yaml.set("IPAddress", ip);
+                try {
+                    yaml.save(f);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            case MySQL:
+                MySQLDatabaseTool sql = new MySQLDatabaseTool("localhost:3360", "username", "Password123", "Database");
+                sql.addData(uuid.toString(), password, login, logout, ip);
+        }
+    }
+
+    private void setData(String path, Object data) {
+        switch (plugin.currentDataType) {
+            case YAML:
+                File f = new File(plugin.getDataFolder(), "PlayerData" + File.separator + uuid.toString() + ".yml");
+                if (!f.exists()) {
+                    try {
+                        f.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                YamlConfiguration yaml = YamlConfiguration.loadConfiguration(f);
+                yaml.set(path, data);
+                try {
+                    yaml.save(f);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            case MySQL:
+                MySQLDatabaseTool sql = new MySQLDatabaseTool("localhost:3360", "username", "Password123", "Database");
+                sql.setData(uuid.toString(), path, data);
+        }
+    }
+
     private Object getData(String path) {
         switch (plugin.currentDataType) {
             case YAML:

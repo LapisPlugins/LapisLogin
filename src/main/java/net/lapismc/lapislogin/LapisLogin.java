@@ -35,7 +35,6 @@ public final class LapisLogin extends JavaPlugin {
     public LapisUpdater updater;
     public LapisLoginPasswordManager passwordManager;
     public InventorySerialization invSerialization;
-    //TODO: set this to the type at some point
     public PlayerDataStore.dataType currentDataType;
     public LapisLoginConfigurations LLConfig;
     private HashMap<UUID, LapisLoginPlayer> players = new HashMap<>();
@@ -71,7 +70,6 @@ public final class LapisLogin extends JavaPlugin {
     @Override
     public void onDisable() {
         for (LapisLoginPlayer p : players.values()) {
-            p.saveConfig(p.config);
             removeLoginPlayer(p.getOfflinePlayer().getUniqueId());
         }
         logger.info("LapisLogin has been disabled!");

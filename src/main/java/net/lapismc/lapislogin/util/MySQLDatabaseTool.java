@@ -34,17 +34,17 @@ public class MySQLDatabaseTool {
         setupDatabase(username, password);
     }
 
-    public void addData(String ID, Object password, Object login, Object logout, Object IP) {
+    public void addData(String ID, String password, Long login, Long logout, String IP) {
         try {
             conn = getConnection();
             String sql = "INSERT INTO loginPlayers(id,password,login,logout,ip) VALUES(?,?,?,?,?)";
             PreparedStatement pstmt = conn.prepareStatement(sql,
                     Statement.RETURN_GENERATED_KEYS);
-            pstmt.setObject(1, ID);
-            pstmt.setObject(2, password);
-            pstmt.setObject(3, login);
-            pstmt.setObject(4, logout);
-            pstmt.setObject(4, IP);
+            pstmt.setString(1, ID);
+            pstmt.setString(2, password);
+            pstmt.setLong(3, login);
+            pstmt.setLong(4, logout);
+            pstmt.setString(4, IP);
             pstmt.execute();
             pstmt.close();
             conn.close();
@@ -93,6 +93,7 @@ public class MySQLDatabaseTool {
 
     private void setupDatabase(String username, String password) {
         try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
             conn = getConnection();
             Statement stmt = conn.createStatement();
             String sql = "CREATE DATABASE IF NOT EXISTS " + DBName;
@@ -101,7 +102,7 @@ public class MySQLDatabaseTool {
             sql = "CREATE TABLE IF NOT EXISTS loginPlayers";
             stmt.execute(sql);
             conn.close();
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
     }
