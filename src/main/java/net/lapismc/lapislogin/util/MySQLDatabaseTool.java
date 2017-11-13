@@ -42,15 +42,15 @@ public class MySQLDatabaseTool {
         try {
             conn = getConnection();
             String sql = "INSERT INTO loginPlayers(UUID,Password,Login,Logout,IPAddress) VALUES(?,?,?,?,?)";
-            PreparedStatement pareStatement = conn.prepareStatement(sql,
+            PreparedStatement preStatement = conn.prepareStatement(sql,
                     Statement.RETURN_GENERATED_KEYS);
-            pareStatement.setString(1, ID);
-            pareStatement.setString(2, password);
-            pareStatement.setLong(3, login);
-            pareStatement.setLong(4, logout);
-            pareStatement.setString(5, IP);
-            pareStatement.execute();
-            pareStatement.close();
+            preStatement.setString(1, ID);
+            preStatement.setString(2, password);
+            preStatement.setLong(3, login);
+            preStatement.setLong(4, logout);
+            preStatement.setString(5, IP);
+            preStatement.execute();
+            preStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -59,30 +59,52 @@ public class MySQLDatabaseTool {
     public void setData(String ID, String item, Object data) {
         try {
             conn = getConnection();
-            String sqlUpdate = "UPDATE loginPlayers SET ? = ? WHERE id = ?";
-            PreparedStatement pareStatement = conn.prepareStatement(sqlUpdate);
-            pareStatement.setString(1, item);
-            pareStatement.setObject(2, data);
-            pareStatement.setString(3, ID);
-            pareStatement.execute();
-            pareStatement.close();
+            String sqlUpdate = "UPDATE loginPlayers SET ? = ? WHERE UUID = ?";
+            PreparedStatement preStatement = conn.prepareStatement(sqlUpdate);
+            preStatement.setString(1, item);
+            preStatement.setObject(2, data);
+            preStatement.setString(3, ID);
+            preStatement.execute();
+            preStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public Object getData(String ID, String item) {
+    public Object getData(String UUID, String item) {
         try {
             conn = getConnection();
-            Statement stmt = conn.createStatement();
-            String sql = "SELECT " + item + " WHERE UUID = " + ID + " FROM loginPlayers";
-            ResultSet rs = stmt.executeQuery(sql);
+            String sql = "SELECT " + item + " FROM loginPlayers WHERE UUID = ?";
+            PreparedStatement preStatement = conn.prepareStatement(sql);
+            preStatement.setString(1, UUID);
+            ResultSet rs = preStatement.executeQuery();
             if (!rs.isBeforeFirst()) {
                 rs.close();
                 return null;
             }
             rs.next();
             Object data = rs.getObject(item);
+            rs.close();
+            return data;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Blob getBlob(String UUID, String item) {
+        try {
+            conn = getConnection();
+            String sql = "SELECT " + item + " FROM loginPlayers WHERE UUID = ?";
+            PreparedStatement preStatement = conn.prepareStatement(sql);
+            preStatement.setString(1, UUID);
+            ResultSet rs = preStatement.executeQuery();
+            if (!rs.isBeforeFirst()) {
+                rs.close();
+                return null;
+            }
+            rs.next();
+            Blob data = rs.getBlob(item);
             rs.close();
             return data;
         } catch (SQLException e) {

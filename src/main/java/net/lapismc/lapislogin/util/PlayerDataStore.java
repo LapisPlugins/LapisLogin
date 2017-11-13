@@ -21,6 +21,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class PlayerDataStore {
@@ -34,8 +36,15 @@ public class PlayerDataStore {
     }
 
     public String getString(String path) {
-        if (getData(path) instanceof String) {
-            return (String) getData(path);
+        if (getData(path) instanceof Blob) {
+            try {
+                Blob blob = (Blob) getData(path);
+                byte[] bdata = blob.getBytes(1, (int) blob.length());
+                String s = new String(bdata);
+                return s;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

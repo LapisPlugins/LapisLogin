@@ -24,6 +24,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class LapisLoginConfigurations {
@@ -37,7 +39,6 @@ public class LapisLoginConfigurations {
     public LapisLoginConfigurations(LapisLogin plugin) {
         this.plugin = plugin;
         plugin.saveDefaultConfig();
-        new File(plugin.getDataFolder(), "PlayerData").mkdirs();
         configVersion();
         primaryColor = ChatColor.translateAlternateColorCodes('&', getMessages(false).getString("PrimaryColor"));
         secondaryColor = ChatColor.translateAlternateColorCodes('&', getMessages(false).getString("SecondaryColor"));
@@ -85,13 +86,14 @@ public class LapisLoginConfigurations {
             }
             f.delete();
         }
-        if (!f.exists() && plugin.getConfig().getString("DataStorage").equalsIgnoreCase("YAML")) {
+        if ((!f.exists() || (f.exists() && f.listFiles().length == 0)) && plugin.getConfig().getString("DataStorage").equalsIgnoreCase("YAML")) {
             MySQLDatabaseTool sql = new MySQLDatabaseTool(plugin.getConfig());
+            f.mkdir();
             for (OfflinePlayer op : Bukkit.getOfflinePlayers()) {
                 PlayerDataStore playerData = new PlayerDataStore(plugin, op.getUniqueId());
                 if (sql.getData(op.getUniqueId().toString(), "Password") != null)
-                    playerData.setupPlayer((String) sql.getData(op.getUniqueId().toString(), "Password"), (Long) sql.getData(op.getUniqueId().toString(), "Login"),
-                            (Long) sql.getData(op.getUniqueId().toString(), "Logout"), (String) sql.getData(op.getUniqueId().toString(), "IPAddress"));
+                    playerData.setupPlayer(getStringFromBlob(sql.getBlob(op.getUniqueId().toString(), "Password")), (Long) sql.getData(op.getUniqueId().toString(), "Login"),
+                            (Long) sql.getData(op.getUniqueId().toString(), "Logout"), getStringFromBlob(sql.getBlob(op.getUniqueId().toString(), "IPAddress")));
             }
         }
         f = new File(plugin.getDataFolder(), "Passwords.yml");
@@ -109,6 +111,21 @@ public class LapisLoginConfigurations {
             }
             f.delete();
         }
+    }
+
+    private String getStringFromBlob(Object data) {
+        if (!(data instanceof Blob)) {
+            return null;
+        }
+        try {
+            Blob blob = (Blob) data;
+            byte[] bdata = blob.getBytes(1, (int) blob.length());
+            String s = new String(bdata);
+            return s;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public YamlConfiguration getMessages(boolean reload) {

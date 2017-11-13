@@ -37,7 +37,7 @@ public class LapisLoginPasswordManager {
     }
 
     public boolean isPasswordSet(UUID uuid) {
-        return getPlayerData(uuid).getString("Password").equalsIgnoreCase("");
+        return !getPlayerData(uuid).getString("Password").equalsIgnoreCase("");
     }
 
     public boolean setPassword(UUID uuid, String pw) {
