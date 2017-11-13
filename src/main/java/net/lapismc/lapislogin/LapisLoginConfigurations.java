@@ -91,9 +91,11 @@ public class LapisLoginConfigurations {
             f.mkdir();
             for (OfflinePlayer op : Bukkit.getOfflinePlayers()) {
                 PlayerDataStore playerData = new PlayerDataStore(plugin, op.getUniqueId());
-                if (sql.getData(op.getUniqueId().toString(), "Password") != null)
+                if (sql.getData(op.getUniqueId().toString(), "Password") != null) {
                     playerData.setupPlayer(getStringFromBlob(sql.getBlob(op.getUniqueId().toString(), "Password")), (Long) sql.getData(op.getUniqueId().toString(), "Login"),
                             (Long) sql.getData(op.getUniqueId().toString(), "Logout"), getStringFromBlob(sql.getBlob(op.getUniqueId().toString(), "IPAddress")));
+                    sql.dropRow(op.getUniqueId().toString());
+                }
             }
         }
         f = new File(plugin.getDataFolder(), "Passwords.yml");

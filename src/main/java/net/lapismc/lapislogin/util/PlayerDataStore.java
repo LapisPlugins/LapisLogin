@@ -23,16 +23,43 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class PlayerDataStore {
 
     LapisLogin plugin;
     UUID uuid;
+    MySQLDatabaseTool sql;
+    HashMap<String, Map<Long, Object>> cache = new HashMap<>();
 
     public PlayerDataStore(LapisLogin p, UUID uuid) {
         plugin = p;
         this.uuid = uuid;
+        setupSQL();
+    }
+
+    private void setupSQL() {
+        if (plugin.currentDataType == dataType.MySQL && sql == null) {
+            sql = new MySQLDatabaseTool(plugin.getConfig());
+        }
+    }
+
+    public Object checkCache(String path) {
+        if (!cache.containsKey(path)) {
+            return null;
+        }
+        Date date = new Date();
+        Long timeout = date.getTime() - 600000l;
+        Map<Long, Object> map = cache.get(path);
+        Long timeSet = (Long) map.keySet().toArray()[0];
+        if (timeSet < timeout) {
+            cache.remove(path);
+            return null;
+        }
+        return map.values().toArray()[0];
     }
 
     public String getString(String path) {
@@ -91,7 +118,7 @@ public class PlayerDataStore {
                 }
                 break;
             case MySQL:
-                MySQLDatabaseTool sql = new MySQLDatabaseTool(plugin.getConfig());
+                setupSQL();
                 sql.addData(uuid.toString(), password, login, logout, ip);
                 break;
         }
@@ -110,6 +137,9 @@ public class PlayerDataStore {
                 }
                 YamlConfiguration yaml = YamlConfiguration.loadConfiguration(f);
                 yaml.set(path, data);
+                Map<Long, Object> map = new HashMap<>();
+                map.put(new Date().getTime(), data);
+                cache.put(path, map);
                 try {
                     yaml.save(f);
                 } catch (IOException e) {
@@ -117,13 +147,19 @@ public class PlayerDataStore {
                 }
                 break;
             case MySQL:
-                MySQLDatabaseTool sql = new MySQLDatabaseTool(plugin.getConfig());
+                setupSQL();
                 sql.setData(uuid.toString(), path, data);
+                map = new HashMap<>();
+                map.put(new Date().getTime(), data);
+                cache.put(path, map);
                 break;
         }
     }
 
     private Object getData(String path) {
+        if (checkCache(path) != null) {
+            return checkCache(path);
+        }
         switch (plugin.currentDataType) {
             case YAML:
                 File f = new File(plugin.getDataFolder(), "PlayerData" + File.separator + uuid.toString() + ".yml");
@@ -135,10 +171,18 @@ public class PlayerDataStore {
                     }
                 }
                 YamlConfiguration yaml = YamlConfiguration.loadConfiguration(f);
-                return yaml.get(path);
+                Object obj = yaml.get(path);
+                Map<Long, Object> map = new HashMap<>();
+                map.put(new Date().getTime(), obj);
+                cache.put(path, map);
+                return obj;
             case MySQL:
-                MySQLDatabaseTool sql = new MySQLDatabaseTool(plugin.getConfig());
-                return sql.getData(uuid.toString(), path);
+                setupSQL();
+                obj = sql.getData(uuid.toString(), path);
+                map = new HashMap<>();
+                map.put(new Date().getTime(), obj);
+                cache.put(path, map);
+                return obj;
             case SQLite:
                 //TODO: create database file and table if it doesn't exist, after that get the data
         }

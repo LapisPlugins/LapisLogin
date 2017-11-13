@@ -113,6 +113,19 @@ public class MySQLDatabaseTool {
         return null;
     }
 
+    public void dropRow(String UUID) {
+        try {
+            conn = getConnection();
+            String sqlUpdate = "DELETE FROM loginPlayers WHERE UUID = ?";
+            PreparedStatement preStatement = conn.prepareStatement(sqlUpdate);
+            preStatement.setString(1, UUID);
+            preStatement.execute();
+            preStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Integer getRows() {
         try {
             conn = getConnection();
@@ -149,7 +162,7 @@ public class MySQLDatabaseTool {
 
     private Connection getConnection() {
         try {
-            if (conn == null) {
+            if (conn == null || conn.isClosed()) {
                 return DriverManager.getConnection(url, username, password);
             } else {
                 return conn;
