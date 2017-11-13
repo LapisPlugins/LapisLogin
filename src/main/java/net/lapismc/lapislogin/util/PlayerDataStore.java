@@ -72,6 +72,8 @@ public class PlayerDataStore {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        } else if (getData(path) instanceof String) {
+            return (String) getData(path);
         }
         return null;
     }
