@@ -38,10 +38,7 @@ public class LapisLoginAPIPlayer {
     public LapisLoginAPIPlayer(LapisLogin plugin, LapisLoginPlayer p) {
         this.plugin = plugin;
         this.p = p;
-        loggedIn = p.isLoggedIn();
-        registrationRequired = p.registrationRequired;
-        Registered = p.isRegistered();
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, update, 20 * 30, 20 * 30);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, update, 20, 20 * 30);
     }
 
     /**

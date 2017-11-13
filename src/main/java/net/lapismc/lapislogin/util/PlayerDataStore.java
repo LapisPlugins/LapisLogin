@@ -79,10 +79,7 @@ public class PlayerDataStore {
     }
 
     public Long getLong(String path) {
-        if (getData(path) instanceof Long) {
-            return (Long) getData(path);
-        }
-        return null;
+        return (Long) getData(path);
     }
 
     public Object get(String path) {
