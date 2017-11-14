@@ -24,8 +24,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.UUID;
 
 public class LapisLoginConfigurations {
@@ -91,9 +89,9 @@ public class LapisLoginConfigurations {
             f.mkdir();
             for (OfflinePlayer op : Bukkit.getOfflinePlayers()) {
                 PlayerDataStore playerData = new PlayerDataStore(plugin, op.getUniqueId());
-                if (sql.getData(op.getUniqueId().toString(), "Password") != null) {
-                    playerData.setupPlayer(getStringFromBlob(sql.getBlob(op.getUniqueId().toString(), "Password")), (Long) sql.getData(op.getUniqueId().toString(), "Login"),
-                            (Long) sql.getData(op.getUniqueId().toString(), "Logout"), getStringFromBlob(sql.getBlob(op.getUniqueId().toString(), "IPAddress")));
+                if (sql.getString(op.getUniqueId().toString(), "Password") != null) {
+                    playerData.setupPlayer(sql.getString(op.getUniqueId().toString(), "Password"), sql.getLong(op.getUniqueId().toString(), "Login"),
+                            sql.getLong(op.getUniqueId().toString(), "Logout"), sql.getString(op.getUniqueId().toString(), "IPAddress"));
                     sql.dropRow(op.getUniqueId().toString());
                 }
             }
@@ -113,21 +111,6 @@ public class LapisLoginConfigurations {
             }
             f.delete();
         }
-    }
-
-    private String getStringFromBlob(Object data) {
-        if (!(data instanceof Blob)) {
-            return null;
-        }
-        try {
-            Blob blob = (Blob) data;
-            byte[] bdata = blob.getBytes(1, (int) blob.length());
-            String s = new String(bdata);
-            return s;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public YamlConfiguration getMessages(boolean reload) {

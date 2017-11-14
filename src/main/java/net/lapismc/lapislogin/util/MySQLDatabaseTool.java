@@ -77,6 +77,7 @@ public class MySQLDatabaseTool {
             if (!rs.isBeforeFirst()) {
                 return null;
             }
+            rs.next();
             return rs.getLong(path);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -90,6 +91,7 @@ public class MySQLDatabaseTool {
             if (!rs.isBeforeFirst()) {
                 return null;
             }
+            rs.next();
             return rs.getString(path);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,6 +105,7 @@ public class MySQLDatabaseTool {
             if (!rs.isBeforeFirst()) {
                 return null;
             }
+            rs.next();
             return rs.getObject(path);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -118,27 +121,6 @@ public class MySQLDatabaseTool {
             preStatement.setString(1, UUID);
             ResultSet rs = preStatement.executeQuery();
             return rs;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public Blob getBlob(String UUID, String item) {
-        try {
-            conn = getConnection();
-            String sql = "SELECT " + item + " FROM loginPlayers WHERE UUID = ?";
-            PreparedStatement preStatement = conn.prepareStatement(sql);
-            preStatement.setString(1, UUID);
-            ResultSet rs = preStatement.executeQuery();
-            if (!rs.isBeforeFirst()) {
-                rs.close();
-                return null;
-            }
-            rs.next();
-            Blob data = rs.getBlob(item);
-            rs.close();
-            return data;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -181,11 +163,11 @@ public class MySQLDatabaseTool {
             stmt.execute(sql);
             stmt = conn.createStatement();
             sql = "CREATE TABLE IF NOT EXISTS loginPlayers (" +
-                    "UUID BLOB NOT NULL," +
-                    "Password BLOB," +
+                    "UUID VARCHAR(36) NOT NULL," +
+                    "Password VARCHAR(105)," +
                     "Login BIGINT," +
                     "Logout BIGINT," +
-                    "IPAddress BLOB)";
+                    "IPAddress VARCHAR(15))";
             stmt.execute(sql);
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
