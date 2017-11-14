@@ -140,6 +140,19 @@ public class MySQLDatabaseTool {
         }
     }
 
+    public ResultSet getAllRows() {
+        try {
+            conn = getConnection();
+            Statement stmt = conn.createStatement();
+            String sql = "SELECT * FROM loginPlayers";
+            ResultSet rs = stmt.executeQuery(sql);
+            return rs;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public Integer getRows() {
         try {
             conn = getConnection();

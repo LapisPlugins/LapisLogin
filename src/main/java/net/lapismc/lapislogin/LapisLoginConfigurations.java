@@ -20,10 +20,11 @@ import net.lapismc.lapislogin.util.MySQLDatabaseTool;
 import net.lapismc.lapislogin.util.PlayerDataStore;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class LapisLoginConfigurations {
@@ -87,13 +88,15 @@ public class LapisLoginConfigurations {
         if ((!f.exists() || (f.exists() && f.listFiles().length == 0)) && plugin.getConfig().getString("DataStorage").equalsIgnoreCase("YAML")) {
             MySQLDatabaseTool sql = new MySQLDatabaseTool(plugin.getConfig());
             f.mkdir();
-            for (OfflinePlayer op : Bukkit.getOfflinePlayers()) {
-                PlayerDataStore playerData = new PlayerDataStore(plugin, op.getUniqueId());
-                if (sql.getString(op.getUniqueId().toString(), "Password") != null) {
-                    playerData.setupPlayer(sql.getString(op.getUniqueId().toString(), "Password"), sql.getLong(op.getUniqueId().toString(), "Login"),
-                            sql.getLong(op.getUniqueId().toString(), "Logout"), sql.getString(op.getUniqueId().toString(), "IPAddress"));
-                    sql.dropRow(op.getUniqueId().toString());
+            ResultSet rs = sql.getAllRows();
+            try {
+                while (rs.next()) {
+                    PlayerDataStore playerData = new PlayerDataStore(plugin, UUID.fromString(rs.getString("UUID")));
+                    playerData.setupPlayer(rs.getString("Password"), rs.getLong("Login"), rs.getLong("Logout"), rs.getString("IPAddress"));
+                    sql.dropRow(rs.getString("UUID").toString());
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
         f = new File(plugin.getDataFolder(), "Passwords.yml");
