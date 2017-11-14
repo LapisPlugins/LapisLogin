@@ -19,6 +19,7 @@ package net.lapismc.lapislogin;
 import net.lapismc.lapislogin.api.LapisLoginAPI;
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
 import net.lapismc.lapislogin.util.InventorySerialization;
+import net.lapismc.lapislogin.util.MySQLDatabaseTool;
 import net.lapismc.lapislogin.util.PlayerDataStore;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -37,6 +38,7 @@ public final class LapisLogin extends JavaPlugin {
     public InventorySerialization invSerialization;
     public PlayerDataStore.dataType currentDataType;
     public LapisLoginConfigurations LLConfig;
+    public MySQLDatabaseTool mySQL;
     private HashMap<UUID, LapisLoginPlayer> players = new HashMap<>();
 
     @Override

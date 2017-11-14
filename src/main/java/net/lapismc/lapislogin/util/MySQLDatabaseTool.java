@@ -71,21 +71,53 @@ public class MySQLDatabaseTool {
         }
     }
 
-    public Object getData(String UUID, String item) {
+    public Long getLong(String UUID, String path) {
+        try {
+            ResultSet rs = getResults(UUID, path);
+            if (!rs.isBeforeFirst()) {
+                return null;
+            }
+            return rs.getLong(path);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getString(String UUID, String path) {
+        try {
+            ResultSet rs = getResults(UUID, path);
+            if (!rs.isBeforeFirst()) {
+                return null;
+            }
+            return rs.getString(path);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Object getObject(String UUID, String path) {
+        try {
+            ResultSet rs = getResults(UUID, path);
+            if (!rs.isBeforeFirst()) {
+                return null;
+            }
+            return rs.getObject(path);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private ResultSet getResults(String UUID, String item) {
         try {
             conn = getConnection();
             String sql = "SELECT " + item + " FROM loginPlayers WHERE UUID = ?";
             PreparedStatement preStatement = conn.prepareStatement(sql);
             preStatement.setString(1, UUID);
             ResultSet rs = preStatement.executeQuery();
-            if (!rs.isBeforeFirst()) {
-                rs.close();
-                return null;
-            }
-            rs.next();
-            Object data = rs.getObject(item);
-            rs.close();
-            return data;
+            return rs;
         } catch (SQLException e) {
             e.printStackTrace();
         }
