@@ -150,10 +150,18 @@ public class PlayerDataStore {
                     }
                 }
                 YamlConfiguration yaml = YamlConfiguration.loadConfiguration(f);
-                return yaml.getString(path);
+                String obj = sql.getString(uuid.toString(), path);
+                Map<Long, Object> map = new HashMap<>();
+                map.put(new Date().getTime(), obj);
+                cache.put(path, map);
+                return obj;
             case MySQL:
                 setupSQL();
-                return sql.getString(uuid.toString(), path);
+                obj = sql.getString(uuid.toString(), path);
+                map = new HashMap<>();
+                map.put(new Date().getTime(), obj);
+                cache.put(path, map);
+                return obj;
         }
         return null;
     }
@@ -173,10 +181,18 @@ public class PlayerDataStore {
                     }
                 }
                 YamlConfiguration yaml = YamlConfiguration.loadConfiguration(f);
-                return yaml.getLong(path);
+                Long obj = yaml.getLong(path);
+                Map<Long, Object> map = new HashMap<>();
+                map.put(new Date().getTime(), obj);
+                cache.put(path, map);
+                return obj;
             case MySQL:
                 setupSQL();
-                return sql.getLong(uuid.toString(), path);
+                obj = sql.getLong(uuid.toString(), path);
+                map = new HashMap<>();
+                map.put(new Date().getTime(), obj);
+                cache.put(path, map);
+                return obj;
         }
         return null;
     }

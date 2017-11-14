@@ -83,7 +83,7 @@ public final class LapisLogin extends JavaPlugin {
         } else {
             Date date = new Date();
             LapisLoginPlayer loginPlayer = players.get(uuid);
-            if (players.get(uuid).getConfig().getLong("Logout") + (getConfig().getInt("LogoutTimeout") * 60000) > date.getTime() && loginPlayer.isLoggedIn()) {
+            if (players.get(uuid).getConfig().getLong("Logout") + (getConfig().getInt("LogoutTimeout", 1) * 60000) > date.getTime() && loginPlayer.isLoggedIn()) {
                 loginPlayer = new LapisLoginPlayer(this, uuid);
                 loginPlayer.forceLogin();
                 players.put(uuid, loginPlayer);
