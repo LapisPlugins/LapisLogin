@@ -43,7 +43,7 @@ public class LapisLoginPasswordManager {
     public boolean setPassword(UUID uuid, String pw) {
         String hash = getHash(pw);
         if (hash != null) {
-            getPlayerData(uuid).set("Password", pw);
+            getPlayerData(uuid).set("Password", hash);
             return true;
         } else {
             return false;
