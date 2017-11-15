@@ -59,10 +59,14 @@ public class LapisLoginPlayer {
     }
 
     public void loadConfig() {
-        config = new PlayerDataStore(plugin, op.getUniqueId());
+        if (config == null)
+            config = new PlayerDataStore(plugin, op.getUniqueId());
     }
 
     public void playerJoin() {
+        if (config.getString("Password") == null) {
+            config.setupPlayer("", 0l, 0l, "");
+        }
         if (!isRegistered() && canRegister && !registrationRequired) {
             sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationOptional"));
             return;
@@ -90,11 +94,10 @@ public class LapisLoginPlayer {
             } else {
                 sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));
             }
-            Date date = new Date();
-            config.setupPlayer("", date.getTime(), 0l, op.getPlayer().getAddress().getHostString());
-            config.set("Login", date.getTime());
         }
         loadConfig();
+        Date date = new Date();
+        config.set("Login", date.getTime());
         config.set("IPAddress", op.getPlayer().getAddress().getHostString());
     }
 
