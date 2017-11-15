@@ -150,7 +150,7 @@ public class PlayerDataStore {
                     }
                 }
                 YamlConfiguration yaml = YamlConfiguration.loadConfiguration(f);
-                String obj = sql.getString(uuid.toString(), path);
+                String obj = yaml.getString(path);
                 Map<Long, Object> map = new HashMap<>();
                 map.put(new Date().getTime(), obj);
                 cache.put(path, map);
@@ -166,7 +166,7 @@ public class PlayerDataStore {
         return null;
     }
 
-    public Long getLong(String path) {
+    public long getLong(String path) {
         if (checkCache(path) != null) {
             return (Long) checkCache(path);
         }
@@ -194,7 +194,7 @@ public class PlayerDataStore {
                 cache.put(path, map);
                 return obj;
         }
-        return null;
+        return 0l;
     }
 
     public Object get(String path) {
