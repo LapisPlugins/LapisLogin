@@ -22,7 +22,7 @@ import java.sql.*;
 
 public class MySQLDatabaseTool {
 
-    String url = "jdbc:mysql://%URL%/%DBName%";
+    String url = "jdbc:mysql://%URL%/%DBName%?verifyServerCertificate=false&useSSL=true";
     String username;
     String password;
     String DBName;
@@ -56,14 +56,13 @@ public class MySQLDatabaseTool {
         }
     }
 
-    public void setData(String ID, String item, Object data) {
+    public void setData(String ID, String path, Object data) {
         try {
             conn = getConnection();
-            String sqlUpdate = "UPDATE loginPlayers SET ? = ? WHERE UUID = ?";
+            String sqlUpdate = "UPDATE loginPlayers SET " + path + " = ? WHERE UUID = ?";
             PreparedStatement preStatement = conn.prepareStatement(sqlUpdate);
-            preStatement.setString(1, item);
-            preStatement.setObject(2, data);
-            preStatement.setString(3, ID);
+            preStatement.setObject(1, data);
+            preStatement.setString(2, ID);
             preStatement.execute();
             preStatement.close();
         } catch (SQLException e) {

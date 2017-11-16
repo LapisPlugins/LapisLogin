@@ -167,9 +167,9 @@ public class PlayerDataStore {
     }
 
     public long getLong(String path) {
-        if (checkCache(path) != null) {
-            return (Long) checkCache(path);
-        }
+        //if (checkCache(path) != null) {
+        //    return (Long) checkCache(path);
+        //}
         switch (plugin.currentDataType) {
             case YAML:
                 File f = new File(plugin.getDataFolder(), "PlayerData" + File.separator + uuid.toString() + ".yml");

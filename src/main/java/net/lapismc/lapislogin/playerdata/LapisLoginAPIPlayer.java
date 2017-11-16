@@ -17,7 +17,6 @@
 package net.lapismc.lapislogin.playerdata;
 
 import net.lapismc.lapislogin.LapisLogin;
-import org.bukkit.Bukkit;
 
 public class LapisLoginAPIPlayer {
 
@@ -26,19 +25,10 @@ public class LapisLoginAPIPlayer {
     private boolean loggedIn;
     private boolean Registered;
     private boolean registrationRequired;
-    private Runnable update = new Runnable() {
-        @Override
-        public void run() {
-            loggedIn = p.isLoggedIn();
-            registrationRequired = p.registrationRequired;
-            Registered = p.isRegistered();
-        }
-    };
 
     public LapisLoginAPIPlayer(LapisLogin plugin, LapisLoginPlayer p) {
         this.plugin = plugin;
         this.p = p;
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, update, 20, 20 * 30);
     }
 
     /**

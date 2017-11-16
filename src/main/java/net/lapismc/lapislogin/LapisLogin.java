@@ -78,18 +78,15 @@ public final class LapisLogin extends JavaPlugin {
     }
 
     public LapisLoginPlayer getLoginPlayer(UUID uuid) {
-        if (!players.containsKey(uuid)) {
+        if (!players.containsKey(uuid) || players.get(uuid) == null) {
             players.put(uuid, new LapisLoginPlayer(this, uuid));
         } else {
             Date date = new Date();
             LapisLoginPlayer loginPlayer = players.get(uuid);
-            try {
-                if (players.get(uuid).getConfig().getLong("Logout") + (getConfig().getLong("LogoutTimeout", 1l) * 60000l) > date.getTime() && loginPlayer.isLoggedIn()) {
-                    loginPlayer = new LapisLoginPlayer(this, uuid);
-                    loginPlayer.forceLogin();
-                    players.put(uuid, loginPlayer);
-                }
-            } catch (NullPointerException ignored) {
+            if (players.get(uuid).getConfig().getLong("Logout") + (getConfig().getLong("LogoutTimeout", 1l) * 60000l) > date.getTime() && loginPlayer.isLoggedIn()) {
+                loginPlayer = new LapisLoginPlayer(this, uuid);
+                loginPlayer.forceLogin();
+                players.put(uuid, loginPlayer);
             }
         }
         if (!players.get(uuid).getOfflinePlayer().isOnline()) {

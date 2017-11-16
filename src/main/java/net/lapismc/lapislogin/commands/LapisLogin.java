@@ -82,7 +82,7 @@ public class LapisLogin {
     public void sendPluginInformation(CommandSender sender) {
         String primary = plugin.LLConfig.primaryColor;
         String secondary = plugin.LLConfig.secondaryColor;
-        String bars = secondary + "------------";
+        String bars = secondary + "-------------";
         sender.sendMessage(bars + primary + " LapisLogin " + bars);
         sender.sendMessage(primary + "Version: " + secondary + plugin.getDescription().getVersion());
         sender.sendMessage(primary + "Author: " + secondary + plugin.getDescription().getAuthors().get(0));
