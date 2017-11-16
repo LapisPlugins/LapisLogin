@@ -16,6 +16,7 @@
 
 package net.lapismc.lapislogin.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.sql.*;
@@ -36,6 +37,23 @@ public class MySQLDatabaseTool {
         this.DBName = config.getString("Database.dbName");
         url = url.replace("%URL%", config.getString("Database.location")).replace("%DBName%", DBName);
         setupDatabase(username, password);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("LapisLogin"),
+                connectionCleaning(), 30 * 20, 30 * 20);
+    }
+
+    public Runnable connectionCleaning() {
+        return new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (conn != null && !conn.isClosed()) {
+                        conn.close();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
     }
 
     public void addData(String ID, String password, Long login, Long logout, String IP) {

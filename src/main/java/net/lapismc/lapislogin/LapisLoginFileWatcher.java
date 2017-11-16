@@ -84,6 +84,7 @@ public class LapisLoginFileWatcher {
         switch (name) {
             case "config":
                 plugin.reloadConfig();
+                plugin.LLConfig.convertPlayerData();
                 plugin.logger.info("Changes made to LapisLogin's config have been loaded");
                 break;
             case "Messages":

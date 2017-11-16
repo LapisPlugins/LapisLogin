@@ -66,7 +66,7 @@ public class LapisLoginConfigurations {
         convertPlayerData();
     }
 
-    private void convertPlayerData() {
+    public void convertPlayerData() {
         if (plugin.getConfig().getString("DataStorage").equalsIgnoreCase("YAML")) {
             plugin.currentDataType = PlayerDataStore.dataType.YAML;
         } else if (plugin.getConfig().getString("DataStorage").equalsIgnoreCase("MySQL")) {
