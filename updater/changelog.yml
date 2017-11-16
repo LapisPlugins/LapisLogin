@@ -28,3 +28,6 @@
 1.0.9:
   - "API change to fix an error in LapisLoginStrength"
   - "Fixed player interact event"
+1.1.0:
+  - "Added MySQL and mirgrated passwords to player data and removed passwords.yml"
+  - "This update will regenerate both the config.yml and messages.yml but you can just rename your old messages.yml back as nothing has changed there"
