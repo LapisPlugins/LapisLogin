@@ -30,24 +30,36 @@ public class PlayerDataStore {
 
     LapisLogin plugin;
     UUID uuid;
-    MySQLDatabaseTool sql;
+    MySQLDatabaseTool MySQL;
+    SQLiteDatabaseTool SQLite;
     HashMap<String, Map<Long, Object>> cache = new HashMap<>();
 
     public PlayerDataStore(LapisLogin p, UUID uuid) {
         plugin = p;
         this.uuid = uuid;
-        setupSQL();
+        setupMySQL();
     }
 
-    private void setupSQL() {
-        if (plugin.currentDataType != dataType.MySQL || sql != null) {
+    private void setupMySQL() {
+        if (plugin.currentDataType != dataType.MySQL || MySQL != null) {
             return;
         }
         if (plugin.mySQL == null) {
-            sql = new MySQLDatabaseTool(plugin.getConfig());
-            plugin.mySQL = sql;
+            MySQL = new MySQLDatabaseTool(plugin.getConfig());
+            plugin.mySQL = MySQL;
         } else {
-            sql = plugin.mySQL;
+            MySQL = plugin.mySQL;
+        }
+    }
+
+    private void setupSQLite() {
+        if (plugin.currentDataType != dataType.SQLite || SQLite != null) {
+            if (plugin.SQLite == null) {
+                SQLite = new SQLiteDatabaseTool();
+                plugin.SQLite = SQLite;
+            } else {
+                SQLite = plugin.SQLite;
+            }
         }
     }
 
@@ -97,8 +109,12 @@ public class PlayerDataStore {
                 }
                 break;
             case MySQL:
-                setupSQL();
-                sql.addData(uuid.toString(), password, login, logout, ip);
+                setupMySQL();
+                MySQL.addData(uuid.toString(), password, login, logout, ip);
+                break;
+            case SQLite:
+                setupSQLite();
+                SQLite.addData(uuid.toString(), password, login, logout, ip);
                 break;
         }
     }
@@ -126,8 +142,15 @@ public class PlayerDataStore {
                 }
                 break;
             case MySQL:
-                setupSQL();
-                sql.setData(uuid.toString(), path, data);
+                setupMySQL();
+                MySQL.setData(uuid.toString(), path, data);
+                map = new HashMap<>();
+                map.put(new Date().getTime(), data);
+                cache.put(path, map);
+                break;
+            case SQLite:
+                setupSQLite();
+                SQLite.setData(uuid.toString(), path, data);
                 map = new HashMap<>();
                 map.put(new Date().getTime(), data);
                 cache.put(path, map);
@@ -156,8 +179,15 @@ public class PlayerDataStore {
                 cache.put(path, map);
                 return obj;
             case MySQL:
-                setupSQL();
-                obj = sql.getString(uuid.toString(), path);
+                setupMySQL();
+                obj = MySQL.getString(uuid.toString(), path);
+                map = new HashMap<>();
+                map.put(new Date().getTime(), obj);
+                cache.put(path, map);
+                return obj;
+            case SQLite:
+                setupSQLite();
+                obj = SQLite.getString(uuid.toString(), path);
                 map = new HashMap<>();
                 map.put(new Date().getTime(), obj);
                 cache.put(path, map);
@@ -187,8 +217,15 @@ public class PlayerDataStore {
                 cache.put(path, map);
                 return obj;
             case MySQL:
-                setupSQL();
-                obj = sql.getLong(uuid.toString(), path);
+                setupMySQL();
+                obj = MySQL.getLong(uuid.toString(), path);
+                map = new HashMap<>();
+                map.put(new Date().getTime(), obj);
+                cache.put(path, map);
+                return obj;
+            case SQLite:
+                setupSQLite();
+                obj = SQLite.getLong(uuid.toString(), path);
                 map = new HashMap<>();
                 map.put(new Date().getTime(), obj);
                 cache.put(path, map);
@@ -222,8 +259,15 @@ public class PlayerDataStore {
                 cache.put(path, map);
                 return obj;
             case MySQL:
-                setupSQL();
-                obj = sql.getObject(uuid.toString(), path);
+                setupMySQL();
+                obj = MySQL.getObject(uuid.toString(), path);
+                map = new HashMap<>();
+                map.put(new Date().getTime(), obj);
+                cache.put(path, map);
+                return obj;
+            case SQLite:
+                setupSQLite();
+                obj = SQLite.getObject(uuid.toString(), path);
                 map = new HashMap<>();
                 map.put(new Date().getTime(), obj);
                 cache.put(path, map);
@@ -233,7 +277,7 @@ public class PlayerDataStore {
     }
 
     public enum dataType {
-        YAML, MySQL
+        YAML, MySQL, SQLite
     }
 
 }

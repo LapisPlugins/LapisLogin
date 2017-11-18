@@ -71,6 +71,8 @@ public class LapisLoginConfigurations {
             plugin.currentDataType = PlayerDataStore.dataType.YAML;
         } else if (plugin.getConfig().getString("DataStorage").equalsIgnoreCase("MySQL")) {
             plugin.currentDataType = PlayerDataStore.dataType.MySQL;
+        } else if (plugin.getConfig().getString("DataStorage").equalsIgnoreCase("SQLite")) {
+            plugin.currentDataType = PlayerDataStore.dataType.SQLite;
         } else {
             plugin.currentDataType = PlayerDataStore.dataType.YAML;
         }
