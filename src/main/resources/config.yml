@@ -1,6 +1,7 @@
 #Dont change unless you want to reset the config
 ConfigVersion: 4
-#Where should data be stored, this can be YAML or MySQL. If it is a database you will need to fill in settings at the bottom of the config
+#Where should data be stored, this can be YAML, MySQL or SQLite.
+#If it is MySQL you will need to fill in the database settings at the bottom of the config
 DataStorage: YAML
 #Downloads and installs updates when available
 DownloadUpdates: true
@@ -17,7 +18,9 @@ HideInventory: true
 
 #Database settings for if you wish to use a Database as your data store
 Database:
+  #The URL and port of your database
   location: "localhost:3306"
   username: "root"
   password: ""
+  #This should be the name of a database on your database server
   dbName: "SpigotServer"
