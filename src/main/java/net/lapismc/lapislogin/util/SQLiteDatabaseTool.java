@@ -176,7 +176,7 @@ public class SQLiteDatabaseTool {
 
     private void setupDatabase() {
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Class.forName("org.sqlite.JDBC").newInstance();
             conn = getConnection();
             Statement stmt = conn.createStatement();
             String sql = "CREATE TABLE IF NOT EXISTS loginPlayers (\n" +
