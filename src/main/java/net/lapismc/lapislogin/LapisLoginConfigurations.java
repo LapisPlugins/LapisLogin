@@ -110,24 +110,22 @@ public class LapisLoginConfigurations {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        SQLiteDatabaseTool sqlite = new SQLiteDatabaseTool(plugin);
-        try {
-            if (plugin.currentDataType != PlayerDataStore.dataType.SQLite && sqlite.isConnected() && sqlite.getAllRows().isBeforeFirst()) {
-                ResultSet rs = sql.getAllRows();
-                try {
-                    while (rs.next()) {
-                        PlayerDataStore playerData = new PlayerDataStore(plugin, UUID.fromString(rs.getString("UUID")));
-                        playerData.setupPlayer(rs.getString("Password"), rs.getLong("Login"), rs.getLong("Logout"), rs.getString("IPAddress"));
-                        sql.dropRow(rs.getString("UUID").toString());
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
+        SQLiteDatabaseTool SQLite = new SQLiteDatabaseTool(plugin);
+        if (plugin.currentDataType != PlayerDataStore.dataType.SQLite && SQLite.isConnected()) {
+            try {
+                ResultSet rs = SQLite.getAllRows();
+                while (rs.next()) {
+                    PlayerDataStore playerData = new PlayerDataStore(plugin, UUID.fromString(rs.getString("UUID")));
+                    playerData.setupPlayer(rs.getString("Password"), rs.getLong("Login"), rs.getLong("Logout"), rs.getString("IPAddress"));
+                    SQLite.dropRow(rs.getString("UUID").toString());
                 }
-                f = new File(plugin.getDataFolder(), "PlayerData.db");
-                f.delete();
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            SQLite.close();
+            f = new File(plugin.getDataFolder(), "PlayerData.db");
+            f.delete();
         }
         f = new File(plugin.getDataFolder(), "Passwords.yml");
         if (f.exists()) {

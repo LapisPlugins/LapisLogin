@@ -30,7 +30,7 @@ public class SQLiteDatabaseTool {
 
     public SQLiteDatabaseTool(LapisLogin plugin) {
         this.plugin = plugin;
-        url = "jdbc:sqlite:" + plugin.getDataFolder() + "/PlayerData.db";
+        url = "jdbc:sqlite:" + plugin.getDataFolder().getAbsolutePath() + "/PlayerData.db";
         File f = new File(plugin.getDataFolder(), "PlayerData.db");
         if (f.exists()) {
             setupDatabase();
@@ -43,15 +43,19 @@ public class SQLiteDatabaseTool {
         return new Runnable() {
             @Override
             public void run() {
-                try {
-                    if (conn != null && !conn.isClosed()) {
-                        conn.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                close();
             }
         };
+    }
+
+    public void close() {
+        try {
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addData(String ID, String password, Long login, Long logout, String IP) {
@@ -135,6 +139,7 @@ public class SQLiteDatabaseTool {
             PreparedStatement preStatement = conn.prepareStatement(sql);
             preStatement.setString(1, UUID);
             ResultSet rs = preStatement.executeQuery();
+            preStatement.close();
             return rs;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -161,6 +166,7 @@ public class SQLiteDatabaseTool {
             Statement stmt = conn.createStatement();
             String sql = "SELECT * FROM loginPlayers";
             ResultSet rs = stmt.executeQuery(sql);
+            stmt.close();
             return rs;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -196,6 +202,7 @@ public class SQLiteDatabaseTool {
                     " Logout BIGINT,\n" +
                     " IPAddress VARCHAR(15)\n);";
             stmt.execute(sql);
+            stmt.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
