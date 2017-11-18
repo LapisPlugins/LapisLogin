@@ -18,6 +18,7 @@ package net.lapismc.lapislogin;
 
 import net.lapismc.lapislogin.util.MySQLDatabaseTool;
 import net.lapismc.lapislogin.util.PlayerDataStore;
+import net.lapismc.lapislogin.util.SQLiteDatabaseTool;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -71,8 +72,13 @@ public class LapisLoginConfigurations {
             plugin.currentDataType = PlayerDataStore.dataType.YAML;
         } else if (plugin.getConfig().getString("DataStorage").equalsIgnoreCase("MySQL")) {
             plugin.currentDataType = PlayerDataStore.dataType.MySQL;
+            if (!(new MySQLDatabaseTool(plugin.getConfig()).isConnected())) {
+                plugin.currentDataType = PlayerDataStore.dataType.YAML;
+                plugin.logger.warning("An error occored with MySQL, Please check your settings. For now we will use YAML");
+            }
         } else if (plugin.getConfig().getString("DataStorage").equalsIgnoreCase("SQLite")) {
             plugin.currentDataType = PlayerDataStore.dataType.SQLite;
+            new SQLiteDatabaseTool().setupDatabase();
         } else {
             plugin.currentDataType = PlayerDataStore.dataType.YAML;
         }
@@ -87,19 +93,41 @@ public class LapisLoginConfigurations {
             }
             f.delete();
         }
-        if ((!f.exists() || (f.exists() && f.listFiles().length == 0)) && plugin.getConfig().getString("DataStorage").equalsIgnoreCase("YAML")) {
-            MySQLDatabaseTool sql = new MySQLDatabaseTool(plugin.getConfig());
-            f.mkdir();
-            ResultSet rs = sql.getAllRows();
-            try {
-                while (rs.next()) {
-                    PlayerDataStore playerData = new PlayerDataStore(plugin, UUID.fromString(rs.getString("UUID")));
-                    playerData.setupPlayer(rs.getString("Password"), rs.getLong("Login"), rs.getLong("Logout"), rs.getString("IPAddress"));
-                    sql.dropRow(rs.getString("UUID").toString());
+        MySQLDatabaseTool sql = new MySQLDatabaseTool(plugin.getConfig());
+        try {
+            if (plugin.currentDataType != PlayerDataStore.dataType.MySQL && sql.isConnected() && sql.getAllRows().isBeforeFirst()) {
+                ResultSet rs = sql.getAllRows();
+                try {
+                    while (rs.next()) {
+                        PlayerDataStore playerData = new PlayerDataStore(plugin, UUID.fromString(rs.getString("UUID")));
+                        playerData.setupPlayer(rs.getString("Password"), rs.getLong("Login"), rs.getLong("Logout"), rs.getString("IPAddress"));
+                        sql.dropRow(rs.getString("UUID").toString());
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        SQLiteDatabaseTool sqlite = new SQLiteDatabaseTool();
+        try {
+            if (plugin.currentDataType != PlayerDataStore.dataType.SQLite && sqlite.getAllRows().isBeforeFirst()) {
+                ResultSet rs = sql.getAllRows();
+                try {
+                    while (rs.next()) {
+                        PlayerDataStore playerData = new PlayerDataStore(plugin, UUID.fromString(rs.getString("UUID")));
+                        playerData.setupPlayer(rs.getString("Password"), rs.getLong("Login"), rs.getLong("Logout"), rs.getString("IPAddress"));
+                        sql.dropRow(rs.getString("UUID").toString());
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                f = new File(plugin.getDataFolder(), "PlayerData.db");
+                f.delete();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         f = new File(plugin.getDataFolder(), "Passwords.yml");
         if (f.exists()) {

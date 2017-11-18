@@ -36,7 +36,9 @@ public class MySQLDatabaseTool {
         this.password = config.getString("Database.password");
         this.DBName = config.getString("Database.dbName");
         url = url.replace("%URL%", config.getString("Database.location")).replace("%DBName%", DBName);
-        setupDatabase(username, password);
+        if (isConnected()) {
+            setupDatabase(username, password);
+        }
         Bukkit.getScheduler().scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("LapisLogin"),
                 connectionCleaning(), 30 * 20, 30 * 20);
     }
@@ -182,6 +184,15 @@ public class MySQLDatabaseTool {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public boolean isConnected() {
+        try {
+            DriverManager.getConnection(url, username, password).close();
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
     }
 
     private void setupDatabase(String username, String password) {

@@ -89,7 +89,11 @@ public class PlayerDataStore {
     private void addData(String password, Long login, Long logout, String ip) {
         switch (plugin.currentDataType) {
             case YAML:
-                File f = new File(plugin.getDataFolder(), "PlayerData" + File.separator + uuid.toString() + ".yml");
+                File f = new File(plugin.getDataFolder(), "PlayerData");
+                if (!f.exists()) {
+                    f.mkdir();
+                }
+                f = new File(plugin.getDataFolder(), "PlayerData" + File.separator + uuid.toString() + ".yml");
                 if (!f.exists()) {
                     try {
                         f.createNewFile();

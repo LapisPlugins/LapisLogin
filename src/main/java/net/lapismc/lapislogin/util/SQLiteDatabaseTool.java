@@ -18,6 +18,7 @@ package net.lapismc.lapislogin.util;
 
 import org.bukkit.Bukkit;
 
+import java.io.File;
 import java.sql.*;
 
 public class SQLiteDatabaseTool {
@@ -26,7 +27,10 @@ public class SQLiteDatabaseTool {
     Connection conn;
 
     public SQLiteDatabaseTool() {
-        setupDatabase();
+        File f = new File(Bukkit.getPluginManager().getPlugin("LapisLogin").getDataFolder(), "PlayerData.db");
+        if (f.exists()) {
+            setupDatabase();
+        }
         Bukkit.getScheduler().scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("LapisLogin"),
                 connectionCleaning(), 30 * 20, 30 * 20);
     }
@@ -174,7 +178,7 @@ public class SQLiteDatabaseTool {
         return 0;
     }
 
-    private void setupDatabase() {
+    public void setupDatabase() {
         try {
             Class.forName("org.sqlite.JDBC").newInstance();
             conn = getConnection();
