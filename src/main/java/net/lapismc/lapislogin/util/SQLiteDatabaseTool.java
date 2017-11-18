@@ -16,6 +16,7 @@
 
 package net.lapismc.lapislogin.util;
 
+import net.lapismc.lapislogin.LapisLogin;
 import org.bukkit.Bukkit;
 
 import java.io.File;
@@ -23,15 +24,18 @@ import java.sql.*;
 
 public class SQLiteDatabaseTool {
 
-    String url = "jdbc:sqlite:" + Bukkit.getPluginManager().getPlugin("LapisLogin").getDataFolder() + "/PlayerData.db";
+    String url;
+    LapisLogin plugin;
     Connection conn;
 
-    public SQLiteDatabaseTool() {
-        File f = new File(Bukkit.getPluginManager().getPlugin("LapisLogin").getDataFolder(), "PlayerData.db");
+    public SQLiteDatabaseTool(LapisLogin plugin) {
+        this.plugin = plugin;
+        url = "jdbc:sqlite:" + plugin.getDataFolder() + "/PlayerData.db";
+        File f = new File(plugin.getDataFolder(), "PlayerData.db");
         if (f.exists()) {
             setupDatabase();
         }
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("LapisLogin"),
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin,
                 connectionCleaning(), 30 * 20, 30 * 20);
     }
 
@@ -166,10 +170,7 @@ public class SQLiteDatabaseTool {
 
     public Integer getRows() {
         try {
-            conn = getConnection();
-            Statement stmt = conn.createStatement();
-            String sql = "SELECT * FROM loginPlayers";
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = getAllRows();
             rs.last();
             return rs.getRow();
         } catch (SQLException e) {
@@ -179,7 +180,7 @@ public class SQLiteDatabaseTool {
     }
 
     public boolean isConnected() {
-        File f = new File(Bukkit.getPluginManager().getPlugin("LapisLogin").getDataFolder(), "PlayerData.db");
+        File f = new File(plugin.getDataFolder(), "PlayerData.db");
         return f.exists();
     }
 

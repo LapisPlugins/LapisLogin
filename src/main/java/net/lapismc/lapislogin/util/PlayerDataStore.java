@@ -64,7 +64,7 @@ public class PlayerDataStore {
             return;
         }
         if (plugin.SQLite == null) {
-            SQLite = new SQLiteDatabaseTool();
+            SQLite = new SQLiteDatabaseTool(plugin);
             plugin.SQLite = SQLite;
         } else {
             SQLite = plugin.SQLite;

@@ -78,7 +78,7 @@ public class LapisLoginConfigurations {
             }
         } else if (plugin.getConfig().getString("DataStorage").equalsIgnoreCase("SQLite")) {
             plugin.currentDataType = PlayerDataStore.dataType.SQLite;
-            new SQLiteDatabaseTool().setupDatabase();
+            new SQLiteDatabaseTool(plugin).setupDatabase();
         } else {
             plugin.currentDataType = PlayerDataStore.dataType.YAML;
         }
@@ -110,7 +110,7 @@ public class LapisLoginConfigurations {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        SQLiteDatabaseTool sqlite = new SQLiteDatabaseTool();
+        SQLiteDatabaseTool sqlite = new SQLiteDatabaseTool(plugin);
         try {
             if (plugin.currentDataType != PlayerDataStore.dataType.SQLite && sqlite.isConnected() && sqlite.getAllRows().isBeforeFirst()) {
                 ResultSet rs = sql.getAllRows();
