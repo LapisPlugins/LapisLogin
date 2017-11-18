@@ -74,7 +74,7 @@
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <minimizeJar>false</minimizeJar>
-                            <relocations>
+                            <!--<relocations>
                                 <relocation>
                                     <pattern>com.mysql</pattern>
                                     <shadedPattern>net.lapismc.lapislogin.mysql</shadedPattern>
@@ -83,7 +83,7 @@
                                     <pattern>org.sqlite</pattern>
                                     <shadedPattern>net.lapismc.lapislogin.sqlite</shadedPattern>
                                 </relocation>
-                            </relocations>
+                            </relocations>-->
                         </configuration>
                     </execution>
                 </executions>
@@ -113,13 +113,13 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.44</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.20.0</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
