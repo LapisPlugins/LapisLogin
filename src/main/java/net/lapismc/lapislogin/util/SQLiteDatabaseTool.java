@@ -178,6 +178,11 @@ public class SQLiteDatabaseTool {
         return 0;
     }
 
+    public boolean isConnected() {
+        File f = new File(Bukkit.getPluginManager().getPlugin("LapisLogin").getDataFolder(), "PlayerData.db");
+        return f.exists();
+    }
+
     public void setupDatabase() {
         try {
             Class.forName("org.sqlite.JDBC").newInstance();

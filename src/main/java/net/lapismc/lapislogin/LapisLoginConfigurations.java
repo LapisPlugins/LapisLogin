@@ -112,7 +112,7 @@ public class LapisLoginConfigurations {
         }
         SQLiteDatabaseTool sqlite = new SQLiteDatabaseTool();
         try {
-            if (plugin.currentDataType != PlayerDataStore.dataType.SQLite && sqlite.getAllRows().isBeforeFirst()) {
+            if (plugin.currentDataType != PlayerDataStore.dataType.SQLite && sqlite.isConnected() && sqlite.getAllRows().isBeforeFirst()) {
                 ResultSet rs = sql.getAllRows();
                 try {
                     while (rs.next()) {
