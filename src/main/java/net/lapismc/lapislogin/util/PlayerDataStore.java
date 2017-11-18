@@ -38,6 +38,13 @@ public class PlayerDataStore {
         plugin = p;
         this.uuid = uuid;
         setupMySQL();
+        setupSQLite();
+        if (plugin.currentDataType == dataType.YAML) {
+            File f = new File(plugin.getDataFolder(), "PlayerData");
+            if (!f.exists()) {
+                f.mkdir();
+            }
+        }
     }
 
     private void setupMySQL() {
@@ -54,12 +61,13 @@ public class PlayerDataStore {
 
     private void setupSQLite() {
         if (plugin.currentDataType != dataType.SQLite || SQLite != null) {
-            if (plugin.SQLite == null) {
-                SQLite = new SQLiteDatabaseTool();
-                plugin.SQLite = SQLite;
-            } else {
-                SQLite = plugin.SQLite;
-            }
+            return;
+        }
+        if (plugin.SQLite == null) {
+            SQLite = new SQLiteDatabaseTool();
+            plugin.SQLite = SQLite;
+        } else {
+            SQLite = plugin.SQLite;
         }
     }
 
@@ -89,11 +97,7 @@ public class PlayerDataStore {
     private void addData(String password, Long login, Long logout, String ip) {
         switch (plugin.currentDataType) {
             case YAML:
-                File f = new File(plugin.getDataFolder(), "PlayerData");
-                if (!f.exists()) {
-                    f.mkdir();
-                }
-                f = new File(plugin.getDataFolder(), "PlayerData" + File.separator + uuid.toString() + ".yml");
+                File f = new File(plugin.getDataFolder(), "PlayerData" + File.separator + uuid.toString() + ".yml");
                 if (!f.exists()) {
                     try {
                         f.createNewFile();
