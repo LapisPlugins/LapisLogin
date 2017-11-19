@@ -21,6 +21,7 @@ import net.lapismc.lapislogin.util.PlayerDataStore;
 import net.lapismc.lapislogin.util.SQLiteDatabaseTool;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -112,16 +113,12 @@ public class LapisLoginConfigurations {
         }
         SQLiteDatabaseTool SQLite = new SQLiteDatabaseTool(plugin);
         if (plugin.currentDataType != PlayerDataStore.dataType.SQLite && SQLite.isConnected()) {
-            try {
-                ResultSet rs = SQLite.getAllRows();
-                while (rs.next()) {
-                    PlayerDataStore playerData = new PlayerDataStore(plugin, UUID.fromString(rs.getString("UUID")));
-                    playerData.setupPlayer(rs.getString("Password"), rs.getLong("Login"), rs.getLong("Logout"), rs.getString("IPAddress"));
-                    SQLite.dropRow(rs.getString("UUID").toString());
+            for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
+                PlayerDataStore playerData = new PlayerDataStore(plugin, p.getUniqueId());
+                if (playerData.getString("Password") != null) {
+                    playerData.setupPlayer(playerData.getString("Password"), playerData.getLong("Login"), playerData.getLong("Logout"), playerData.getString("IPAddress"));
+                    SQLite.dropRow(p.getUniqueId().toString());
                 }
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
             SQLite.close();
             f = new File(plugin.getDataFolder(), "PlayerData.db");
