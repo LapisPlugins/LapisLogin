@@ -27,6 +27,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.UUID;
 
 public class LapisLoginConfigurations {
@@ -69,21 +70,25 @@ public class LapisLoginConfigurations {
     }
 
     public void convertPlayerData() {
+        //set which data storage system we are using
         if (plugin.getConfig().getString("DataStorage").equalsIgnoreCase("YAML")) {
             plugin.currentDataType = PlayerDataStore.dataType.YAML;
         } else if (plugin.getConfig().getString("DataStorage").equalsIgnoreCase("MySQL")) {
             plugin.currentDataType = PlayerDataStore.dataType.MySQL;
             if (!(new MySQLDatabaseTool(plugin.getConfig()).isConnected())) {
                 plugin.currentDataType = PlayerDataStore.dataType.YAML;
-                plugin.logger.warning("An error occored with MySQL, Please check your settings. For now we will use YAML");
+                plugin.logger.warning("An error occurred with MySQL, Please check your settings. For now we will use YAML");
             }
         } else if (plugin.getConfig().getString("DataStorage").equalsIgnoreCase("SQLite")) {
             plugin.currentDataType = PlayerDataStore.dataType.SQLite;
             new SQLiteDatabaseTool(plugin).setupDatabase();
         } else {
+            //if the value entered doesnt match anything we just use YAML
             plugin.currentDataType = PlayerDataStore.dataType.YAML;
+            plugin.logger.warning("The data storage type entered doesn't exist, please check spelling. For now we will use YAML");
         }
         File f = new File(plugin.getDataFolder(), "PlayerData");
+        //if YAML has data but isn't the current data storage type then we will migrate it into the current storage type
         if (f.exists() && !plugin.getConfig().getString("DataStorage").equalsIgnoreCase("YAML")) {
             for (File data : f.listFiles()) {
                 YamlConfiguration yaml = YamlConfiguration.loadConfiguration(data);
@@ -96,6 +101,7 @@ public class LapisLoginConfigurations {
         }
         MySQLDatabaseTool sql = new MySQLDatabaseTool(plugin.getConfig());
         try {
+            //if MySQL has data but isn't the current data storage type then we will migrate it into the current storage type
             if (plugin.currentDataType != PlayerDataStore.dataType.MySQL && sql.isConnected() && sql.getAllRows().isBeforeFirst()) {
                 ResultSet rs = sql.getAllRows();
                 try {
@@ -112,6 +118,7 @@ public class LapisLoginConfigurations {
             e.printStackTrace();
         }
         SQLiteDatabaseTool SQLite = new SQLiteDatabaseTool(plugin);
+        //if SQLite has data but isn't the current data storage type then we will migrate it into the current storage type
         if (plugin.currentDataType != PlayerDataStore.dataType.SQLite && SQLite.isConnected()) {
             for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
                 PlayerDataStore playerData = new PlayerDataStore(plugin, p.getUniqueId());
@@ -125,6 +132,7 @@ public class LapisLoginConfigurations {
             f.delete();
         }
         f = new File(plugin.getDataFolder(), "Passwords.yml");
+        //if the passwords file still exists then we will move this data into the player data file and then remove the passwords file
         if (f.exists()) {
             YamlConfiguration yaml = YamlConfiguration.loadConfiguration(f);
             for (String s : yaml.getKeys(false)) {
@@ -138,6 +146,22 @@ public class LapisLoginConfigurations {
                 yaml.set(s, null);
             }
             f.delete();
+        }
+        clearOldEntries();
+    }
+
+    private void clearOldEntries() {
+        //for each player we see how long they have been offline and remove their data if they have been offline too long
+        for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
+            PlayerDataStore playerData = new PlayerDataStore(plugin, p.getUniqueId());
+            Long logout = playerData.getLong("Logout");
+            //86400000 is the number of milliseconds in a day
+            Long timeout = (plugin.getConfig().getInt("PlayerTimeout", 365) * 86400000) - new Date().getTime();
+            //if timeout is bigger than logout, it means that they player was last online before the cut off point
+            if (timeout > logout) {
+                playerData.deletePlayer();
+                plugin.logger.info("Player " + p.getName() + " has had their LapisLogin data wiped as they have been offline too long");
+            }
         }
     }
 

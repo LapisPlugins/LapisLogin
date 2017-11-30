@@ -94,6 +94,26 @@ public class PlayerDataStore {
         addData(password, login, logout, ip);
     }
 
+    public void deletePlayer() {
+        switch (plugin.currentDataType) {
+            case YAML:
+                File f = new File(plugin.getDataFolder(), "PlayerData" + File.separator + uuid.toString() + ".yml");
+                if (f.exists()) {
+                    f.delete();
+                }
+                break;
+            case MySQL:
+                setupMySQL();
+                MySQL.dropRow(uuid.toString());
+                break;
+            case SQLite:
+                setupSQLite();
+                SQLite.dropRow(uuid.toString());
+                break;
+        }
+        cache.clear();
+    }
+
     private void addData(String password, Long login, Long logout, String ip) {
         switch (plugin.currentDataType) {
             case YAML:

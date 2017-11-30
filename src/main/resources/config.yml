@@ -15,6 +15,8 @@ LogoutTimeout: 1
 InventoryLock: true
 #This will hide the players inventory while they aren't logged in and give it back when they login
 HideInventory: true
+#After this number of days have passed, the players data (including password) will be removed, that means that the player will need to register again
+PlayerTimeout: 365
 
 #Database settings for if you wish to use a Database as your data store
 Database:
