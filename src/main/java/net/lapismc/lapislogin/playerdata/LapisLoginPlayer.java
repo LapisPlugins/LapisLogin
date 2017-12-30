@@ -21,6 +21,7 @@ import net.lapismc.lapislogin.api.events.LoginEvent;
 import net.lapismc.lapislogin.api.events.RegisterEvent;
 import net.lapismc.lapislogin.util.PlayerDataStore;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -33,6 +34,8 @@ public class LapisLoginPlayer {
 
     public PlayerDataStore config;
     public BukkitTask task;
+    public boolean registrationRequired = true;
+    public boolean canRegister = true;
     private LapisLogin plugin;
     private OfflinePlayer op;
     private UUID uuid;
@@ -40,8 +43,6 @@ public class LapisLoginPlayer {
     private LapisLoginAPIPlayer api;
     private int loginAttempts = 0;
     private boolean loggedIn = false;
-    public boolean registrationRequired = true;
-    public boolean canRegister = true;
 
     public LapisLoginPlayer(LapisLogin plugin, UUID uuid) {
         this.plugin = plugin;
@@ -207,6 +208,19 @@ public class LapisLoginPlayer {
 
     public void saveInventory() {
         if (op.isOnline()) {
+            if (!plugin.getConfig().getString("ForceGamemode").equalsIgnoreCase("None")) {
+                switch (plugin.getConfig().getString("ForceGamemode")) {
+                    case "Survival":
+                        getPlayer().setGameMode(GameMode.SURVIVAL);
+                        break;
+                    case "Creative":
+                        getPlayer().setGameMode(GameMode.CREATIVE);
+                        break;
+                    case "Adventure":
+                        getPlayer().setGameMode(GameMode.ADVENTURE);
+                        break;
+                }
+            }
             inv = getPlayer().getInventory().getContents();
             getPlayer().getInventory().clear();
         }

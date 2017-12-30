@@ -5,6 +5,9 @@ ConfigVersion: 4
 DataStorage: YAML
 #Downloads and installs updates when available
 DownloadUpdates: true
+#This can be useful if you have inventory management plugins
+#Vaules can be None, Survival, Creative or Adventure
+ForceGamemode: None
 #How many times can a player get their password wrong before the LoginAttemptsReachedCommand is run
 LoginAttempts: 3
 #Command to run after a player get their password wrong

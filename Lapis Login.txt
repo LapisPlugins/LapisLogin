@@ -1,3 +1,0 @@
-/lapislogin
-update, checks for updates and installs them if available
-reload, reloads all configs

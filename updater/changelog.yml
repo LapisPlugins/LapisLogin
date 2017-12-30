@@ -34,3 +34,6 @@
 1.1.1:
   - "Added SQLite as a player data storage option"
   - "Other data storage based fixes"
+1.1.2:
+  - "SQLite fixes"
+  - "Added forceGamemode option for servers with GamemodeInventories or simular plugins"
