@@ -21,6 +21,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +47,42 @@ public class PlayerDataStore {
                 f.mkdir();
             }
         }
+    }
+
+    public boolean hasData() {
+        //checks to see if we have any data for the player{
+        switch (plugin.currentDataType) {
+            case YAML:
+                File file = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "PlayerData" + File.separator + uuid.toString() + ".yml");
+                return file.exists();
+            case MySQL:
+                try {
+                    ResultSet rs = plugin.mySQL.getAllRows();
+                    while (rs.next()) {
+                        if (rs.getString("UUID").equals(uuid.toString())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case SQLite:
+                try {
+                    ResultSet rs = plugin.SQLite.getAllRows();
+                    while (rs.next()) {
+                        if (rs.getString("UUID").equals(uuid.toString())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
+        return false;
     }
 
     private void setupMySQL() {

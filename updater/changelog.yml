@@ -36,4 +36,5 @@
   - "Other data storage based fixes"
 1.1.2:
   - "SQLite fixes"
-  - "Added forceGamemode option for servers with GamemodeInventories or simular plugins"
+  - "Added forceGamemode option for servers with GamemodeInventories or similar plugins"
+  - "Player data clean up fix"
