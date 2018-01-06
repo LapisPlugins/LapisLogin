@@ -1,10 +1,12 @@
-#Dont change unless you want to reset the config
-ConfigVersion: 4
+#Don't change unless you want to reset the config
+ConfigVersion: 5
 #Where should data be stored, this can be YAML, MySQL or SQLite.
 #If it is MySQL you will need to fill in the database settings at the bottom of the config
 DataStorage: YAML
 #Downloads and installs updates when available
 DownloadUpdates: true
+#This will log things like incorrect password attempts and successful registration and login to the console
+ExtraConsoleLog: false
 #This can be useful if you have inventory management plugins
 #Values can be None, Survival, Creative or Adventure
 ForceGamemode: None

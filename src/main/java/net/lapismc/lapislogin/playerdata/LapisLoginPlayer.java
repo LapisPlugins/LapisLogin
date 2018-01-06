@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Benjamin Martin
+ * Copyright 2018 Benjamin Martin
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -112,6 +112,7 @@ public class LapisLoginPlayer {
             return;
         }
         if (plugin.passwordManager.checkPassword(op.getUniqueId(), password)) {
+            plugin.logger.info(plugin.LLConfig.getMessage("Login.SuccessConsole").replace("%PLAYER%", op.getName()));
             sendMessage(plugin.LLConfig.getColoredMessage("Login.Success"));
             loginAttempts = 0;
             loadInventory();
@@ -122,6 +123,8 @@ public class LapisLoginPlayer {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getConfig().getString("LoginAttemptsReachedCommand")
                         .replace("%NAME%", op.getName()).replace("%ATTEMPTS%", loginAttempts + ""));
             } else {
+                plugin.logger.info(plugin.LLConfig.getMessage("Login.PasswordIncorrectConsole").replace("%ATTEMPTS%", plugin.getConfig().getInt("LoginAttempts") - loginAttempts + "")
+                        .replace("%PLAYER%", op.getName()));
                 sendMessage(plugin.LLConfig.getColoredMessage("Login.PasswordIncorrect").replace("%ATTEMPTS%", plugin.getConfig().getInt("LoginAttempts") - loginAttempts + ""));
             }
         }
@@ -198,6 +201,7 @@ public class LapisLoginPlayer {
             return;
         }
         if (plugin.passwordManager.setPassword(op.getUniqueId(), password)) {
+            plugin.logger.info(plugin.LLConfig.getMessage("Register.SuccessConsole").replace("%PLAYER%", op.getName()));
             sendMessage(plugin.LLConfig.getColoredMessage("Register.Success").replace("%PASSWORD%", password));
             loadInventory();
             loggedIn = true;
