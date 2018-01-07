@@ -120,7 +120,7 @@ public class LapisLoginPlayer {
         } else {
             loginAttempts++;
             if (plugin.getConfig().getInt("LoginAttempts") <= loginAttempts) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getConfig().getString("LoginAttemptsReachedCommand")
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), plugin.getConfig().getString("LoginAttemptsReachedCommand")
                         .replace("%NAME%", op.getName()).replace("%ATTEMPTS%", loginAttempts + ""));
             } else {
                 plugin.logger.info(plugin.LLConfig.getMessage("Login.PasswordIncorrectConsole").replace("%ATTEMPTS%", plugin.getConfig().getInt("LoginAttempts") - loginAttempts + "")
