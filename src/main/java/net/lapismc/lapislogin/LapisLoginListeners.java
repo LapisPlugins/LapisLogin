@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Benjamin Martin
+ * Copyright 2018 Benjamin Martin
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.filter.AbstractFilter;
 import org.apache.logging.log4j.message.Message;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
@@ -40,6 +41,15 @@ import java.util.logging.LogRecord;
 public class LapisLoginListeners implements Listener {
 
     LapisLogin plugin;
+    Filter consoleLogListener = new Filter() {
+        @Override
+        public boolean isLoggable(LogRecord record) {
+            record.setMessage(removePasswords(record.getMessage()));
+            return true;
+        }
+    };
+
+    //connect disconnect events
 
     public LapisLoginListeners(LapisLogin p) {
         plugin = p;
@@ -48,21 +58,19 @@ public class LapisLoginListeners implements Listener {
         setLog4JFilter();
     }
 
-    //connect disconnect events
-
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
         loginPlayer.playerJoin();
     }
 
+    //Deny action events
+
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
         loginPlayer.playerQuit();
     }
-
-    //Deny action events
 
     private boolean denyAction(PlayerEvent e) {
         if (e instanceof Cancellable) {
@@ -72,6 +80,13 @@ public class LapisLoginListeners implements Listener {
             }
         }
         LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
+        if (!loginPlayer.canInteract() && e.getPlayer().getVelocity().getY() < 0) {
+            Location y = e.getPlayer().getWorld().getHighestBlockAt(e.getPlayer().getLocation()).getLocation();
+            Location loc = e.getPlayer().getLocation();
+            loc.setY(y.getY());
+            e.getPlayer().teleport(loc);
+            return false;
+        }
         if (!loginPlayer.canInteract()) {
             loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
             return true;
@@ -97,6 +112,8 @@ public class LapisLoginListeners implements Listener {
         }
     }
 
+    //inventory lock events
+
     @EventHandler
     public void onPlayerCommand(PlayerCommandPreprocessEvent e) {
         String cmd = e.getMessage().split(" ")[0].toLowerCase();
@@ -106,8 +123,6 @@ public class LapisLoginListeners implements Listener {
             e.setCancelled(false);
         }
     }
-
-    //inventory lock events
 
     @EventHandler
     public void onInventoryInteract(InventoryInteractEvent e) {
@@ -133,6 +148,8 @@ public class LapisLoginListeners implements Listener {
         }
     }
 
+    //console log event for hiding passwords
+
     @EventHandler
     public void onItemPickup(EntityPickupItemEvent e) {
         if (!plugin.getConfig().getBoolean("InventoryLock"))
@@ -145,16 +162,6 @@ public class LapisLoginListeners implements Listener {
             }
         }
     }
-
-    //console log event for hiding passwords
-
-    Filter consoleLogListener = new Filter() {
-        @Override
-        public boolean isLoggable(LogRecord record) {
-            record.setMessage(removePasswords(record.getMessage()));
-            return true;
-        }
-    };
 
     private void setLog4JFilter() {
         AbstractFilter abstractConsoleLogListener = new AbstractFilter() {

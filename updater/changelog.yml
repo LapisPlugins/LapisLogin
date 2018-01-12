@@ -40,3 +40,4 @@
   - "Player data clean up fix"
 1.1.3:
   - "Added extra console logging option to log info about logging attempts and such to console"
+  - "Added a teleport to group system so that players in the air are dealt with appropriately"
