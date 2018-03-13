@@ -29,11 +29,15 @@
   - "API change to fix an error in LapisLoginStrength"
   - "Fixed player interact event"
 1.1.0:
-  - "Added MySQL and mirgrated passwords to player data and removed passwords.yml"
+  - "Added MySQL and migrated passwords to player data and removed passwords.yml"
   - "This update will regenerate both the config.yml and messages.yml but you can just rename your old messages.yml back as nothing has changed there"
 1.1.1:
   - "Added SQLite as a player data storage option"
   - "Other data storage based fixes"
 1.1.2:
   - "SQLite fixes"
-  - "Added forceGamemode option for servers with GamemodeInventories or simular plugins"
+  - "Added forceGamemode option for servers with GamemodeInventories or similar plugins"
+  - "Player data clean up fix"
+1.1.3:
+  - "Added extra console logging option to log info about logging attempts and such to console"
+  - "Added a teleport to group system so that players in the air are dealt with appropriately"

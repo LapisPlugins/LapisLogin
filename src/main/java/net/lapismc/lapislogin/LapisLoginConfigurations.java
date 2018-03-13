@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Benjamin Martin
+ * Copyright 2018 Benjamin Martin
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -154,6 +154,9 @@ public class LapisLoginConfigurations {
         //for each player we see how long they have been offline and remove their data if they have been offline too long
         for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
             PlayerDataStore playerData = new PlayerDataStore(plugin, p.getUniqueId());
+            if (!playerData.hasData()) {
+                return;
+            }
             Long logout = playerData.getLong("Logout");
             //86400000 is the number of milliseconds in a day
             Long timeout = (plugin.getConfig().getInt("PlayerTimeout", 365) * 86400000) - new Date().getTime();
