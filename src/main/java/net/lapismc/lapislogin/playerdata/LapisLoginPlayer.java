@@ -67,6 +67,7 @@ public class LapisLoginPlayer {
     }
 
     public void playerJoin() {
+        loadConfig();
         if (config.getString("Password") == null) {
             config.setupPlayer("", 0l, 0l, "");
         }
@@ -86,22 +87,20 @@ public class LapisLoginPlayer {
         if (isLoggedIn()) {
             if (getIP() != null && !getIP().equals(getPlayer().getAddress().getHostString())) {
                 sendMessage(plugin.LLConfig.getColoredMessage("Error.IPChangeLogout"));
+                config.set("IPAddress", op.getPlayer().getAddress().getHostString());
                 logoutPlayer(false);
             } else {
                 loadInventory();
                 getPlayer().sendMessage(plugin.LLConfig.getColoredMessage("Login.NoLoginRequired"));
             }
         } else {
+            config.set("IPAddress", op.getPlayer().getAddress().getHostString());
             if (isRegistered()) {
                 sendMessage(plugin.LLConfig.getColoredMessage("Login.LoginRequired"));
             } else {
                 sendMessage(plugin.LLConfig.getColoredMessage("Register.RegistrationRequired"));
             }
         }
-        loadConfig();
-        Date date = new Date();
-        config.set("Login", date.getTime());
-        config.set("IPAddress", op.getPlayer().getAddress().getHostString());
     }
 
     public void loginPlayer(String password) {
@@ -117,6 +116,8 @@ public class LapisLoginPlayer {
             loginAttempts = 0;
             loadInventory();
             loggedIn = true;
+            Date date = new Date();
+            config.set("Login", date.getTime());
         } else {
             loginAttempts++;
             if (plugin.getConfig().getInt("LoginAttempts") <= loginAttempts) {
