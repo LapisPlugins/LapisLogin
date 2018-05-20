@@ -114,6 +114,9 @@ public class LapisLoginPlayer {
             plugin.logger.info(plugin.LLConfig.getMessage("Login.SuccessConsole").replace("%PLAYER%", op.getName()));
             sendMessage(plugin.LLConfig.getColoredMessage("Login.Success"));
             loginAttempts = 0;
+            if (plugin.invHook != null) {
+                plugin.invHook.loginComplete(getPlayer());
+            }
             loadInventory();
             loggedIn = true;
             Date date = new Date();
@@ -136,6 +139,9 @@ public class LapisLoginPlayer {
     }
 
     public void forceLogin() {
+        if (plugin.invHook != null) {
+            plugin.invHook.loginComplete(getPlayer());
+        }
         loggedIn = true;
     }
 
@@ -212,6 +218,9 @@ public class LapisLoginPlayer {
     }
 
     public void saveInventory() {
+        if (plugin.invHook != null) {
+            plugin.invHook.saveInventory(getPlayer(), getPlayer().getGameMode());
+        }
         if (op.isOnline()) {
             if (!plugin.getConfig().getString("ForceGamemode").equalsIgnoreCase("None")) {
                 switch (plugin.getConfig().getString("ForceGamemode")) {
@@ -232,6 +241,11 @@ public class LapisLoginPlayer {
     }
 
     public void loadInventory() {
+        if (plugin.invHook != null) {
+            plugin.invHook.loadInventory(getPlayer(), getPlayer().getGameMode());
+            inv = null;
+            return;
+        }
         if (!plugin.getConfig().getBoolean("HideInventory")) return;
         if (inv != null) {
             op.getPlayer().getInventory().setContents(inv);

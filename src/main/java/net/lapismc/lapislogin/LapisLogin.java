@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Benjamin Martin
+ * Copyright 2018 Benjamin Martin
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package net.lapismc.lapislogin;
 
+import net.lapismc.lapislogin.api.LapisInventoriesHook;
 import net.lapismc.lapislogin.api.LapisLoginAPI;
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
 import net.lapismc.lapislogin.util.InventorySerialization;
@@ -39,6 +40,7 @@ public final class LapisLogin extends JavaPlugin {
     public InventorySerialization invSerialization;
     public PlayerDataStore.dataType currentDataType;
     public LapisLoginConfigurations LLConfig;
+    public LapisInventoriesHook invHook;
     public MySQLDatabaseTool mySQL;
     public SQLiteDatabaseTool SQLite;
     private HashMap<UUID, LapisLoginPlayer> players = new HashMap<>();
@@ -61,6 +63,9 @@ public final class LapisLogin extends JavaPlugin {
         new LapisLoginFileWatcher(this);
         new LapisLoginAPI(this);
         Metrics metrics = new Metrics(this);
+        if (Bukkit.getPluginManager().isPluginEnabled("LapisInventories")) {
+            invHook = new LapisInventoriesHook(this);
+        }
         for (Player p : Bukkit.getOnlinePlayers()) {
             LapisLoginPlayer loginPlayer = getLoginPlayer(p.getUniqueId());
             if (loginPlayer.isRegistered()) {
