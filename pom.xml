@@ -130,7 +130,6 @@
         <dependency>
             <groupId>net.lapsimc</groupId>
             <artifactId>LapisInventories</artifactId>
-            <version>0.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
