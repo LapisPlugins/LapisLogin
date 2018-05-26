@@ -78,7 +78,7 @@ public class LapisLoginPlayer {
         if (!canRegister) {
             return;
         }
-        if (plugin.getConfig().getBoolean("HideInventory")) {
+        if (plugin.getConfig().getBoolean("HideInventory") && plugin.invHook == null) {
             saveInventory();
         }
         if (task != null) {
@@ -116,8 +116,9 @@ public class LapisLoginPlayer {
             loginAttempts = 0;
             if (plugin.invHook != null) {
                 plugin.invHook.loginComplete(getPlayer());
+            } else {
+                loadInventory();
             }
-            loadInventory();
             loggedIn = true;
             Date date = new Date();
             config.set("Login", date.getTime());
