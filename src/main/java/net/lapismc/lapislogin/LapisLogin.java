@@ -97,12 +97,9 @@ public final class LapisLogin extends JavaPlugin {
             }
         }
         if (!players.get(uuid).getOfflinePlayer().isOnline()) {
-            Bukkit.getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
-                @Override
-                public void run() {
-                    removeLoginPlayer(uuid);
-                }
-            }, 20 * 10);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> {
+                removeLoginPlayer(uuid);
+            }, 20);
         }
         return players.get(uuid);
     }

@@ -103,6 +103,10 @@
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
         <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
@@ -128,9 +132,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.lapsimc</groupId>
+            <groupId>com.github.LapisPlugins</groupId>
             <artifactId>LapisInventories</artifactId>
-            <version>LATEST</version>
+            <version>master</version>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>

@@ -108,7 +108,7 @@ public class LapisLoginConfigurations {
                     while (rs.next()) {
                         PlayerDataStore playerData = new PlayerDataStore(plugin, UUID.fromString(rs.getString("UUID")));
                         playerData.setupPlayer(rs.getString("Password"), rs.getLong("Login"), rs.getLong("Logout"), rs.getString("IPAddress"));
-                        sql.dropRow(rs.getString("UUID").toString());
+                        sql.dropRow(rs.getString("UUID"));
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -151,21 +151,24 @@ public class LapisLoginConfigurations {
     }
 
     private void clearOldEntries() {
-        //for each player we see how long they have been offline and remove their data if they have been offline too long
-        for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
-            PlayerDataStore playerData = new PlayerDataStore(plugin, p.getUniqueId());
-            if (!playerData.hasData()) {
-                return;
+        //made async so that waiting for SQL doesn't bring the server to a halt on enable
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            //for each player we see how long they have been offline and remove their data if they have been offline too long
+            for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
+                PlayerDataStore playerData = new PlayerDataStore(plugin, p.getUniqueId());
+                if (!playerData.hasData()) {
+                    return;
+                }
+                Long logout = playerData.getLong("Logout");
+                //86400000 is the number of milliseconds in a day
+                Long timeout = (plugin.getConfig().getInt("PlayerTimeout", 365) * 86400000) - new Date().getTime();
+                //if timeout is bigger than logout, it means that they player was last online before the cut off point
+                if (timeout > logout) {
+                    playerData.deletePlayer();
+                    plugin.logger.info("Player " + p.getName() + " has had their LapisLogin data wiped as they have been offline too long");
+                }
             }
-            Long logout = playerData.getLong("Logout");
-            //86400000 is the number of milliseconds in a day
-            Long timeout = (plugin.getConfig().getInt("PlayerTimeout", 365) * 86400000) - new Date().getTime();
-            //if timeout is bigger than logout, it means that they player was last online before the cut off point
-            if (timeout > logout) {
-                playerData.deletePlayer();
-                plugin.logger.info("Player " + p.getName() + " has had their LapisLogin data wiped as they have been offline too long");
-            }
-        }
+        });
     }
 
     public YamlConfiguration getMessages(boolean reload) {

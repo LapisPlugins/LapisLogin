@@ -17,6 +17,7 @@
 package net.lapismc.lapislogin.util;
 
 import net.lapismc.lapislogin.LapisLogin;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -39,8 +40,10 @@ public class PlayerDataStore {
     public PlayerDataStore(LapisLogin p, UUID uuid) {
         plugin = p;
         this.uuid = uuid;
-        setupMySQL();
-        setupSQLite();
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            setupMySQL();
+            setupSQLite();
+        });
         if (plugin.currentDataType == dataType.YAML) {
             File f = new File(plugin.getDataFolder(), "PlayerData");
             if (!f.exists()) {
@@ -56,6 +59,13 @@ public class PlayerDataStore {
                 File file = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "PlayerData" + File.separator + uuid.toString() + ".yml");
                 return file.exists();
             case MySQL:
+                while (plugin.mySQL == null) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
                 try {
                     ResultSet rs = plugin.mySQL.getAllRows();
                     while (rs.next()) {

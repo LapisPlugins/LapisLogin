@@ -67,6 +67,10 @@ public class LapisLoginPlayer {
     }
 
     public void playerJoin() {
+        if (op.isOnline()) {
+            registrationRequired = getPlayer().hasPermission("lapislogin.required");
+            canRegister = getPlayer().hasPermission("lapislogin.optional") || getPlayer().hasPermission("lapislogin.required");
+        }
         loadConfig();
         if (config.getString("Password") == null) {
             config.setupPlayer("", 0l, 0l, "");
@@ -140,10 +144,11 @@ public class LapisLoginPlayer {
     }
 
     public void forceLogin() {
-        if (plugin.invHook != null) {
-            plugin.invHook.loginComplete(getPlayer());
-        }
         loggedIn = true;
+    }
+
+    public void forceLogout() {
+        loggedIn = false;
     }
 
     public void logoutPlayer(boolean deregister) {
@@ -163,12 +168,9 @@ public class LapisLoginPlayer {
         loadInventory();
         config.set("Logout", date.getTime());
         if (isRegistered() && isLoggedIn()) {
-            task = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    if (!op.isOnline()) {
-                        plugin.removeLoginPlayer(op.getUniqueId());
-                    }
+            task = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+                if (!op.isOnline()) {
+                    plugin.removeLoginPlayer(op.getUniqueId());
                 }
             }, plugin.getConfig().getInt("LogoutTimeout") * 20 * 60);
         } else {
@@ -219,6 +221,7 @@ public class LapisLoginPlayer {
     }
 
     public void saveInventory() {
+        if (!loggedIn) return;
         if (plugin.invHook != null) {
             plugin.invHook.saveInventory(getPlayer(), getPlayer().getGameMode());
         }
@@ -250,6 +253,7 @@ public class LapisLoginPlayer {
         if (!plugin.getConfig().getBoolean("HideInventory")) return;
         if (inv != null) {
             op.getPlayer().getInventory().setContents(inv);
+            inv = null;
         }
     }
 

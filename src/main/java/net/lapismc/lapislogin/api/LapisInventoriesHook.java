@@ -30,15 +30,21 @@ public class LapisInventoriesHook {
     }
 
     public void saveInventory(Player p, GameMode gm) {
-        api.hideInventory(p, gm);
+        if (p.isOnline()) {
+            api.hideInventory(p, gm);
+        }
     }
 
     public void loadInventory(Player p, GameMode gm) {
-        api.giveInventory(p, gm);
+        if (p.isOnline()) {
+            api.giveInventory(p, gm);
+        }
     }
 
     public void loginComplete(Player p) {
-        api.loginComplete(p, p.getGameMode());
+        if (p.isOnline()) {
+            api.loginComplete(p, p.getGameMode());
+        }
     }
 
 }
