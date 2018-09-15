@@ -30,7 +30,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.*;
 
@@ -151,16 +150,14 @@ public class LapisLoginListeners implements Listener {
     //console log event for hiding passwords
 
     @EventHandler
-    public void onItemPickup(EntityPickupItemEvent e) {
+    public void onItemPickup(PlayerPickupItemEvent e) {
         if (!plugin.getConfig().getBoolean("InventoryLock"))
             return;
-        if (e.getEntity() instanceof Player) {
-            LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getEntity().getUniqueId());
+        LapisLoginPlayer loginPlayer = plugin.getLoginPlayer(e.getPlayer().getUniqueId());
             if (!loginPlayer.isLoggedIn() && loginPlayer.registrationRequired) {
                 e.setCancelled(true);
                 loginPlayer.sendMessage(plugin.LLConfig.getColoredMessage("Error.ActionDenied"));
             }
-        }
     }
 
     private void setLog4JFilter() {
