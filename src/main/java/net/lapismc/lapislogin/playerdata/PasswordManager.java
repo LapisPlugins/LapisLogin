@@ -17,31 +17,29 @@
 package net.lapismc.lapislogin.playerdata;
 
 import net.lapismc.lapislogin.LapisLogin;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
+import org.mindrot.BCrypt;
 
 import java.util.UUID;
 
-public class LapisLoginPlayer {
+public class PasswordManager {
 
-    private OfflinePlayer op;
-    private boolean loggedIn;
+    private LapisLogin plugin;
 
-    public LapisLoginPlayer(OfflinePlayer op) {
-        this.op = op;
-        this.loggedIn = false;
+    public PasswordManager(LapisLogin plugin) {
+        this.plugin = plugin;
     }
 
-    public LapisLoginPlayer(UUID uuid) {
-        this(Bukkit.getOfflinePlayer(uuid));
+    public void setPassword(String password, UUID uuid) {
+        String hashed = BCrypt.hashpw(password, BCrypt.gensalt());
+        plugin.getDataStore().setData("UUID", uuid.toString(), "Password", hashed);
     }
 
-    public boolean isLoggedIn() {
-        return loggedIn;
-    }
-
-    public boolean checkPassword(String password) {
-        return new PasswordManager(LapisLogin.getInstance()).checkPassword(password, op.getUniqueId());
+    public boolean checkPassword(String password, UUID uuid) {
+        String hashed = plugin.getDataStore().getString("UUID", uuid.toString(), "Password");
+        if (hashed.equals("")) {
+            return false;
+        }
+        return BCrypt.checkpw(password, hashed);
     }
 
 }

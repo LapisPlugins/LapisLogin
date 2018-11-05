@@ -16,95 +16,65 @@
 
 package net.lapismc.lapislogin;
 
-import net.lapismc.lapislogin.api.LapisInventoriesHook;
-import net.lapismc.lapislogin.api.LapisLoginAPI;
-import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
-import net.lapismc.lapislogin.util.InventorySerialization;
-import net.lapismc.lapislogin.util.MySQLDatabaseTool;
-import net.lapismc.lapislogin.util.PlayerDataStore;
-import net.lapismc.lapislogin.util.SQLiteDatabaseTool;
+
+import net.lapismc.lapiscore.LapisCorePlugin;
+import net.lapismc.lapislogin.playerdata.datastore.DataStore;
+import net.lapismc.lapislogin.playerdata.datastore.H2DataStore;
+import net.lapismc.lapislogin.playerdata.datastore.MySQLDataStore;
+import net.lapismc.lapislogin.playerdata.datastore.YamlDataStore;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.UUID;
-import java.util.logging.Logger;
+public final class LapisLogin extends LapisCorePlugin {
 
-public final class LapisLogin extends JavaPlugin {
+    private static LapisLogin instance;
+    private DataStore dataStore;
 
-    public Logger logger = getLogger();
-    public LapisUpdater updater;
-    public LapisLoginPasswordManager passwordManager;
-    public InventorySerialization invSerialization;
-    public PlayerDataStore.dataType currentDataType;
-    public LapisLoginConfigurations LLConfig;
-    public LapisInventoriesHook invHook;
-    public MySQLDatabaseTool mySQL;
-    public SQLiteDatabaseTool SQLite;
-    private HashMap<UUID, LapisLoginPlayer> players = new HashMap<>();
+    public static LapisLogin getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
-        updater = new LapisUpdater(this, "LapisLogin", "LapisPlugins", "LapisLogin", "master");
-        if (updater.checkUpdate()) {
-            if (getConfig().getBoolean("DownloadUpdates")) {
-                updater.downloadUpdate();
-            } else {
-                logger.info("Update available for LapisLogin");
-            }
-        }
-        passwordManager = new LapisLoginPasswordManager(this);
-        invSerialization = new InventorySerialization();
-        LLConfig = new LapisLoginConfigurations(this);
-        new LapisLoginListeners(this);
-        new LapisLoginCommands(this);
-        new LapisLoginFileWatcher(this);
-        new LapisLoginAPI(this);
-        Metrics metrics = new Metrics(this);
-        if (Bukkit.getPluginManager().isPluginEnabled("LapisInventories")) {
-            invHook = new LapisInventoriesHook(this);
-        }
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            LapisLoginPlayer loginPlayer = getLoginPlayer(p.getUniqueId());
-            if (loginPlayer.isRegistered()) {
-                p.sendMessage(LLConfig.getColoredMessage("Error.ReloadedPlugin"));
-                p.sendMessage(LLConfig.getColoredMessage("Login.LoginRequired"));
-            }
-        }
-        logger.info("LapisLogin v." + getDescription().getVersion() + " has been enabled!");
+        getLogger().info("LapisLogin v." + getDescription().getVersion() + " has been enabled!");
     }
 
     @Override
     public void onDisable() {
-        for (LapisLoginPlayer p : players.values()) {
-            removeLoginPlayer(p.getOfflinePlayer().getUniqueId());
-        }
-        logger.info("LapisLogin has been disabled!");
+        getLogger().info("LapisLogin has been disabled!");
     }
 
-    public LapisLoginPlayer getLoginPlayer(UUID uuid) {
-        if (!players.containsKey(uuid) || players.get(uuid) == null) {
-            players.put(uuid, new LapisLoginPlayer(this, uuid));
-        } else {
-            Date date = new Date();
-            LapisLoginPlayer loginPlayer = players.get(uuid);
-            if (players.get(uuid).getConfig().getLong("Logout") + (getConfig().getLong("LogoutTimeout", 1l) * 60000l) > date.getTime() && loginPlayer.isLoggedIn()) {
-                loginPlayer = new LapisLoginPlayer(this, uuid);
-                loginPlayer.forceLogin();
-                players.put(uuid, loginPlayer);
+    public DataStore getDataStore() {
+        if (dataStore == null) {
+            switch (getConfig().getString("Storage", "H2")) {
+                case "YAML":
+                    dataStore = new YamlDataStore(this);
+                    break;
+                case "MySQL":
+                    dataStore = new MySQLDataStore(this);
+                    if (!((MySQLDataStore) dataStore).isConnected(true)) {
+                        getLogger().warning(config.getMessage("Error.DatabaseConnectionError"));
+                        dataStore = new YamlDataStore(this);
+                    }
+                    break;
+                case "H2":
+                    dataStore = new H2DataStore(this);
+                    if (!((H2DataStore) dataStore).isConnected(true)) {
+                        getLogger().warning(config.getMessage("Error.DatabaseConnectionError"));
+                        dataStore = new YamlDataStore(this);
+                    }
+                    break;
+                default:
+                    getLogger().info("Invalid storage, the only values are YAML, MySQL or H2, Disabling");
+                    Bukkit.getPluginManager().disablePlugin(this);
+                    break;
             }
         }
-        if (!players.get(uuid).getOfflinePlayer().isOnline()) {
-            Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> {
-                removeLoginPlayer(uuid);
-            }, 20);
-        }
-        return players.get(uuid);
+        return dataStore;
     }
 
-    public void removeLoginPlayer(UUID uuid) {
-        players.remove(uuid);
+    public void resetDataStore() {
+        getDataStore().closeConnection();
+        dataStore = null;
     }
+
 }

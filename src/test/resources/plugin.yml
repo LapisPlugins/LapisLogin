@@ -1,0 +1,29 @@
+name: LapisLogin
+version: ${project.version}
+main: net.lapismc.lapislogin.LapisLogin
+api-version: 1.13
+authors: [Dart2112]
+softdepend: [LapisInventories]
+description: Simple login plugin for offline mode servers
+permissions:
+  lapislogin.optional:
+    decsription: Players with this permission will have the option to register
+  lapislogin.required:
+    decsription: Players with this permission will be required to register
+  lapislogin.admin:
+    decsription: Allows you to deregister players with /resetpassword (Player)
+commands:
+  lapislogin:
+    description: Use /lapislogin help for help
+  login:
+    description: Allows you to login to the server
+    alias: l
+  register:
+    description: Allows you to register a password for future logins
+    alias: r
+  logout:
+    description: Allows you to logout immediately instead of waiting for the timeout
+  changepassword:
+    description: Allows you to change your password
+  resetpassword:
+    description: Allows admins to remove other peoples passwords requiring them to re-register
