@@ -14,28 +14,26 @@
  *  limitations under the License.
  */
 
-package net.lapismc.lapislogin.playerdata.datastore;
+package net.lapismc.lapislogin.api;
 
-public enum Tables {
+import net.lapismc.lapiscore.LapisCoreCancellableEvent;
+import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
 
-    LoginPlayers("UUID,Username,Permission,IPAddress,OfflineTime,Password");
+public class RegisterEvent extends LapisCoreCancellableEvent {
 
-    private final String values;
+    private LapisLoginPlayer player;
+    private String password;
 
-
-    Tables(String s) {
-        values = s;
+    public RegisterEvent(LapisLoginPlayer player, String password) {
+        this.player = player;
+        this.password = password;
     }
 
-    public static Tables getFromName(String name) {
-        return valueOf(name);
+    public LapisLoginPlayer getPlayer() {
+        return player;
     }
 
-    public String getName() {
-        return this.name();
-    }
-
-    public String getValues() {
-        return this.values;
+    public String getPassword() {
+        return password;
     }
 }

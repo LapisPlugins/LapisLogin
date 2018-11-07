@@ -1,0 +1,11 @@
+Permissions for:
+    Required registration
+    Optional registration
+    Ignore (Players who cant register)
+    Admin (Allows deregister of others)
+Lock the player in place and lock the inventory when not logged in but registered
+Commands:
+    register
+    deregister
+    login
+    changepassword

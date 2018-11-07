@@ -83,6 +83,10 @@
                                     <pattern>net.lapismc.lapiscore</pattern>
                                     <shadedPattern>net.lapismc.lapislogin.core</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>net.lapismc.datastore</pattern>
+                                    <shadedPattern>net.lapismc.lapislogin.core.datastore</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -108,6 +112,12 @@
         <dependency>
             <groupId>net.lapismc</groupId>
             <artifactId>LapisCore</artifactId>
+            <version>LATEST</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.lapismc</groupId>
+            <artifactId>LapisDatastore</artifactId>
             <version>LATEST</version>
             <scope>compile</scope>
         </dependency>

@@ -17,6 +17,8 @@
 package net.lapismc.lapislogin.playerdata;
 
 import net.lapismc.lapislogin.LapisLogin;
+import net.lapismc.lapislogin.api.RegisterEvent;
+import net.lapismc.lapislogin.playerdata.datastore.Passwords;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -24,24 +26,52 @@ import java.util.UUID;
 
 public class LapisLoginPlayer {
 
-    private OfflinePlayer op;
+    private LapisLogin plugin;
+    private UUID uuid;
     private boolean loggedIn;
 
-    public LapisLoginPlayer(OfflinePlayer op) {
-        this.op = op;
+    public LapisLoginPlayer(LapisLogin plugin, UUID uuid) {
+        this.plugin = plugin;
+        this.uuid = uuid;
         this.loggedIn = false;
     }
 
-    public LapisLoginPlayer(UUID uuid) {
-        this(Bukkit.getOfflinePlayer(uuid));
+    public LapisLoginPlayer(LapisLogin plugin, OfflinePlayer op) {
+        this(plugin, op.getUniqueId());
     }
 
     public boolean isLoggedIn() {
         return loggedIn;
     }
 
+    public boolean login(String password) {
+        loggedIn = isRegistered() && new PasswordManager(plugin).checkPassword(password, uuid);
+        return loggedIn;
+    }
+
+    public boolean isRegistered() {
+        String password = plugin.getDataStore().getString(new Passwords(), "UUID", uuid.toString(), "Password");
+        return password != null;
+    }
+
+    public boolean canRegister() {
+        //TODO this will be permission based
+        return false;
+    }
+
+    public boolean register(String password) {
+        RegisterEvent event = new RegisterEvent(this, password);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            Bukkit.getPlayer(uuid).sendMessage(event.getReason());
+            return false;
+        }
+        new PasswordManager(plugin).setPassword(password, uuid);
+        return true;
+    }
+
     public boolean checkPassword(String password) {
-        return new PasswordManager(LapisLogin.getInstance()).checkPassword(password, op.getUniqueId());
+        return new PasswordManager(plugin).checkPassword(password, uuid);
     }
 
 }

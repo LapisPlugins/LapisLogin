@@ -16,21 +16,29 @@
 
 package net.lapismc.lapislogin.playerdata.datastore;
 
-import net.lapismc.datastore.H2;
-import net.lapismc.datastore.util.LapisURL;
-import net.lapismc.lapiscore.LapisCorePlugin;
+import net.lapismc.datastore.Table;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-public class H2DataStore extends H2 {
+public class Passwords extends Table {
 
-    public H2DataStore(LapisCorePlugin core, LapisURL url) {
-        super(core, url);
+    public Passwords() {
+        super("Passwords", "UUID", "Password");
     }
 
-    @Override
-    public void createTables(Connection conn) {
-        new LoginPlayers().createTable(conn);
-        new Passwords().createTable(conn);
+    public void createTable(Connection conn) {
+        try {
+            Statement stmt = conn.createStatement();
+            //TODO get length of hashed passwords
+            String sql = "CREATE TABLE IF NOT EXISTS Passwords (" +
+                    "UUID VARCHAR(36) NOT NULL," +
+                    "Password VARCHAR(256));";
+            stmt.execute(sql);
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

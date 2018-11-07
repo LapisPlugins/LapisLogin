@@ -17,6 +17,7 @@
 package net.lapismc.lapislogin.playerdata;
 
 import net.lapismc.lapislogin.LapisLogin;
+import net.lapismc.lapislogin.playerdata.datastore.Passwords;
 import org.mindrot.BCrypt;
 
 import java.util.UUID;
@@ -24,18 +25,20 @@ import java.util.UUID;
 public class PasswordManager {
 
     private LapisLogin plugin;
+    private Passwords passwordsTable;
 
     public PasswordManager(LapisLogin plugin) {
         this.plugin = plugin;
+        this.passwordsTable = new Passwords();
     }
 
     public void setPassword(String password, UUID uuid) {
         String hashed = BCrypt.hashpw(password, BCrypt.gensalt());
-        plugin.getDataStore().setData("UUID", uuid.toString(), "Password", hashed);
+        plugin.getDataStore().setData(passwordsTable, "UUID", uuid.toString(), "Password", hashed);
     }
 
     public boolean checkPassword(String password, UUID uuid) {
-        String hashed = plugin.getDataStore().getString("UUID", uuid.toString(), "Password");
+        String hashed = plugin.getDataStore().getString(passwordsTable, "UUID", uuid.toString(), "Password");
         if (hashed.equals("")) {
             return false;
         }

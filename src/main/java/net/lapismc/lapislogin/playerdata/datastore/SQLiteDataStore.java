@@ -16,15 +16,15 @@
 
 package net.lapismc.lapislogin.playerdata.datastore;
 
-import net.lapismc.datastore.H2;
+import net.lapismc.datastore.SQLite;
 import net.lapismc.datastore.util.LapisURL;
 import net.lapismc.lapiscore.LapisCorePlugin;
 
 import java.sql.Connection;
 
-public class H2DataStore extends H2 {
+public class SQLiteDataStore extends SQLite {
 
-    public H2DataStore(LapisCorePlugin core, LapisURL url) {
+    public SQLiteDataStore(LapisCorePlugin core, LapisURL url) {
         super(core, url);
     }
 
