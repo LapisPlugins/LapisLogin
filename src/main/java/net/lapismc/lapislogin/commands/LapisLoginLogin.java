@@ -22,12 +22,11 @@ import net.lapismc.lapislogin.util.LapisLoginCommand;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-public class LapisLoginRegister extends LapisLoginCommand {
+public class LapisLoginLogin extends LapisLoginCommand {
 
-    protected LapisLoginRegister(LapisLogin core) {
-        super(core, "register", "Set a password to secure your account", new ArrayList<>(Collections.singletonList("reg")));
+    protected LapisLoginLogin(LapisLogin core) {
+        super(core, "login", "Use your password to login", new ArrayList<>());
     }
 
     @Override
@@ -35,26 +34,14 @@ public class LapisLoginRegister extends LapisLoginCommand {
         if (isNotPlayer(sender, "Error.MustBePlayer"))
             return;
         LapisLoginPlayer player = getPlayer(sender);
-        if (!player.canRegister()) {
-            sendMessage(sender, "Register.CannotRegister");
-            return;
+        if (!player.isRegistered()) {
+            sendMessage(sender, "Register.MustRegister");
         }
-        if (player.isRegistered()) {
-            sendMessage(sender, "Register.AlreadyRegistered");
-            return;
-        }
-        // reg pass pass
-        //Check that they have the password twice
-        if (args.length == 2) {
-            //Check that the passwords match
-            if (!args[0].equals(args[1])) {
-                sendMessage(sender, "Register.PasswordsDoNotMatch");
-                return;
-            }
-            //if the password is registered successfully we will send them a message
-            //if it isn't successful a message will be sent by the event that cancelled it
-            if (player.register(args[0])) {
-                sendMessage(sender, "Register.Success");
+        if (args.length == 1) {
+            //If the player successfully logs in send them a message
+            //If the login fails or is cancelled they will be sent a message by the player class
+            if (player.login(args[0])) {
+                sendMessage(sender, "Login.Success");
             }
         } else {
             //TODO send command help

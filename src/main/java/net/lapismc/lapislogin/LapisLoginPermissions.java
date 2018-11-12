@@ -16,26 +16,21 @@
 
 package net.lapismc.lapislogin;
 
-import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import net.lapismc.lapiscore.LapisCorePermissions;
+import net.lapismc.lapiscore.LapisCorePlugin;
+import net.lapismc.lapislogin.playerdata.Permission;
 
-public class LapisLoginListeners implements Listener {
+class LapisLoginPermissions extends LapisCorePermissions {
 
-    private LapisLogin plugin;
-
-    LapisLoginListeners(LapisLogin plugin) {
-        this.plugin = plugin;
-        Bukkit.getPluginManager().registerEvents(this, plugin);
+    LapisLoginPermissions(LapisCorePlugin core) {
+        super(core);
+        registerPermissions();
+        loadPermissions();
     }
 
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        LapisLoginPlayer player = plugin.getLoginPlayer(e.getPlayer());
-        if (!player.canInteract()) {
-            //TODO send message for register or login
+    private void registerPermissions() {
+        for (Permission permission : Permission.values()) {
+            registerPermissions(permission.getPermission());
         }
     }
 

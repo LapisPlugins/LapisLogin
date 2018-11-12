@@ -16,7 +16,9 @@
 
 package net.lapismc.lapislogin.playerdata;
 
+import net.lapismc.lapiscore.LapisPermission;
 import net.lapismc.lapislogin.LapisLogin;
+import net.lapismc.lapislogin.api.LoginEvent;
 import net.lapismc.lapislogin.api.RegisterEvent;
 import net.lapismc.lapislogin.playerdata.datastore.Passwords;
 import org.bukkit.Bukkit;
@@ -46,24 +48,50 @@ public class LapisLoginPlayer {
 
     public boolean login(String password) {
         loggedIn = isRegistered() && new PasswordManager(plugin).checkPassword(password, uuid);
+        if (!loggedIn) {
+            sendMessage("Login.IncorrectPassword");
+        }
+        //Call login event
+        LoginEvent event = new LoginEvent(this, password);
+        Bukkit.getPluginManager().callEvent(event);
+        //If it gets cancelled we need to set the player as not logged in and send them the reason
+        if (event.isCancelled()) {
+            loggedIn = false;
+            sendPlainMessage(event.getReason());
+        }
         return loggedIn;
     }
 
+    public boolean canInteract() {
+        //return false if the player needs to register or login
+        if (isRegistered() && !isLoggedIn()) {
+            return false;
+        }
+        return !canRegister().equals(registerPermission.required) || isRegistered();
+    }
+
     public boolean isRegistered() {
+        //Check if the password is set by seeing if it returns null from the database
         String password = plugin.getDataStore().getString(new Passwords(), "UUID", uuid.toString(), "Password");
         return password != null;
     }
 
-    public boolean canRegister() {
-        //TODO this will be permission based
-        return false;
+    public registerPermission canRegister() {
+        if (isPermitted(Permission.Required.getPermission())) {
+            return registerPermission.required;
+        } else if (isPermitted(Permission.Disallowed.getPermission())) {
+            return registerPermission.disallowed;
+        }
+        return registerPermission.optional;
     }
 
     public boolean register(String password) {
+        //Call the register event
         RegisterEvent event = new RegisterEvent(this, password);
         Bukkit.getPluginManager().callEvent(event);
+        //If the registration is cancelled then we send the player the reason and return false
         if (event.isCancelled()) {
-            Bukkit.getPlayer(uuid).sendMessage(event.getReason());
+            sendPlainMessage(event.getReason());
             return false;
         }
         new PasswordManager(plugin).setPassword(password, uuid);
@@ -74,4 +102,19 @@ public class LapisLoginPlayer {
         return new PasswordManager(plugin).checkPassword(password, uuid);
     }
 
+    public void sendPlainMessage(String message) {
+        Bukkit.getPlayer(uuid).sendMessage(message);
+    }
+
+    public void sendMessage(String key) {
+        sendPlainMessage(plugin.config.getMessage(key));
+    }
+
+    public boolean isPermitted(LapisPermission perm) {
+        return plugin.perms.isPermitted(uuid, perm);
+    }
+
+    public enum registerPermission {
+        optional, required, disallowed
+    }
 }

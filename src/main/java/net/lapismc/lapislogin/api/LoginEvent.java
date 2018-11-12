@@ -14,29 +14,27 @@
  *  limitations under the License.
  */
 
-package net.lapismc.lapislogin;
+package net.lapismc.lapislogin.api;
 
+import net.lapismc.lapiscore.LapisCoreCancellableEvent;
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
-public class LapisLoginListeners implements Listener {
+public class LoginEvent extends LapisCoreCancellableEvent {
 
-    private LapisLogin plugin;
+    private LapisLoginPlayer player;
+    private String password;
 
-    LapisLoginListeners(LapisLogin plugin) {
-        this.plugin = plugin;
-        Bukkit.getPluginManager().registerEvents(this, plugin);
+    public LoginEvent(LapisLoginPlayer player, String password) {
+        this.player = player;
+        this.password = password;
     }
 
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        LapisLoginPlayer player = plugin.getLoginPlayer(e.getPlayer());
-        if (!player.canInteract()) {
-            //TODO send message for register or login
-        }
+    public LapisLoginPlayer getPlayer() {
+        return player;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
 }

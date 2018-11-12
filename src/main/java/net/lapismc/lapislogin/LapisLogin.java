@@ -20,6 +20,7 @@ package net.lapismc.lapislogin;
 import net.lapismc.datastore.DataStore;
 import net.lapismc.datastore.util.LapisURL;
 import net.lapismc.datastore.util.URLBuilder;
+import net.lapismc.lapiscore.LapisCoreConfiguration;
 import net.lapismc.lapiscore.LapisCorePlugin;
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
 import net.lapismc.lapislogin.playerdata.datastore.H2DataStore;
@@ -39,6 +40,8 @@ public class LapisLogin extends LapisCorePlugin {
 
     @Override
     public void onEnable() {
+        registerConfiguration(new LapisCoreConfiguration(this, 1, 1));
+        registerPermissions(new LapisLoginPermissions(this));
         getLogger().info("LapisLogin v." + getDescription().getVersion() + " has been enabled!");
     }
 
