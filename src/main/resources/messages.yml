@@ -11,5 +11,10 @@ Login:
   Success: "You have successfully logged in, welcome back"
   IncorrectPassword: "That password was incorrect, please try again"
 
+Help:
+  #TODO write these when I can be bothered
+  Register: ""
+  Login: ""
+
 Error:
   MustBePlayer: "&4You must be a player to do that!"

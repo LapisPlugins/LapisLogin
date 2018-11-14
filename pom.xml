@@ -29,7 +29,7 @@
     </properties>
 
     <build>
-        <defaultGoal>clean install</defaultGoal>
+        <defaultGoal>clean package</defaultGoal>
         <finalName>${project.name}</finalName>
         <plugins>
             <plugin>
@@ -64,7 +64,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.3</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -76,10 +76,6 @@
                             <minimizeJar>false</minimizeJar>
                             <relocations>
                                 <relocation>
-                                    <pattern>org.h2</pattern>
-                                    <shadedPattern>net.lapismc.lapislogin.lib.h2</shadedPattern>
-                                </relocation>
-                                <relocation>
                                     <pattern>net.lapismc.lapiscore</pattern>
                                     <shadedPattern>net.lapismc.lapislogin.core</shadedPattern>
                                 </relocation>
@@ -87,7 +83,26 @@
                                     <pattern>net.lapismc.datastore</pattern>
                                     <shadedPattern>net.lapismc.lapislogin.core.datastore</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>org.mindrot</pattern>
+                                    <shadedPattern>net.lapismc.lapislogin.util</shadedPattern>
+                                </relocation>
                             </relocations>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <includes>
+                                        <include>**/**</include>
+                                        <include>*.*</include>
+                                    </includes>
+                                    <excludes>
+                                        <exclude>org/h2/**</exclude>
+                                        <exclude>org/sqlite/**</exclude>
+                                        <exclude>org/slf4j/**</exclude>
+                                        <exclude>com/zaxxer/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
@@ -125,11 +140,6 @@
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.196</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

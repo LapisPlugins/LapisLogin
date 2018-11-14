@@ -14,25 +14,34 @@
  *  limitations under the License.
  */
 
-package net.lapismc.lapislogin.playerdata.datastore;
+package net.lapismc.lapislogin.api;
 
-import net.lapismc.datastore.MySQL;
-import net.lapismc.datastore.util.LapisURL;
 import net.lapismc.lapislogin.LapisLogin;
+import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
+import org.bukkit.OfflinePlayer;
 
-import java.sql.Connection;
+import java.util.UUID;
 
-public class MySQLDataStore extends MySQL {
+/**
+ * Use this class to get the LapisLoginPlayer class
+ */
+public class LapisLoginPlayerAPI {
 
-    public MySQLDataStore(LapisLogin core, LapisURL url, String username, String password) {
-        super(core, url, username, password);
-        initialiseDataStore();
+    private static LapisLogin plugin;
+
+    public LapisLoginPlayerAPI(LapisLogin plugin) {
+        LapisLoginPlayerAPI.plugin = plugin;
     }
 
-    @Override
-    public void createTables(Connection conn) {
-        new LoginPlayers().createTable(conn);
-        new Passwords().createTable(conn);
+    public LapisLoginPlayerAPI() {
+    }
+
+    public LapisLoginPlayer getPlayer(UUID uuid) {
+        return plugin.getLoginPlayer(uuid);
+    }
+
+    public LapisLoginPlayer getPlayer(OfflinePlayer op) {
+        return plugin.getLoginPlayer(op);
     }
 
 }

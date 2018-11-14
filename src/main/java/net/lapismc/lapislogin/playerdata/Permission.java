@@ -20,7 +20,7 @@ import net.lapismc.lapiscore.LapisPermission;
 
 public enum Permission {
 
-    Disallowed(new Disallowed()), Required(new Required()), Admin(new Admin());
+    Required(new Required()), Admin(new Admin());
 
     private final LapisPermission permission;
 
@@ -32,16 +32,9 @@ public enum Permission {
         return this.permission;
     }
 
-    private static class Disallowed extends LapisPermission {
-        //Players with this permission will not be allowed to register
-        Disallowed() {
-            super("Disallowed");
-        }
-    }
-
     private static class Required extends LapisPermission {
         //Players with this permission will be forced to register
-        //Without this permission it will be optional, unless they have disallowed
+        //0 = optional, 1 = required, 2 = disallowed
         Required() {
             super("Required");
         }

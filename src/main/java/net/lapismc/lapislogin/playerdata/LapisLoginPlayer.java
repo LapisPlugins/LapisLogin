@@ -67,7 +67,7 @@ public class LapisLoginPlayer {
         if (isRegistered() && !isLoggedIn()) {
             return false;
         }
-        return !canRegister().equals(registerPermission.required) || isRegistered();
+        return !getRegisterPermission().equals(registerPermission.required) || isRegistered();
     }
 
     public boolean isRegistered() {
@@ -76,10 +76,15 @@ public class LapisLoginPlayer {
         return password != null;
     }
 
-    public registerPermission canRegister() {
-        if (isPermitted(Permission.Required.getPermission())) {
+    public boolean canRegister() {
+        return !getRegisterPermission().equals(registerPermission.disallowed);
+    }
+
+    public registerPermission getRegisterPermission() {
+        int required = plugin.perms.getPermissionValue(uuid, Permission.Required.getPermission());
+        if (required == 1) {
             return registerPermission.required;
-        } else if (isPermitted(Permission.Disallowed.getPermission())) {
+        } else if (required == 2) {
             return registerPermission.disallowed;
         }
         return registerPermission.optional;
@@ -102,11 +107,11 @@ public class LapisLoginPlayer {
         return new PasswordManager(plugin).checkPassword(password, uuid);
     }
 
-    public void sendPlainMessage(String message) {
+    private void sendPlainMessage(String message) {
         Bukkit.getPlayer(uuid).sendMessage(message);
     }
 
-    public void sendMessage(String key) {
+    private void sendMessage(String key) {
         sendPlainMessage(plugin.config.getMessage(key));
     }
 

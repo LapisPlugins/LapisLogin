@@ -9,3 +9,13 @@ DataStore:
     Username: "admin"
     Password: "Password"
     Database: "Spigot"
+Permissions:
+  lapislogin,player:
+    Required: 2
+    Admin: 0
+  lapislogin,vip:
+    Required: 0
+    Admin: 0
+  lapislogin,admin:
+    Required: 1
+    Admin: 1

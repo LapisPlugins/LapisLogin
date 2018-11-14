@@ -42,11 +42,15 @@ public class LapisLogin extends LapisCorePlugin {
     public void onEnable() {
         registerConfiguration(new LapisCoreConfiguration(this, 1, 1));
         registerPermissions(new LapisLoginPermissions(this));
+        getDataStore();
         getLogger().info("LapisLogin v." + getDescription().getVersion() + " has been enabled!");
     }
 
     @Override
     public void onDisable() {
+        if (dataStore != null) {
+            dataStore.shutdown();
+        }
         getLogger().info("LapisLogin has been disabled!");
     }
 
@@ -89,11 +93,6 @@ public class LapisLogin extends LapisCorePlugin {
             }
         }
         return dataStore;
-    }
-
-    public void resetDataStore() {
-        getDataStore().closeConnection();
-        dataStore = null;
     }
 
 }

@@ -26,6 +26,7 @@ public class H2DataStore extends H2 {
 
     public H2DataStore(LapisCorePlugin core, LapisURL url) {
         super(core, url);
+        initialiseDataStore();
     }
 
     @Override

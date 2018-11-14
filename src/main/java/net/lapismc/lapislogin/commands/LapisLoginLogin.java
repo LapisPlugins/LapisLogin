@@ -44,7 +44,7 @@ public class LapisLoginLogin extends LapisLoginCommand {
                 sendMessage(sender, "Login.Success");
             }
         } else {
-            //TODO send command help
+            sendMessage(sender, "Help.Login");
         }
     }
 }

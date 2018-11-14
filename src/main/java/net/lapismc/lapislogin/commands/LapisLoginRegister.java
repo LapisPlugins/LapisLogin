@@ -57,7 +57,7 @@ public class LapisLoginRegister extends LapisLoginCommand {
                 sendMessage(sender, "Register.Success");
             }
         } else {
-            //TODO send command help
+            sendMessage(sender, "Help.Register");
         }
     }
 }

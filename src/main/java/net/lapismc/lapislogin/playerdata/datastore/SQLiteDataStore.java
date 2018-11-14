@@ -26,6 +26,7 @@ public class SQLiteDataStore extends SQLite {
 
     public SQLiteDataStore(LapisCorePlugin core, LapisURL url) {
         super(core, url);
+        initialiseDataStore();
     }
 
     @Override

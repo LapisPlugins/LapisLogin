@@ -94,7 +94,7 @@ public class LapisLogin {
     private boolean isAdmin(CommandSender sender) {
         boolean admin;
         if (sender instanceof Player) {
-            admin = ((Player) sender).hasPermission("lapislogin.admin");
+            admin = sender.hasPermission("lapislogin.admin");
         } else {
             admin = true;
         }

@@ -193,10 +193,7 @@ public class LapisLoginPlayer {
         if (!isRegistered() && registrationRequired) {
             return false;
         }
-        if (isRegistered() && !isLoggedIn()) {
-            return false;
-        }
-        return true;
+        return !isRegistered() || isLoggedIn();
     }
 
     public void registerPlayer(String password) {
