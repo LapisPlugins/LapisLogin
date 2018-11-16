@@ -23,10 +23,10 @@ import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 
-public class LapisLoginLogin extends LapisLoginCommand {
+public class LapisLoginLogout extends LapisLoginCommand {
 
-    public LapisLoginLogin(LapisLogin core) {
-        super(core, "login", "Use your password to login", new ArrayList<>());
+    public LapisLoginLogout(LapisLogin core) {
+        super(core, "logout", "Logout to stop people using your account", new ArrayList<>());
     }
 
     @Override
@@ -34,17 +34,10 @@ public class LapisLoginLogin extends LapisLoginCommand {
         if (isNotPlayer(sender, "Error.MustBePlayer"))
             return;
         LapisLoginPlayer player = getPlayer(sender);
-        if (!player.isRegistered()) {
-            sendMessage(sender, "Register.MustRegister");
+        if (!player.isLoggedIn()) {
+            sendMessage(sender, "Login.Required");
+            return;
         }
-        if (args.length == 1) {
-            //If the player successfully logs in send them a message
-            //If the login fails or is cancelled they will be sent a message by the player class
-            if (player.login(args[0])) {
-                sendMessage(sender, "Login.Success");
-            }
-        } else {
-            sendMessage(sender, "Help.Login");
-        }
+        player.logout();
     }
 }

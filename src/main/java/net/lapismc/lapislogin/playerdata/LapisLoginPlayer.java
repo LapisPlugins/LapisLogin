@@ -23,6 +23,7 @@ import net.lapismc.lapislogin.api.RegisterEvent;
 import net.lapismc.lapislogin.playerdata.datastore.Passwords;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 
@@ -62,12 +63,31 @@ public class LapisLoginPlayer {
         return loggedIn;
     }
 
+    public void logout() {
+        loggedIn = false;
+        startRepeatingMessages();
+    }
+
     public boolean canInteract() {
         //return false if the player needs to register or login
         if (isRegistered() && !isLoggedIn()) {
             return false;
         }
         return !getRegisterPermission().equals(registerPermission.required) || isRegistered();
+    }
+
+    public void startRepeatingMessages() {
+        String key = isRegistered() ? "Register.MustRegister" : "Login.Required";
+        BukkitRunnable runnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!canInteract())
+                    sendMessage(key);
+                else
+                    cancel();
+            }
+        };
+        runnable.runTaskTimer(plugin, 0, 5 * 20);
     }
 
     public boolean isRegistered() {
@@ -111,7 +131,7 @@ public class LapisLoginPlayer {
         Bukkit.getPlayer(uuid).sendMessage(message);
     }
 
-    private void sendMessage(String key) {
+    public void sendMessage(String key) {
         sendPlainMessage(plugin.config.getMessage(key));
     }
 

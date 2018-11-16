@@ -17,11 +17,17 @@
 package net.lapismc.lapislogin;
 
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import net.lapismc.datastore.DataStore;
 import net.lapismc.datastore.util.LapisURL;
 import net.lapismc.datastore.util.URLBuilder;
 import net.lapismc.lapiscore.LapisCoreConfiguration;
 import net.lapismc.lapiscore.LapisCorePlugin;
+import net.lapismc.lapislogin.api.LapisLoginPlayerAPI;
+import net.lapismc.lapislogin.commands.LapisLoginLogin;
+import net.lapismc.lapislogin.commands.LapisLoginLogout;
+import net.lapismc.lapislogin.commands.LapisLoginRegister;
 import net.lapismc.lapislogin.playerdata.LapisLoginPlayer;
 import net.lapismc.lapislogin.playerdata.datastore.H2DataStore;
 import net.lapismc.lapislogin.playerdata.datastore.MySQLDataStore;
@@ -30,18 +36,22 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class LapisLogin extends LapisCorePlugin {
 
     private DataStore dataStore;
-    private HashMap<UUID, LapisLoginPlayer> players = new HashMap<>();
+    private Cache<UUID, LapisLoginPlayer> players = CacheBuilder.newBuilder()
+            .expireAfterAccess(1, TimeUnit.MINUTES).build();
 
     @Override
     public void onEnable() {
         registerConfiguration(new LapisCoreConfiguration(this, 1, 1));
         registerPermissions(new LapisLoginPermissions(this));
+        new LapisLoginPlayerAPI(this);
+        new LapisLoginListeners(this);
+        registerCommands();
         getDataStore();
         getLogger().info("LapisLogin v." + getDescription().getVersion() + " has been enabled!");
     }
@@ -55,14 +65,23 @@ public class LapisLogin extends LapisCorePlugin {
     }
 
     public LapisLoginPlayer getLoginPlayer(UUID uuid) {
-        if (players.containsKey(uuid)) {
+        if (players.getIfPresent(uuid) == null) {
             players.put(uuid, new LapisLoginPlayer(this, uuid));
         }
-        return players.get(uuid);
+        return players.getIfPresent(uuid);
     }
 
     public LapisLoginPlayer getLoginPlayer(OfflinePlayer op) {
-        return getLoginPlayer(op.getUniqueId());
+        if (players.getIfPresent(op.getUniqueId()) == null) {
+            players.put(op.getUniqueId(), new LapisLoginPlayer(this, op));
+        }
+        return players.getIfPresent(op.getUniqueId());
+    }
+
+    private void registerCommands() {
+        new LapisLoginLogin(this);
+        new LapisLoginLogout(this);
+        new LapisLoginRegister(this);
     }
 
     public DataStore getDataStore() {

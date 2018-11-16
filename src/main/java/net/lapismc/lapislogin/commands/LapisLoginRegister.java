@@ -26,7 +26,7 @@ import java.util.Collections;
 
 public class LapisLoginRegister extends LapisLoginCommand {
 
-    protected LapisLoginRegister(LapisLogin core) {
+    public LapisLoginRegister(LapisLogin core) {
         super(core, "register", "Set a password to secure your account", new ArrayList<>(Collections.singletonList("reg")));
     }
 
