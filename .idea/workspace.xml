@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="10ebed4d-fece-476d-a095-43ffb01c1d58" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_findbugs_jsr305_3_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_gson_gson_2_8_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_guava_guava_21_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_lang_commons_lang_2_6.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_lapismc_LapisCore_1_7_6.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_md_5_bungeecord_chat_1_15_SNAPSHOT.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_logging_log4j_log4j_api_2_11_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_logging_log4j_log4j_core_2_11_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_mindrot_jbcrypt_0_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_spigotmc_spigot_api_1_15_2_R0_1_SNAPSHOT.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_yaml_snakeyaml_1_25.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LapisLogin.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/LapisLoginPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/allclasses-frame.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/allclasses-noframe.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/constant-values.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/deprecated-list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/help-doc.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/index-all.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/LapisLoginAPI.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/class-use/LapisLoginAPI.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/events/ChangePasswordEvent.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/events/LoginEvent.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/events/LogoutEvent.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/events/RegisterEvent.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/events/class-use/ChangePasswordEvent.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/events/class-use/LoginEvent.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/events/class-use/LogoutEvent.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/events/class-use/RegisterEvent.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/events/package-frame.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/events/package-summary.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/events/package-tree.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/events/package-use.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/package-frame.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/package-summary.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/package-tree.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/api/package-use.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/playerdata/LapisLoginAPIPlayer.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/playerdata/class-use/LapisLoginAPIPlayer.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/playerdata/package-frame.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/playerdata/package-summary.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/playerdata/package-tree.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/net/lapismc/lapislogin/playerdata/package-use.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/overview-frame.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/overview-summary.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/overview-tree.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/package-list" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/stylesheet.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/LapisLogin.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/LapisLoginCommands.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/LapisLoginConfigurations.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/LapisLoginFileWatcher.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/LapisLoginListeners.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/LapisLoginPasswordManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/LapisUpdater.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/Metrics.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/api/LapisInventoriesHook.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/api/LapisLoginAPI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/api/events/ChangePasswordEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/api/events/LoginEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/api/events/LogoutEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/api/events/RegisterEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/commands/LapisLogin.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/commands/LapisLoginChangePassword.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/commands/LapisLoginLogin.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/commands/LapisLoginLogout.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/commands/LapisLoginRegister.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/commands/LapisLoginResetPassword.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/playerdata/LapisLoginAPIPlayer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/playerdata/LapisLoginPlayer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/util/InventorySerialization.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/util/MySQLDatabaseTool.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/util/PasswordHash.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/util/PlayerDataStore.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/java/net/lapismc/lapislogin/util/SQLiteDatabaseTool.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/resources/Messages.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/resources/Passwords.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/resources/config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/legacy/resources/plugin.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/LapisLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/LapisLogin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/LapisLoginListeners.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/LapisLoginPermissions.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/api/LapisLoginPlayerAPI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/api/LoginEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/api/RegisterEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/commands/LapisLoginLogin.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/commands/LapisLoginLogout.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/commands/LapisLoginRegister.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/playerdata/LapisLoginPlayer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/playerdata/PasswordManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/playerdata/Permission.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/playerdata/datastore/H2DataStore.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/playerdata/datastore/LoginPlayers.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/playerdata/datastore/MySQLDataStore.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/playerdata/datastore/Passwords.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/playerdata/datastore/SQLiteDataStore.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/util/LapisLoginCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/util/LapisLoginConsoleFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/messages.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/messages.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIEW_PUSH_ON_COMMIT_AND_PUSH" value="false" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1Wndd4ZloT3Y20TpsXcWUDMKQwI" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="10ebed4d-fece-476d-a095-43ffb01c1d58" name="Default Changelist" comment="" />
+      <created>1579789377563</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1579789377563</updated>
+      <workItem from="1579789385795" duration="677000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+</project>

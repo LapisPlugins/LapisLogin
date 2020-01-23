@@ -1,6 +1,6 @@
 name: LapisLogin
 version: ${project.version}
 main: net.lapismc.lapislogin.LapisLogin
-api-version: 1.13
+api-version: "1.15"
 authors: [Dart2112]
-description: Simple login plugin for offline mode servers
+description: The simple but powerful login plugin
