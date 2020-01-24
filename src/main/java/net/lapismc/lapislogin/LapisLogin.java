@@ -28,14 +28,10 @@ public class LapisLogin extends LapisCorePlugin {
     private static LapisLogin instance;
     private HashMap<UUID, LapisLoginPlayer> players = new HashMap<>();
     public LapisLoginPasswordManager passwordManager;
+    protected LapisLoginListener listener;
 
     public static LapisLogin getInstance() {
         return instance;
-    }
-
-    @Override
-    public void onDisable() {
-        passwordManager.savePasswords();
     }
 
     public LapisLoginPlayer getPlayer(UUID uuid) {
@@ -50,6 +46,12 @@ public class LapisLogin extends LapisCorePlugin {
         instance = this;
         passwordManager = new LapisLoginPasswordManager(this);
         registerConfiguration(new LapisCoreConfiguration(this, 1, 1));
+        listener = new LapisLoginListener(this);
+    }
+
+    @Override
+    public void onDisable() {
+        passwordManager.savePasswords();
     }
 
 }
