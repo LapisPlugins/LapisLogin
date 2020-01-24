@@ -1,1 +1,3 @@
 /target
+#Including the workspace file causes pulls to fail
+/.idea/workspace.xml
