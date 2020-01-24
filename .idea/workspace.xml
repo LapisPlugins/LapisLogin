@@ -2,22 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="10ebed4d-fece-476d-a095-43ffb01c1d58" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/LapisLogin.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/Copy_to_test_server.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copyright/Apcache_Lisence.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/benja.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_lapismc_LapisDatastore_0_3_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/Build_LapisLogin.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/LapisLoginPasswordManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_spigotmc_spigot_api_1_15_2_R0_1_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_spigotmc_spigot_api_1_15_2_R0_1_SNAPSHOT.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/LapisLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/LapisLogin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/LapisLoginPasswordManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/LapisLoginPasswordManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/LapisLoginPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/lapismc/lapislogin/LapisLoginPlayer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -68,6 +55,12 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Hash Example" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="SvnConfiguration">
@@ -82,20 +75,39 @@
       <updated>1579789377563</updated>
       <workItem from="1579789385795" duration="677000" />
     </task>
+    <task id="LOCAL-00001" summary="Added password hashing and storage&#10;This solves issue #8">
+      <created>1579836851691</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1579836851691</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="UpdateCopyrightCheckinHandler">
+    <option name="UPDATE_COPYRIGHT" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
+    <MESSAGE value="Added password hashing and storage&#10;This solves issue #8" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added password hashing and storage&#10;This solves issue #8" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="2338" y="182" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1579835640787">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2338" y="182" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1050/1920.0.1920.1080@1920.0.1920.1080" timestamp="1579835640787" />
-    <state x="2450" y="121" width="850" height="801" key="CommitChangelistDialog2" timestamp="1579836792907">
+    <state x="2450" y="121" width="850" height="801" key="CommitChangelistDialog2" timestamp="1579836851382">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="2450" y="121" width="850" height="801" key="CommitChangelistDialog2/0.0.1920.1050/1920.0.1920.1080@1920.0.1920.1080" timestamp="1579836792907" />
+    <state x="2450" y="121" width="850" height="801" key="CommitChangelistDialog2/0.0.1920.1050/1920.0.1920.1080@1920.0.1920.1080" timestamp="1579836851382" />
     <state x="2663" y="282" width="424" height="479" key="FileChooserDialogImpl" timestamp="1579835685655">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>

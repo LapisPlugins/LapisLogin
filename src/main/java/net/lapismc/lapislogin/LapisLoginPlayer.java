@@ -18,24 +18,71 @@ package net.lapismc.lapislogin;
 
 import java.util.UUID;
 
+/**
+ * Represents a player on the server
+ * <p>
+ * Stores the login and registered state of the player as well as providing methods to query and manipulate these states
+ */
 public class LapisLoginPlayer {
 
     private UUID uuid;
     private boolean loggedIn = false;
     private boolean registered;
 
+    /**
+     * Initialize for a player
+     *
+     * @param uuid The UUID of the player
+     */
     public LapisLoginPlayer(UUID uuid) {
         this.uuid = uuid;
+        registered = LapisLogin.getInstance().passwordManager.hasPasswordSet(uuid);
     }
 
+    /**
+     * Check if a player is registered
+     *
+     * @return True if the player has a password on record, otherwise false
+     */
     public boolean isRegistered() {
         return registered;
     }
 
+    /**
+     * Check if a player is currently logged in
+     *
+     * @return True if the player is logged in, otherwise false
+     */
     public boolean isLoggedIn() {
         return loggedIn;
     }
 
+    /**
+     * Register a password to this player
+     *
+     * @param password The plain text password for the player
+     */
+    public void register(String password) {
+        LapisLogin.getInstance().passwordManager.setPassword(uuid, password);
+        registered = true;
+    }
+
+    /**
+     * Attempt to login the player
+     *
+     * @param password The password to login the player
+     * @return True if the password was correct and the player was logged in, otherwise false
+     */
+    public boolean login(String password) {
+        if (LapisLogin.getInstance().passwordManager.checkPassword(uuid, password)) {
+            loggedIn = true;
+        }
+        return loggedIn;
+    }
+
+    /**
+     * @return The UUID of the player that this object represents
+     */
     public UUID getUUID() {
         return uuid;
     }

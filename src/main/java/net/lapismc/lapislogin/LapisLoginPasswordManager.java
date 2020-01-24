@@ -24,6 +24,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
+/**
+ * A class to manage the passwords.yml file and hashing and checking of passwords
+ */
 public class LapisLoginPasswordManager {
 
     private LapisLogin plugin;
@@ -62,6 +65,16 @@ public class LapisLoginPasswordManager {
             return false;
         String hashedPassword = passwordsStore.get(uuid);
         return BCrypt.checkpw(password, hashedPassword);
+    }
+
+    /**
+     * Check if a player has a password in the passwords store
+     *
+     * @param uuid The UUID of the player you wish to query
+     * @return True if the player has a password set, otherwise false
+     */
+    public boolean hasPasswordSet(UUID uuid) {
+        return passwordsStore.containsKey(uuid);
     }
 
     /**

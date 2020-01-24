@@ -25,13 +25,12 @@ import java.util.UUID;
 
 public class LapisLogin extends LapisCorePlugin {
 
+    private static LapisLogin instance;
     private HashMap<UUID, LapisLoginPlayer> players = new HashMap<>();
-    private LapisLoginPasswordManager passwordManager;
+    public LapisLoginPasswordManager passwordManager;
 
-    @Override
-    public void onEnable() {
-        passwordManager = new LapisLoginPasswordManager(this);
-        registerConfiguration(new LapisCoreConfiguration(this, 1, 1));
+    public static LapisLogin getInstance() {
+        return instance;
     }
 
     @Override
@@ -44,6 +43,13 @@ public class LapisLogin extends LapisCorePlugin {
             players.put(uuid, new LapisLoginPlayer(uuid));
         }
         return players.get(uuid);
+    }
+
+    @Override
+    public void onEnable() {
+        instance = this;
+        passwordManager = new LapisLoginPasswordManager(this);
+        registerConfiguration(new LapisCoreConfiguration(this, 1, 1));
     }
 
 }
