@@ -24,44 +24,48 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class LapisLoginRegister extends LapisCoreCommand {
-    //TODO: maybe make a LapisLoginMasterCommand class to store plugin and have util methods?
+public class LapisLoginLogin extends LapisCoreCommand {
+
     private LapisLogin plugin;
 
-    public LapisLoginRegister(LapisLogin plugin) {
-        super(plugin, "register", "Allows a player to set a password on their account", new ArrayList<>());
+    public LapisLoginLogin(LapisLogin plugin) {
+        super(plugin, "login", "Allows a player to login and unlock their player", new ArrayList<>());
         this.plugin = plugin;
     }
 
     @Override
     protected void onCommand(CommandSender sender, String[] args) {
-        // /register (password) (repeat password)
+        // /login password
         if (!(sender instanceof Player)) {
-            //TODO: send not player message
-            sender.sendMessage("You must be a player");
+            //TODO: proper message
+            sender.sendMessage("Must be player");
             return;
         }
+        //Is a player
         LapisLoginPlayer player = plugin.getPlayer(((Player) sender).getUniqueId());
-        //TODO: Check permission
-        //Make sure the player isn't already registered
-        if (player.isRegistered()) {
-            //TODO: send proper message
-            player.sendRawMessage("You are already registered");
+        if (args.length != 1) {
+            player.sendRawMessage("You need to enter a password");
+        }
+        //TODO: check permissions
+        //Check if they are registered and not currently logged in
+        if (!player.isRegistered()) {
+            //TODO: proper message
+            player.sendRawMessage("Register before login");
             return;
         }
-        if (args.length != 2) {
-            //TODO: send help
-            sender.sendMessage("/register password password");
+        if (player.isLoggedIn()) {
+            //TODO: proper message
+            player.sendRawMessage("Already logged in");
             return;
         }
+        //They are registered and not logged in, grab and check the password
         String password = args[0];
-        String confirmation = args[1];
-        if (!password.equals(confirmation)) {
-            //TODO: send mismatched password error
-            sender.sendMessage("Those passwords dont match");
-            return;
+        if (player.login(password)) {
+            //TODO: proper msg
+            player.sendRawMessage("Logged in");
+        } else {
+            //TODO: proper msg
+            player.sendRawMessage("Incorrect password");
         }
-        //At this point we have a confirmed password
-        player.register(password);
     }
 }

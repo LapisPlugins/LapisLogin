@@ -19,6 +19,8 @@ package net.lapismc.lapislogin;
 
 import net.lapismc.lapiscore.LapisCoreConfiguration;
 import net.lapismc.lapiscore.LapisCorePlugin;
+import net.lapismc.lapislogin.commands.LapisLoginLogin;
+import net.lapismc.lapislogin.commands.LapisLoginRegister;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -47,6 +49,8 @@ public class LapisLogin extends LapisCorePlugin {
         passwordManager = new LapisLoginPasswordManager(this);
         registerConfiguration(new LapisCoreConfiguration(this, 1, 1));
         listener = new LapisLoginListener(this);
+        new LapisLoginRegister(this);
+        new LapisLoginLogin(this);
     }
 
     @Override
