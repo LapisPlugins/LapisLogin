@@ -16,6 +16,8 @@
 
 package net.lapismc.lapislogin;
 
+import org.bukkit.Bukkit;
+
 import java.util.UUID;
 
 /**
@@ -76,8 +78,30 @@ public class LapisLoginPlayer {
     public boolean login(String password) {
         if (LapisLogin.getInstance().passwordManager.checkPassword(uuid, password)) {
             loggedIn = true;
+            //Unlock the player when they login successfully
+            LapisLogin.getInstance().listener.unlockPlayer(uuid);
         }
         return loggedIn;
+    }
+
+    /**
+     * Send the player a message directly
+     *
+     * @param msg The message to send
+     */
+    public void sendRawMessage(String msg) {
+        if (Bukkit.getOfflinePlayer(uuid).isOnline()) {
+            Bukkit.getPlayer(uuid).sendMessage(msg);
+        }
+    }
+
+    /**
+     * Send the player a message from the messages.yml
+     *
+     * @param key The key for the message to fetch from the messages.yml
+     */
+    public void sendMessage(String key) {
+        sendRawMessage(LapisLogin.getInstance().config.getMessage(key));
     }
 
     /**

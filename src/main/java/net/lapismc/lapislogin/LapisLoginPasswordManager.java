@@ -16,6 +16,7 @@
 
 package net.lapismc.lapislogin;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -37,6 +38,16 @@ public class LapisLoginPasswordManager {
     protected LapisLoginPasswordManager(LapisLogin plugin) {
         this.plugin = plugin;
         passwordsFile = new File(plugin.getDataFolder(), "passwords.yml");
+        if (!passwordsFile.exists()) {
+            try {
+                passwordsFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                plugin.getLogger().severe("Failed to create passwords.yml, this means passwords cannot be stored!" +
+                        " Disabling the plugin");
+                Bukkit.getPluginManager().disablePlugin(plugin);
+            }
+        }
         passwordsYml = YamlConfiguration.loadConfiguration(passwordsFile);
         loadPasswords();
     }
